@@ -8,6 +8,6 @@ export function resolveOptions(options?: LuathOptions) {
     server: {
       ...defaultLuathOptions.server,
       ...options?.server,
-    }
+    },
   };
 }

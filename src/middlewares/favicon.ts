@@ -1,4 +1,4 @@
-import type { RequestHandler, Request } from "../../deps.ts";
+import type { Request, RequestHandler } from "../../deps.ts";
 
 export const RE_FAVICON_ICO = /(favicon\.ico)($|\?)/;
 

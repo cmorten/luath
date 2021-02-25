@@ -15,7 +15,7 @@ import { stripUrl } from "../stripUrl.ts";
 import { isPublicFile } from "./isPublicFile.ts";
 import { getEntryChunk } from "./getEntryChunk.ts";
 import { getCssAsset } from "./getCssAsset.ts";
-import { LMR_JS_PATH_IMPORT, lmr } from "./plugins/lmr.ts";
+import { lmr, LMR_JS_PATH_IMPORT } from "./plugins/lmr.ts";
 import { esbuild } from "./plugins/esbuild.ts";
 
 function injectCss(
