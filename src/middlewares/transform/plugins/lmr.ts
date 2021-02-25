@@ -30,12 +30,14 @@ export function lmr() {
       const hasHotMeta = isHot(code);
 
       if (hasHotMeta) {
-        code =
-          `import { luath as $__luath } from "${LMR_JS_PATH_IMPORT}"; import.meta.hot = $__luath(import.meta.url);\n` +
+        code = `import { luath as $__luath } from "${LMR_JS_PATH_IMPORT}";\n` +
+          `import.meta.hot = $__luath(import.meta.url);\n` +
           code;
       } else {
         code +=
-          `\nimport { luath as $__luath } from "${LMR_JS_PATH_IMPORT}"; $__luath(import.meta.url);`;
+          `\nimport { luath as $__luath } from "${LMR_JS_PATH_IMPORT}";\n` +
+          `import.meta.hot = $__luath(import.meta.url);\n` +
+          `if (import.meta.hot) { import.meta.hot.accept(); }`;
       }
 
       return code;
