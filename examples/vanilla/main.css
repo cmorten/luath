@@ -1,0 +1,23 @@
+@import "./colours.css";
+
+.intro,
+.meta {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: var(--intro-colour);
+  text-align: center;
+}
+
+.intro {
+  font-size: 25px;
+}
+
+.meta {
+  font-size: 18px;
+}
+
+.icon {
+  margin: auto;
+  display: block;
+  width: 200px;
+  height: 200px;
+}

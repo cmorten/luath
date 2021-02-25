@@ -12,8 +12,42 @@ function logInfo(...args) {
   console.info("[lmr] ", ...args);
 }
 
+let errorOverlay;
+
+function showErrorOverlay(...errors) {
+  hideErrorOverlay();
+
+  errorOverlay = document.createElement("div");
+  errorOverlay.style =
+    "box-sizing: border-box; width: 100%; height: 100%; position: absolute; top: 0; left: 0; padding: 15px; background: #ffffff88; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 16px;";
+
+  errorOverlay.innerHTML =
+    `<div style="background: #ffffff; padding: 25px; color: darkred; border: 2px solid darkred; position: relative;">` +
+    `<button id="$luath_close" style="border: 0; color: #111; width: 20px; height: 20px; background: transparent; position: absolute; top: 15px; right: 15px; font-size: 20px; padding: 0; cursor: pointer;">&#10005;</button>` +
+    errors
+      .filter((error) => error instanceof Error)
+      .map((error) => {
+        return `<p>${error.toString()}</p>${
+          error.stack ? `<p style="font-size: 12px;">${error.stack.replace(/ at /g, "<br />&nbsp; &nbsp; at ")}</p>` : ""
+        }`;
+      })
+      .join("") +
+    `</div>`;
+
+  document.body.appendChild(errorOverlay);
+  document.getElementById("$luath_close").onclick = () => hideErrorOverlay();
+}
+
+function hideErrorOverlay() {
+  if (errorOverlay) {
+    document.body.removeChild(errorOverlay);
+    errorOverlay = null;
+  }
+}
+
 function logError(...args) {
   console.error("[lmr] ", ...args);
+  showErrorOverlay(...args);
 }
 
 function reload() {
@@ -60,6 +94,8 @@ function dequeue() {
 }
 
 function handleMessage(message) {
+  hideErrorOverlay();
+
   const data = JSON.parse(message.data);
 
   switch (data.type) {
@@ -110,7 +146,8 @@ function handleMessage(message) {
       break;
     }
     case "error": {
-      logError(data.error);
+      const error = Object.assign(new Error(data.error.message), data.error);
+      logError(error);
 
       break;
     }

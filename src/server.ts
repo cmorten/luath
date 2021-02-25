@@ -61,7 +61,7 @@ export async function server(options?: LuathOptions) {
   app.use(notFound());
 
   // error handler
-  app.use(error());
+  app.use(error(webSocketServer));
 
   // listen
   const _server = app.listen(config.server);

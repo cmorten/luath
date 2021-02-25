@@ -2,13 +2,21 @@ import { WebSocket } from "../deps.ts";
 
 export class WebSocketServer {
   private clients: Set<WebSocket>;
+  private buffer: any[] = [];
 
   constructor() {
     this.clients = new Set<WebSocket>();
   }
 
+  private flush() {
+    while (this.buffer.length > 0) {
+      this.send(this.buffer.shift());
+    }
+  }
+
   public register(socket: WebSocket) {
     this.clients.add(socket);
+    this.flush();
   }
 
   public async unregister(socket: WebSocket) {
@@ -19,9 +27,15 @@ export class WebSocketServer {
     } catch (_) {
       // swallow
     }
+
+    this.flush();
   }
 
   public send(data: any) {
+    if (!this.clients.size) {
+      this.buffer.push(data);
+    }
+
     const message = JSON.stringify(data);
 
     this.clients.forEach(async (client) => {

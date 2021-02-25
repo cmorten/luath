@@ -27,7 +27,12 @@ export function transform(
 
     try {
       if (_isCss || isJs(req)) {
-        const code = await bundle(url, rootDir, moduleGraph, esbuildService);
+        const code = await bundle(
+          url,
+          rootDir,
+          moduleGraph,
+          esbuildService,
+        );
 
         if (code) {
           const type = _isCss ? "css" : "js";
@@ -36,8 +41,6 @@ export function transform(
         }
       }
     } catch (err) {
-      console.error(err);
-
       return next(err);
     }
 

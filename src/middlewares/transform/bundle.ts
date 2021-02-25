@@ -117,6 +117,10 @@ export async function bundle(
   const entryChunk = getEntryChunk(output);
   const virtualCssAsset = getCssAsset(output);
 
+  if (virtualCssAsset) {
+    virtualCssAsset.fileName = `$luath_${virtualCssAsset.fileName}`;
+  }
+
   const realModules = Array.from(
     new Set([
       ...Object.keys(entryChunk.modules).map((path) => pathToId(path, rootDir))

@@ -105,14 +105,27 @@ export function lmr(
         type: "update",
         changes: Array.from(invalidatedModules),
       });
-
-      invalidatedModules.clear();
     }
+
+    invalidatedModules.clear();
   });
 
   fileWatcher.on("remove", (path: string) => {
     const id = pathToId(path);
     moduleGraph.delete(id);
+
+    const shouldReload = updateModuleSubGraph(id);
+
+    if (shouldReload) {
+      webSocketServer.send({ type: "reload" });
+    } else {
+      webSocketServer.send({
+        type: "update",
+        changes: Array.from(invalidatedModules),
+      });
+    }
+
+    invalidatedModules.clear();
   });
 
   return async (req, res, next) => {
