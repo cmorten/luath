@@ -24,8 +24,6 @@ import { WebSocketServer } from "./webSocketServer.ts";
  * @public
  */
 export async function server(options?: LuathOptions) {
-  const start = performance.now();
-
   const config = resolveOptions(options);
   const rootDir = Deno.cwd();
   const publicDir = join(rootDir, "public");
