@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-undef
 /// <reference lib="dom" />
 
 const RE_QUERYSTRING = /\?.*$/;
@@ -28,7 +29,11 @@ function showErrorOverlay(...errors) {
       .filter((error) => error instanceof Error)
       .map((error) => {
         return `<p>${error.toString()}</p>${
-          error.stack ? `<p style="font-size: 12px;">${error.stack.replace(/ at /g, "<br />&nbsp; &nbsp; at ")}</p>` : ""
+          error.stack
+            ? `<p style="font-size: 12px;">${
+              error.stack.replace(/ at /g, "<br />&nbsp; &nbsp; at ")
+            }</p>`
+            : ""
         }`;
       })
       .join("") +
@@ -116,11 +121,10 @@ function handleMessage(message) {
             return;
           } else if (
             url.replace(RE_INDEX_HTML, "") ===
-            resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
+              resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
           ) {
             return reload();
           } else {
-            // @ts-ignore
             for (const node of document.querySelectorAll("[src],[href]")) {
               const attribute = node.src ? "src" : "href";
               const value = node[attribute];
@@ -221,7 +225,7 @@ export function luath(url) {
         JSON.stringify({
           id: url.replace(location.origin, ""),
           type: "hotAccepted",
-        })
+        }),
       );
 
       if (fn) {

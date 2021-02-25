@@ -1,8 +1,12 @@
+// deno-lint-ignore-file no-explicit-any
+
 import { WebSocket } from "../deps.ts";
+
+type Data = Record<string, any>;
 
 export class WebSocketServer {
   private clients: Set<WebSocket>;
-  private buffer: any[] = [];
+  private buffer: Data[] = [];
 
   constructor() {
     this.clients = new Set<WebSocket>();
@@ -10,7 +14,7 @@ export class WebSocketServer {
 
   private flush() {
     while (this.buffer.length > 0) {
-      this.send(this.buffer.shift());
+      this.send(this.buffer.shift()!);
     }
   }
 
@@ -31,7 +35,7 @@ export class WebSocketServer {
     this.flush();
   }
 
-  public send(data: any) {
+  public send(data: Data) {
     if (!this.clients.size) {
       this.buffer.push(data);
     }

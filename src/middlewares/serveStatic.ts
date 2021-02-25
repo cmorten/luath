@@ -5,7 +5,7 @@ import { isHtml } from "./isHtml.ts";
 export function serveStatic(staticDir: string): RequestHandler {
   const serve = _serveStatic(staticDir);
 
-  return async (req, res, next) => {
+  return (req, res, next) => {
     if (isHtml(req)) {
       return next();
     }

@@ -2,7 +2,7 @@ import type { Service } from "../../../../deps.ts";
 import { isJsExtension } from "../../isJs.ts";
 
 export function esbuild(servicePromise: Promise<Service>) {
-  let esbuildTransform: any;
+  let esbuildTransform: Service["transform"];
 
   servicePromise.then((service) => esbuildTransform = service.transform);
 

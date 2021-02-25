@@ -1,4 +1,4 @@
-import type { LuathOptions, } from "./types.ts";
+import type { LuathOptions } from "./types.ts";
 import type { Service } from "../deps.ts";
 import { esbuildStartService, join, opine } from "../deps.ts";
 import { resolveOptions } from "./resolveOptions.ts";
@@ -23,7 +23,7 @@ import { WebSocketServer } from "./webSocketServer.ts";
  * @param {Number} port
  * @public
  */
-export async function server(options?: LuathOptions) {
+export function server(options?: LuathOptions) {
   const config = resolveOptions(options);
   const rootDir = Deno.cwd();
   const publicDir = join(rootDir, "public");

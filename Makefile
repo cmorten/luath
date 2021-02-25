@@ -3,7 +3,7 @@
 FILES_TO_FORMAT = ./src ./deps.ts ./mod.ts ./version.ts
 
 build:
-	@deno run --unstable -A mod.ts
+	@deno run -A --unstable mod.ts
 
 ci:
 	@make fmt-check
@@ -21,4 +21,4 @@ lint:
 	@deno lint --unstable $(FILES_TO_FORMAT)
 
 test:
-	@deno test --allow-read --allow-write --allow-net --allow-run --allow-env --unstable ./src
+	@deno test -A --unstable --allow-none ./src
