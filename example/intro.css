@@ -1,0 +1,8 @@
+@import "./colours.css";
+
+.intro {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 25px;
+  color: var(--intro-colour);
+  text-align: center;
+}
