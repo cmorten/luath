@@ -1,14 +1,19 @@
+import type { Service } from "../../../../deps.ts";
 import { isJsExtension } from "../../isJs.ts";
 
-export function esbuild(service: any) {
+export function esbuild(servicePromise: Promise<Service>) {
+  let esbuildTransform: any;
+
+  servicePromise.then((service) => esbuildTransform = service.transform);
+
   return {
     name: "esbuild",
     async transform(code: string, id: string) {
-      if (!isJsExtension(id)) {
+      if (!esbuildTransform || !isJsExtension(id)) {
         return;
       }
 
-      const output = await service.transform(code, {
+      const output = await esbuildTransform(code, {
         format: "esm",
         minify: true,
       });

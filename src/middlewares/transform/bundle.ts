@@ -1,3 +1,4 @@
+import type { Service } from "../../../deps.ts";
 import {
   atImport,
   image,
@@ -51,7 +52,7 @@ export async function bundle(
   url: string,
   rootDir: string,
   moduleGraph: ModuleGraph,
-  esbuildService: any,
+  esbuildService: Promise<Service>,
 ) {
   const id = stripUrl(url);
   const cachedMod = moduleGraph.get(id);

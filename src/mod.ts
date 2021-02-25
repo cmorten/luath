@@ -1,2 +1,2 @@
-export * from "./server.ts";
-export * from "./types.ts";
+export { server } from "./server.ts";
+export type { LuathOptions, LuathServerOptions } from "./types.ts";

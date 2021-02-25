@@ -1,5 +1,6 @@
-import type { LuathOptions } from "./types.ts";
-import { esbuildStartService, join, opine, v4 } from "../deps.ts";
+import type { LuathOptions, } from "./types.ts";
+import type { Service } from "../deps.ts";
+import { esbuildStartService, join, opine } from "../deps.ts";
 import { resolveOptions } from "./resolveOptions.ts";
 import {
   error,
@@ -15,35 +16,6 @@ import { FileWatcher } from "./fileWatcher.ts";
 import { ModuleGraph } from "./moduleGraph.ts";
 import { WebSocketServer } from "./webSocketServer.ts";
 
-const blobURLMap = new Map();
-
-function createObjectURL(blob: any) {
-  const origin = "http://deno-opaque-origin";
-  const key = `blob:${origin}/${v4.generate()}`;
-  blobURLMap.set(key, blob);
-
-  return key;
-}
-
-function revokeObjectURL(url: any) {
-  let urlObject;
-
-  try {
-    urlObject = new URL(url);
-  } catch {
-    throw new TypeError("Provided URL string is not valid");
-  }
-
-  if (urlObject.protocol !== "blob:") {
-    return;
-  }
-
-  blobURLMap.delete(url);
-}
-
-(URL as any).createObjectURL = createObjectURL;
-(URL as any).revokeObjectURL = revokeObjectURL;
-
 /**
  * server
  * 
@@ -52,6 +24,8 @@ function revokeObjectURL(url: any) {
  * @public
  */
 export async function server(options?: LuathOptions) {
+  const start = performance.now();
+
   const config = resolveOptions(options);
   const rootDir = Deno.cwd();
   const publicDir = join(rootDir, "public");
@@ -62,7 +36,7 @@ export async function server(options?: LuathOptions) {
   const webSocketServer = new WebSocketServer();
   const moduleGraph = new ModuleGraph();
 
-  const esbuildService = await esbuildStartService({
+  const esbuildService = esbuildStartService({
     worker: false,
     wasmURL: "https://esm.sh/esbuild-wasm@0.8.51/esbuild.wasm",
   });
@@ -92,18 +66,18 @@ export async function server(options?: LuathOptions) {
   app.use(error());
 
   // listen
-  const server = app.listen(config.server);
-  const closeServer = server.close;
+  const _server = app.listen(config.server);
+  const closeServer = _server.close;
 
-  server.close = () => {
-    esbuildService.stop();
+  _server.close = () => {
+    esbuildService.then((service: Service) => service.stop());
     fileWatcher.close();
     webSocketServer.close();
     closeServer();
   };
 
-  const { hostname, port } = server.listener.addr as Deno.NetAddr;
+  const { hostname, port } = _server.listener.addr as Deno.NetAddr;
   console.info(`listening on http://${hostname}:${port}`);
 
-  return server;
+  return _server;
 }

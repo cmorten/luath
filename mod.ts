@@ -1,2 +1,3 @@
-export * from "./src/mod.ts";
-export * from "./version.ts";
+export type { LuathOptions, LuathServerOptions } from "./src/mod.ts";
+export { server } from "./src/mod.ts";
+export { version } from "./version.ts";

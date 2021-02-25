@@ -26,7 +26,6 @@ export {
   acceptWebSocket,
   isWebSocketCloseEvent,
 } from "https://deno.land/std@0.83.0/ws/mod.ts";
-export { v4 } from "https://deno.land/std@0.88.0/uuid/mod.ts";
 
 /**
  * Rollup
@@ -63,3 +62,4 @@ export { default as pm } from "https://esm.sh/picomatch@2.2.2";
 export { default as atImport } from "https://esm.sh/postcss-import@14.0.0";
 // @deno-types="https://cdn.esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts"
 export { startService as esbuildStartService } from "https://esm.sh/esbuild-wasm@0.8.51/esm/browser.min.js";
+export type { Service } from "https://cdn.esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts"

@@ -1,4 +1,4 @@
-import type { RequestHandler } from "../../../deps.ts";
+import type { RequestHandler, Service } from "../../../deps.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
 import { isHtml } from "../isHtml.ts";
 import { isJs } from "../isJs.ts";
@@ -10,7 +10,7 @@ export const urlIgnoreList = new Set(["/", "/favicon.ico"]);
 export function transform(
   rootDir: string,
   moduleGraph: ModuleGraph,
-  esbuildService: any,
+  esbuildService: Promise<Service>,
 ): RequestHandler {
   return async (req, res, next) => {
     let url = req.url;

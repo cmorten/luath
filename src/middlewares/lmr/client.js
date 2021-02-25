@@ -1,12 +1,18 @@
 /// <reference lib="dom" />
-import { isCssExtension } from "../isCss.ts";
-import { stripUrl } from "../stripUrl.ts";
 
-function logInfo(...args: any[]) {
+const RE_QUERYSTRING = /\?.*$/;
+const RE_HASH = /#.*$/;
+const RE_CSS = /\.(css)($|\?)/;
+
+const stripUrl = (url) => url.replace(RE_QUERYSTRING, "").replace(RE_HASH, "");
+
+const isCssExtension = (fileName) => RE_CSS.test(fileName);
+
+function logInfo(...args) {
   console.info("[lmr] ", ...args);
 }
 
-function logError(...args: any[]) {
+function logError(...args) {
   console.error("[lmr] ", ...args);
 }
 
@@ -17,7 +23,7 @@ function reload() {
 const channel = new MessageChannel();
 const url = `${location.origin.replace("http", "ws")}/_lmr`;
 
-let ws: WebSocket;
+let ws;
 
 function connectWebSocket(cb = () => {}) {
   ws = new WebSocket(url);
@@ -35,25 +41,25 @@ connectWebSocket();
 function forwardMessages() {
   logInfo("server connected");
 
-  channel.port2.onmessage = (message: MessageEvent) => ws.send(message.data);
+  channel.port2.onmessage = (message) => ws.send(message.data);
 }
 
-const resolveUrl = (url: string) => new URL(url, location.origin).href;
+const resolveUrl = (url) => new URL(url, location.origin).href;
 
 const RE_INDEX_HTML = /\/(index\.html)($|\?)/;
 
-const updateQueue: string[] = [];
+const updateQueue = [];
 let updating = false;
 
 function dequeue() {
   updating = updateQueue.length !== 0;
 
   if (updating) {
-    update(updateQueue.shift() as string).then(dequeue, dequeue);
+    update(updateQueue.shift()).then(dequeue, dequeue);
   }
 }
 
-function handleMessage(message: MessageEvent) {
+function handleMessage(message) {
   const data = JSON.parse(message.data);
 
   switch (data.type) {
@@ -64,7 +70,7 @@ function handleMessage(message: MessageEvent) {
       break;
     }
     case "update": {
-      data.changes.forEach((path: string) => {
+      data.changes.forEach((path) => {
         const url = stripUrl(resolveUrl(path));
 
         if (!modules.get(url)) {
@@ -74,7 +80,7 @@ function handleMessage(message: MessageEvent) {
             return;
           } else if (
             url.replace(RE_INDEX_HTML, "") ===
-              resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
+            resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
           ) {
             return reload();
           } else {
@@ -118,20 +124,17 @@ function handleError() {}
 
 const CONNECTION_RETRY_TIMEOUT = 5000;
 
-function handleClose(event: CloseEvent) {
+function handleClose(event) {
   if (!event.wasClean) {
     logInfo("connection lost - reconnecting...");
     setTimeout(() => connectWebSocket(reload), CONNECTION_RETRY_TIMEOUT);
   }
 }
 
-type AcceptFunction = ({ module }: { module: any }) => void;
-type DisposeFunction = () => void;
-
-function update(url: string) {
+function update(url) {
   const oldModule = getModule(url);
-  const accept: AcceptFunction[] = Array.from(oldModule.accept);
-  const dispose: DisposeFunction[] = Array.from(oldModule.dispose);
+  const accept = Array.from(oldModule.accept);
+  const dispose = Array.from(oldModule.dispose);
   const newUrl = `${url}?mtime=${Date.now()}`;
   const newModulePromise = import(newUrl);
 
@@ -156,7 +159,7 @@ function update(url: string) {
 
 const modules = new Map();
 
-function getModule(url: string) {
+function getModule(url) {
   url = stripUrl(url);
 
   const _module = modules.get(url);
@@ -172,23 +175,23 @@ function getModule(url: string) {
   return newModule;
 }
 
-export function luath(url: string) {
+export function luath(url) {
   const _module = getModule(url);
 
   return {
-    accept(fn: AcceptFunction) {
+    accept(fn) {
       channel.port1.postMessage(
         JSON.stringify({
           id: url.replace(location.origin, ""),
           type: "hotAccepted",
-        }),
+        })
       );
 
       if (fn) {
         _module.accept.add(fn);
       }
     },
-    dispose(fn: DisposeFunction) {
+    dispose(fn) {
       if (fn) {
         _module.remove.add(fn);
       }
@@ -201,7 +204,7 @@ export function luath(url: string) {
 
 const styles = new Map();
 
-export function style(filename: string) {
+export function style(filename) {
   const id = resolveUrl(filename);
   const oldNode = styles.get(id);
 

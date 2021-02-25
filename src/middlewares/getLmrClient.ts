@@ -1,12 +1,14 @@
-const importMetaUrl = import.meta.url;
+import { loadUrl } from "./loadUrl.ts";
 
-const clientUrl = new URL("./lmr/client.ts", importMetaUrl).href;
-
-const { files: { ["deno:///bundle.js"]: lmrClient } } = await Deno.emit(
-  clientUrl,
-  { check: false, bundle: "esm" },
-);
+let lmrClient: Promise<string>;
 
 export function getLmrClient() {
-  return lmrClient;
+  if (lmrClient) {
+    return lmrClient;
+  }
+
+  const importMetaUrl = import.meta.url;
+  const clientUrl = new URL("./lmr/client.js", importMetaUrl);
+
+  return lmrClient = loadUrl(clientUrl);
 }
