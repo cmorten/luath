@@ -4,6 +4,8 @@ import { EventEmitter, relative } from "../deps.ts";
 import { ensureArray } from "./ensureArray.ts";
 import { createFilter } from "./createFilter.ts";
 
+const FILE_WATCH_DEBOUNCE_MS = 50;
+
 /**
  * FileWatcher
  * 
@@ -13,15 +15,22 @@ export class FileWatcher extends EventEmitter {
   private closed = false;
   private rootDir: string;
   private filter: CreateFilter;
+  private queueMap: Map<string, string>;
 
   constructor(rootDir: string, { include, exclude }: WatcherOptions) {
     super();
     this.rootDir = rootDir;
     this.filter = createFilter(ensureArray(include), ensureArray(exclude));
+    this.queueMap = new Map();
   }
 
   public close() {
     this.closed = true;
+  }
+
+  private flush() {
+    this.queueMap.forEach((kind, id) => this.emit(kind, id));
+    this.queueMap.clear();
   }
 
   public async watch() {
@@ -36,7 +45,8 @@ export class FileWatcher extends EventEmitter {
 
       for (const path of paths) {
         if (this.filter(path)) {
-          this.emit(kind, relative(this.rootDir, path));
+          this.queueMap.set(relative(this.rootDir, path), kind);
+          setTimeout(() => this.flush(), FILE_WATCH_DEBOUNCE_MS);
         }
       }
     }

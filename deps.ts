@@ -16,7 +16,6 @@ export {
   isAbsolute,
   join,
   normalize,
-  posix,
   relative,
   resolve,
 } from "https://deno.land/std@0.83.0/path/mod.ts";
@@ -44,6 +43,8 @@ export { virtual } from "https://deno.land/x/drollup@2.39.0+0.14.0/plugins/virtu
 export { image } from "https://deno.land/x/drollup@2.39.0+0.14.0/plugins/image/mod.ts";
 export { json } from "https://deno.land/x/drollup@2.39.0+0.14.0/plugins/json/mod.ts";
 export { postcss } from "https://deno.land/x/drollup@2.39.0+0.14.0/plugins/postcss/mod.ts";
+export { parse } from "https://deno.land/x/drollup@2.39.0+0.14.0/src/rollup-plugin-deno-resolver/parse.ts";
+export { loadUrl } from "https://deno.land/x/drollup@2.39.0+0.14.0/src/rollup-plugin-deno-resolver/loadUrl.ts";
 
 /**
  * Opine
@@ -63,4 +64,7 @@ export { default as pm } from "https://esm.sh/picomatch@2.2.2";
 export { default as atImport } from "https://esm.sh/postcss-import@14.0.0";
 // @deno-types="https://cdn.esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts"
 export { startService as esbuildStartService } from "https://esm.sh/esbuild-wasm@0.8.51/esm/browser.min.js";
-export type { Service } from "https://cdn.esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts";
+export type {
+  Loader,
+  Service,
+} from "https://cdn.esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts";

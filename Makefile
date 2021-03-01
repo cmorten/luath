@@ -1,6 +1,6 @@
 .PHONY: build ci fmt fmt-check lint test
 
-FILES_TO_FORMAT = ./src ./deps.ts ./mod.ts ./version.ts
+FILES_TO_FORMAT = ./src/ ./deps.ts ./mod.ts ./version.ts
 
 build:
 	@deno run -A --unstable mod.ts

@@ -1,7 +1,7 @@
-import { existsSync, posix } from "../../../deps.ts";
+import { existsSync, join } from "../../../deps.ts";
 
 export function isPublicFile(url: string, rootDir: string): boolean {
-  const publicFile = posix.join(rootDir, "public", url.slice(1));
+  const publicFile = join(rootDir, "public", url.slice(1));
 
   return existsSync(publicFile);
 }

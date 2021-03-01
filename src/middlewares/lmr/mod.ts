@@ -2,7 +2,7 @@ import type { RequestHandler, WebSocket } from "../../../deps.ts";
 import {
   acceptWebSocket,
   isWebSocketCloseEvent,
-  posix,
+  normalize,
 } from "../../../deps.ts";
 import { FileWatcher } from "../../fileWatcher.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
@@ -11,13 +11,15 @@ import { getLmrClient } from "../getLmrClient.ts";
 import { isHtmlExtension } from "../isHtml.ts";
 import { stripUrl } from "../stripUrl.ts";
 
-const RE_LMR_WS = /_lmr($|\?)/;
-const RE_LMR_JS = /_lmr\.js($|\?)/;
+const RE_LMR_WS = /\$__luath($|\?)/;
+const RE_LMR_JS = /\$__luath\.js($|\?)/;
 
 const isLmrWs = (fileName: string) => RE_LMR_WS.test(fileName);
 const isLmrJs = (fileName: string) => RE_LMR_JS.test(fileName);
 
-const pathToId = (path: string) => posix.normalize(`/${path}`);
+// TODO: replace with shared pathToId
+const pathToId = (path: string) =>
+  normalize(`/${path.replace(".css", ".css.css")}`);
 
 const invalidatedModules = new Set();
 
@@ -56,7 +58,7 @@ export function lmr(
     await webSocketServer.unregister(socket);
   }
 
-  function updateModuleSubGraph(id: string): boolean {
+  function updateModuleSubGraph(id: string, mtime: number): boolean {
     const mod = moduleGraph.get(id);
 
     if (!mod) {
@@ -64,20 +66,19 @@ export function lmr(
     }
 
     mod.stale = true;
+    mod.mtime = mtime;
 
     if (mod.acceptingUpdates) {
       invalidatedModules.add(id);
-
-      return false;
     }
 
     if (mod.dependents.size) {
       return !Array.from(mod.dependents).every(
-        (subModulePath) => !updateModuleSubGraph(subModulePath),
+        (subModulePath) => !updateModuleSubGraph(subModulePath, mtime),
       );
     }
 
-    return true;
+    return !invalidatedModules.size;
   }
 
   fileWatcher.watch();
@@ -89,6 +90,7 @@ export function lmr(
 
   fileWatcher.on("modify", (path: string) => {
     const id = pathToId(path);
+    const mtime = +new Date();
 
     if (isHtmlExtension(path)) {
       webSocketServer.send({ type: "reload" });
@@ -96,13 +98,14 @@ export function lmr(
       return;
     }
 
-    const shouldReload = updateModuleSubGraph(id);
+    const shouldReload = updateModuleSubGraph(id, mtime);
 
     if (shouldReload) {
       webSocketServer.send({ type: "reload" });
     } else {
       webSocketServer.send({
         type: "update",
+        mtime,
         changes: Array.from(invalidatedModules),
       });
     }
@@ -110,17 +113,20 @@ export function lmr(
     invalidatedModules.clear();
   });
 
+  // TODO: harden this
   fileWatcher.on("remove", (path: string) => {
     const id = pathToId(path);
+    const mtime = +new Date();
     moduleGraph.delete(id);
 
-    const shouldReload = updateModuleSubGraph(id);
+    const shouldReload = updateModuleSubGraph(id, mtime);
 
     if (shouldReload) {
       webSocketServer.send({ type: "reload" });
     } else {
       webSocketServer.send({
         type: "update",
+        mtime,
         changes: Array.from(invalidatedModules),
       });
     }
@@ -142,7 +148,7 @@ export function lmr(
 
         return;
       } else if (isLmrJs(req.url)) {
-        res.type("application/javascript").send(await getLmrClient());
+        res.type(".js").send(await getLmrClient());
 
         return;
       }

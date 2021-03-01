@@ -1,46 +1,81 @@
-import { isJsExtension } from "../../isJs.ts";
+import {
+  ImportSpecifier,
+  init,
+  parse as parseImports,
+} from "https://esm.sh/es-module-lexer";
+import { default as MagicString } from "https://esm.sh/magic-string";
+import { isHot } from "./isHot.ts";
+import { pathToId } from "../pathToId.ts";
+import { isCssImportExtension } from "../../isCss.ts";
 import { getLmrClient } from "../../getLmrClient.ts";
+import { stripUrl } from "../../stripUrl.ts";
+import { ModuleGraph } from "../../../moduleGraph.ts";
 
-export const RE_HOT = /import\.meta\.hot/;
+export const LMR_JS_PATH_IMPORT = "$__luath.js";
+export const LMR_JS_URL_IMPORT =
+  new URL(LMR_JS_PATH_IMPORT, "http://localhost:3000").href;
 
-export const isHot = (code: string) => RE_HOT.test(code);
-
-export const LMR_JS_PATH_IMPORT = "./_lmr.js";
-
-export function lmr() {
+export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
   return {
-    name: "luath-module-reloading-plugin",
+    name: "luath",
     resolveId(id: string) {
-      if (id === LMR_JS_PATH_IMPORT) {
-        return LMR_JS_PATH_IMPORT;
+      if (id.endsWith(LMR_JS_PATH_IMPORT)) {
+        return id;
       }
     },
     load(id: string) {
-      if (id === LMR_JS_PATH_IMPORT) {
+      if (id.endsWith(LMR_JS_PATH_IMPORT)) {
         return getLmrClient();
       }
 
       return null;
     },
-    transform(code: string, id: string) {
-      if (!isJsExtension(id)) {
-        return;
+    async transform(code: string, id: string) {
+      if (isCssImportExtension(id) || /\$__luath/.test(id)) {
+        return code;
       }
+
+      await init;
+      let imports: ImportSpecifier[] = [];
+
+      try {
+        imports = parseImports(code)[0];
+      } catch (_) {
+        // swallow
+      }
+
+      let s: MagicString | undefined;
+      const str = () => s || (s = new MagicString(code));
 
       const hasHotMeta = isHot(code);
 
-      if (hasHotMeta) {
-        code = `import { luath as $__luath } from "${LMR_JS_PATH_IMPORT}";\n` +
-          `import.meta.hot = $__luath(import.meta.url);\n` +
-          code;
-      } else {
-        code +=
-          `\nimport { luath as $__luath } from "${LMR_JS_PATH_IMPORT}";\n` +
-          `import.meta.hot = $__luath(import.meta.url);\n` +
-          `if (import.meta.hot) { import.meta.hot.accept(); }`;
+      for (let index = 0; index < imports.length; index++) {
+        const {
+          s: start,
+          e: end,
+        } = imports[index];
+
+        const rawUrl = stripUrl(code.slice(start, end));
+        const mod = moduleGraph.get(pathToId(rawUrl, rootDir));
+
+        if (mod?.mtime) {
+          str().overwrite(start, end, `${rawUrl}?mtime=${mod.mtime}`);
+        }
       }
 
-      return code;
+      if (hasHotMeta) {
+        str().prepend(
+          `import { luath as $__luath } from "${LMR_JS_URL_IMPORT}";\n` +
+            `import.meta.hot = $__luath(import.meta.url);\n`,
+        );
+      } else {
+        str().append(
+          `\nimport { luath as $__luath } from "${LMR_JS_URL_IMPORT}";\n` +
+            `import.meta.hot = $__luath(import.meta.url); import.meta.hot.accept();`,
+        );
+      }
+
+      return str().toString();
     },
   };
 }

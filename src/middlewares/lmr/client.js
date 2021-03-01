@@ -3,7 +3,7 @@
 
 const RE_QUERYSTRING = /\?.*$/;
 const RE_HASH = /#.*$/;
-const RE_CSS = /\.(css)($|\?)/;
+const RE_CSS = /\.css\.css($|\?)/;
 
 const stripUrl = (url) => url.replace(RE_QUERYSTRING, "").replace(RE_HASH, "");
 
@@ -22,21 +22,26 @@ function showErrorOverlay(...errors) {
   errorOverlay.style =
     "box-sizing: border-box; width: 100%; height: 100%; position: absolute; top: 0; left: 0; padding: 15px; background: #ffffff88; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 16px;";
 
+  const formattedErrors = errors
+    .filter((error) => error instanceof Error)
+    .map((error) => {
+      // TODO: someone will have a well thought beautifier somewhere
+      return `<p>${error.toString()}</p>${
+        error.stack
+          ? `<p style="font-size: 12px;">${
+            error.stack
+              .replace(/ at /g, "<br />&nbsp; &nbsp; at ")
+              .replace(/\b\s+(\w*@)/g, "<br />&nbsp; &nbsp; $1")
+          }</p>`
+          : ""
+      }`;
+    })
+    .join("");
+
   errorOverlay.innerHTML =
     `<div style="background: #ffffff; padding: 25px; color: darkred; border: 2px solid darkred; position: relative;">` +
     `<button id="$luath_close" style="border: 0; color: #111; width: 20px; height: 20px; background: transparent; position: absolute; top: 15px; right: 15px; font-size: 20px; padding: 0; cursor: pointer;">&#10005;</button>` +
-    errors
-      .filter((error) => error instanceof Error)
-      .map((error) => {
-        return `<p>${error.toString()}</p>${
-          error.stack
-            ? `<p style="font-size: 12px;">${
-              error.stack.replace(/ at /g, "<br />&nbsp; &nbsp; at ")
-            }</p>`
-            : ""
-        }`;
-      })
-      .join("") +
+    formattedErrors +
     `</div>`;
 
   document.body.appendChild(errorOverlay);
@@ -60,7 +65,7 @@ function reload() {
 }
 
 const channel = new MessageChannel();
-const url = `${location.origin.replace("http", "ws")}/_lmr`;
+const url = `${location.origin.replace("http", "ws")}/$__luath`;
 
 let ws;
 
@@ -87,14 +92,16 @@ const resolveUrl = (url) => new URL(url, location.origin).href;
 
 const RE_INDEX_HTML = /\/(index\.html)($|\?)/;
 
-const updateQueue = [];
+let updateQueue = [];
 let updating = false;
 
 function dequeue() {
   updating = updateQueue.length !== 0;
 
   if (updating) {
-    update(updateQueue.shift()).then(dequeue, dequeue);
+    const updates = updateQueue.map((item) => update(item));
+    Promise.all(updates).then(dequeue, dequeue);
+    updateQueue = [];
   }
 }
 
@@ -102,6 +109,7 @@ function handleMessage(message) {
   hideErrorOverlay();
 
   const data = JSON.parse(message.data);
+  const mtime = data?.mtime ?? Date.now();
 
   switch (data.type) {
     case "reload": {
@@ -116,7 +124,7 @@ function handleMessage(message) {
 
         if (!modules.get(url)) {
           if (isCssExtension(url)) {
-            style(url);
+            style(url, mtime);
 
             return;
           } else if (
@@ -130,7 +138,7 @@ function handleMessage(message) {
               const value = node[attribute];
 
               if (value && stripUrl(resolveUrl(value)) === url) {
-                node[attribute] = `${stripUrl(value)}?mtime=${Date.now()}`;
+                node[attribute] = `${stripUrl(value)}?mtime=${mtime}`;
               }
             }
 
@@ -138,8 +146,8 @@ function handleMessage(message) {
           }
         }
 
-        if (!updateQueue.includes(url)) {
-          updateQueue.push(url);
+        if (!updateQueue.find(({ url: existingUrl }) => existingUrl === url)) {
+          updateQueue.push({ url, mtime });
         }
 
         if (!updating) {
@@ -163,7 +171,7 @@ function handleMessage(message) {
 
 function handleError() {}
 
-const CONNECTION_RETRY_TIMEOUT = 5000;
+const CONNECTION_RETRY_TIMEOUT = 1000;
 
 function handleClose(event) {
   if (!event.wasClean) {
@@ -172,11 +180,11 @@ function handleClose(event) {
   }
 }
 
-function update(url) {
+function update({ url, mtime }) {
   const oldModule = getModule(url);
   const accept = Array.from(oldModule.accept);
   const dispose = Array.from(oldModule.dispose);
-  const newUrl = `${url}?mtime=${Date.now()}`;
+  const newUrl = `${url}?mtime=${mtime}`;
   const newModulePromise = import(newUrl);
 
   return newModulePromise
@@ -217,6 +225,10 @@ function getModule(url) {
 }
 
 export function luath(url) {
+  if (!url) {
+    return;
+  }
+
   const _module = getModule(url);
 
   return {
@@ -245,18 +257,25 @@ export function luath(url) {
 
 const styles = new Map();
 
-export function style(filename) {
+export function style(filename, mtime = Date.now()) {
   const id = resolveUrl(filename);
   const oldNode = styles.get(id);
-
   const newNode = document.createElement("link");
   newNode.rel = "stylesheet";
-  newNode.href = oldNode ? `${filename}?mtime=${Date.now()}` : filename;
+  newNode.href = oldNode ? `${filename}?mtime=${mtime}` : filename;
   document.head.appendChild(newNode);
 
   styles.set(id, newNode);
 
   if (oldNode) {
-    newNode.onload = () => document.head.removeChild(oldNode);
+    newNode.onload = () => {
+      setTimeout(() => {
+        try {
+          document.head.removeChild(oldNode);
+        } catch (_) {
+          // swallow
+        }
+      }, 1000);
+    };
   }
 }

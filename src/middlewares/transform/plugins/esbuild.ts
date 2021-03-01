@@ -1,4 +1,5 @@
 import type { Service } from "../../../../deps.ts";
+import { loadUrl, parse } from "../../../../deps.ts";
 import { isJsExtension } from "../../isJs.ts";
 
 export function esbuild(servicePromise: Promise<Service>) {
@@ -8,6 +9,21 @@ export function esbuild(servicePromise: Promise<Service>) {
 
   return {
     name: "esbuild",
+    async load(id: string) {
+      if (!esbuildTransform || !isJsExtension(id)) {
+        return null;
+      }
+
+      const url = parse(id);
+
+      if (!url) {
+        return null;
+      }
+
+      const code = await loadUrl(url, {});
+
+      return code;
+    },
     async transform(code: string, id: string) {
       if (!esbuildTransform || !isJsExtension(id)) {
         return;
@@ -15,7 +31,7 @@ export function esbuild(servicePromise: Promise<Service>) {
 
       const output = await esbuildTransform(code, {
         format: "esm",
-        minify: true,
+        loader: "tsx",
       });
 
       return output.code;

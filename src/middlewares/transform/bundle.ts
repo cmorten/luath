@@ -1,52 +1,29 @@
 import type { Service } from "../../../deps.ts";
-import {
-  atImport,
-  image,
-  json,
-  posix,
-  postcss,
-  relative,
-  resolve,
-  rollup,
-} from "../../../deps.ts";
+import { atImport, image, join, json, postcss, rollup } from "../../../deps.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
-import { isCssExtension } from "../isCss.ts";
-import { isJsExtension } from "../isJs.ts";
 import { stripUrl } from "../stripUrl.ts";
 import { isPublicFile } from "./isPublicFile.ts";
 import { getEntryChunk } from "./getEntryChunk.ts";
 import { getCssAsset } from "./getCssAsset.ts";
-import { lmr, LMR_JS_PATH_IMPORT } from "./plugins/lmr.ts";
+import { isHttpUrl } from "./isHttpUrl.ts";
+import { pathToId } from "./pathToId.ts";
+import { lmr, LMR_JS_URL_IMPORT } from "./plugins/lmr.ts";
 import { esbuild } from "./plugins/esbuild.ts";
+import { reactRefresh } from "./plugins/reactRefresh.ts";
 
 function injectCss(
   code: string,
   styleName: string,
 ) {
-  return `import { style as $__luath_style } from "${LMR_JS_PATH_IMPORT}";\n` +
+  return `import { style as $__luath_style } from "${LMR_JS_URL_IMPORT}";\n` +
     `$__luath_style(${JSON.stringify(styleName)});\n` + code;
 }
 
-const minifyCss = (code: string) => code.replace(/\s+/g, "");
-
-function addRealModulesToGraph(
-  moduleGraph: ModuleGraph,
-  realModules: string[],
-  parentId: string,
-) {
-  const parentMod = moduleGraph.ensure(parentId);
-
-  realModules.forEach((id) => {
-    const realMod = moduleGraph.ensure(id);
-    realMod.stale = false;
-    realMod.dependents.add(parentId);
-    parentMod.dependencies.add(id);
-  });
-}
-
-function pathToId(path: string, rootDir: string) {
-  return `/${relative(rootDir, resolve(rootDir, path))}`;
-}
+// TODO: List:
+// - caching
+// - ensuring @import works in .css
+// - this nonsense with .css.css everywhere
+// - inject plugins ( reactRefresh ) rather than hardcoded in here
 
 export async function bundle(
   url: string,
@@ -54,16 +31,23 @@ export async function bundle(
   moduleGraph: ModuleGraph,
   esbuildService: Promise<Service>,
 ) {
-  const id = stripUrl(url);
-  const cachedMod = moduleGraph.get(id);
+  url = stripUrl(url);
+  const isDirectCss = /\.css\.css/.test(url);
+  const id = url.replace(".css.css", ".css");
 
-  if (cachedMod?.code && !cachedMod?.stale) {
-    return cachedMod.code;
-  }
+  // TODO: fix caching
+  // const cachedMod = moduleGraph.get(url);
+  // const useCache = cachedMod?.code && !cachedMod?.stale;
+  //
+  //
+  // if (useCache) {
+  //   return cachedMod;
+  // }
 
-  const filename = posix.join(rootDir, id.slice(1));
+  const filename = join(rootDir, id.slice(1));
   let code = null;
 
+  // If we don't have it cached, let's try the local fs.
   try {
     code = Deno.readTextFileSync(filename);
   } catch (err) {
@@ -72,12 +56,16 @@ export async function bundle(
     }
   }
 
+  // TODO: This needs checking!
+  // If we couldn't find it, maybe it's:
+  // - In the public directory
+  // - Is a "special" luath thingy
   if (code == null) {
     if (isPublicFile(id, rootDir)) {
       throw new Error(
         `Failed to load url ${id} as it was in the "public/" directory.`,
       );
-    } else {
+    } else if (!/\$__luath/.test(id)) {
       return null;
     }
   }
@@ -87,6 +75,7 @@ export async function bundle(
   const build = await rollup({
     input: filename,
     plugins: [
+      reactRefresh(),
       json(),
       image(),
       postcss({
@@ -99,62 +88,72 @@ export async function bundle(
           },
         })],
       }),
-      lmr(),
       esbuild(esbuildService),
+      lmr(moduleGraph, rootDir),
     ],
-    external: [LMR_JS_PATH_IMPORT],
+    external: () => true,
     onwarn() {},
+    treeshake: false,
   });
 
   const { output } = await build.generate({
     sourcemap: false,
     format: "es" as const,
+    preserveModules: true,
+    hoistTransitiveImports: false,
   });
 
-  const mod = moduleGraph.ensure(id);
-  mod.stale = false;
-
+  const entryMod = moduleGraph.ensure(id);
   const entryChunk = getEntryChunk(output);
-  const virtualCssAsset = getCssAsset(output);
 
-  if (virtualCssAsset) {
-    virtualCssAsset.fileName = `$luath_${virtualCssAsset.fileName}`;
-  }
+  // If it's not an asset then it's a chunk.
+  // Either JS or a CSS proxy module
+  // Because we preserve module structure, a
+  // bundle will be at most 2 files: the entry,
+  // a CSS asset.
+  entryMod.stale = false;
+  entryMod.code = entryChunk.code;
 
-  const realModules = Array.from(
+  // Ensure that we populate the module graph properly
+  // Ignoring the LMR injected imports, and any external
+  // URL imports.
+  Array.from(
     new Set([
-      ...Object.keys(entryChunk.modules).map((path) => pathToId(path, rootDir))
-        .filter((modId) => modId !== id),
-      ...cssImports,
+      ...entryChunk.imports,
+      ...entryChunk.dynamicImports,
     ]),
-  );
+  )
+    .filter((path) => path !== LMR_JS_URL_IMPORT && !isHttpUrl(path))
+    .forEach((path) => {
+      const importedId = pathToId(path, rootDir);
+      const importedMod = moduleGraph.ensure(importedId);
 
-  if (isCssExtension(id)) {
-    mod.acceptingUpdates = true;
-    addRealModulesToGraph(moduleGraph, realModules, id);
+      importedMod.stale = false;
+      importedMod.dependents.add(id);
 
-    return mod.code = minifyCss(virtualCssAsset.source as string);
-  } else if (isJsExtension(id)) {
-    if (!virtualCssAsset) {
-      addRealModulesToGraph(moduleGraph, realModules, id);
+      entryMod.dependencies.add(importedId);
+    });
 
-      return mod.code = entryChunk.code;
-    }
+  const cssAsset = getCssAsset(output);
 
-    const cssId = pathToId(virtualCssAsset.fileName, rootDir);
-    const cssMod = moduleGraph.ensure(cssId);
-    cssMod.dependents.add(id);
-    mod.dependencies.add(cssId);
-    cssMod.code = minifyCss(virtualCssAsset.source as string);
-    cssMod.stale = false;
+  if (cssAsset) {
+    const assetId = pathToId(cssAsset.fileName, rootDir);
+    const assetMod = moduleGraph.ensure(assetId);
 
-    addRealModulesToGraph(moduleGraph, realModules, cssId);
+    assetMod.stale = false;
+    assetMod.code = cssAsset.source as string;
+    assetMod.dependents.add(id);
 
-    return mod.code = injectCss(
-      entryChunk.code,
-      virtualCssAsset.fileName,
+    entryMod.dependencies.add(assetId);
+    entryMod.code = injectCss(
+      entryMod.code!,
+      assetId,
     );
   }
 
-  return code;
+  if (isDirectCss) {
+    return moduleGraph.get(url);
+  }
+
+  return entryMod;
 }

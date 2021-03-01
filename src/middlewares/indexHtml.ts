@@ -1,6 +1,7 @@
 import type { RequestHandler } from "../../deps.ts";
 import { exists, join } from "../../deps.ts";
 import { isHtml } from "./isHtml.ts";
+import { preambleCode } from "./transform/plugins/reactRefresh.ts";
 
 export function indexHtml(rootDir: string): RequestHandler {
   return async (req, res, next) => {
@@ -13,10 +14,13 @@ export function indexHtml(rootDir: string): RequestHandler {
         try {
           let html = await Deno.readTextFile(filename);
 
-          // TODO: lex/parse properly
+          // TODO:
+          // - lex / parse properly
+          // - need a way to say, hey - we're using x plugin which does y to the index.html
           html = html.replace(
-            "</head>",
-            `<script type="module" src="./_lmr.js"></script></head>`,
+            "<head>",
+            `<head><script type="module">${preambleCode}</script><script type="module" src="/$__luath.js"></script>`,
+            // `<head><script type="module" src="/$__luath.js"></script>`,
           );
 
           return res.send(html);

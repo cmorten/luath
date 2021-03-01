@@ -2,8 +2,10 @@ export interface Module {
   dependencies: Set<string>;
   dependents: Set<string>;
   stale?: boolean;
+  mtime?: number;
   acceptingUpdates?: boolean;
   code?: string;
+  type?: string;
 }
 
 export class ModuleGraph extends Map<string, Module> {
