@@ -6,10 +6,11 @@ import { isPublicFile } from "./isPublicFile.ts";
 import { getEntryChunk } from "./getEntryChunk.ts";
 import { getCssAsset } from "./getCssAsset.ts";
 import { isHttpUrl } from "./isHttpUrl.ts";
-import { pathToId } from "./pathToId.ts";
+import { pathToId } from "../pathToId.ts";
 import { lmr, LMR_JS_URL_IMPORT } from "./plugins/lmr.ts";
 import { esbuild } from "./plugins/esbuild.ts";
 import { reactRefresh } from "./plugins/reactRefresh.ts";
+import { isCssExtension } from "../isCss.ts";
 
 function injectCss(
   code: string,
@@ -19,10 +20,12 @@ function injectCss(
     `$__luath_style(${JSON.stringify(styleName)});\n` + code;
 }
 
+function idToPath(id: string, rootDir: string) {
+  return join(rootDir, id.slice(1).replace(".css.js", ".css"));
+}
+
 // TODO: List:
-// - caching
 // - ensuring @import works in .css
-// - this nonsense with .css.css everywhere
 // - inject plugins ( reactRefresh ) rather than hardcoded in here
 
 export async function bundle(
@@ -31,20 +34,17 @@ export async function bundle(
   moduleGraph: ModuleGraph,
   esbuildService: Promise<Service>,
 ) {
-  url = stripUrl(url);
-  const isDirectCss = /\.css\.css/.test(url);
-  const id = url.replace(".css.css", ".css");
+  const id = stripUrl(url);
+  const isCss = isCssExtension(id);
 
-  // TODO: fix caching
-  // const cachedMod = moduleGraph.get(url);
-  // const useCache = cachedMod?.code && !cachedMod?.stale;
-  //
-  //
-  // if (useCache) {
-  //   return cachedMod;
-  // }
+  const cachedMod = moduleGraph.get(id);
+  const useCache = cachedMod?.code && !cachedMod?.stale;
 
-  const filename = join(rootDir, id.slice(1));
+  if (useCache) {
+    return cachedMod;
+  }
+
+  const filename = idToPath(id, rootDir);
   let code = null;
 
   // If we don't have it cached, let's try the local fs.
@@ -103,8 +103,9 @@ export async function bundle(
     hoistTransitiveImports: false,
   });
 
-  const entryMod = moduleGraph.ensure(id);
   const entryChunk = getEntryChunk(output);
+  const entryId = isCss ? pathToId(entryChunk.fileName, rootDir) : id;
+  const entryMod = moduleGraph.ensure(entryId);
 
   // If it's not an asset then it's a chunk.
   // Either JS or a CSS proxy module
@@ -129,7 +130,7 @@ export async function bundle(
       const importedMod = moduleGraph.ensure(importedId);
 
       importedMod.stale = false;
-      importedMod.dependents.add(id);
+      importedMod.dependents.add(entryId);
 
       entryMod.dependencies.add(importedId);
     });
@@ -137,22 +138,28 @@ export async function bundle(
   const cssAsset = getCssAsset(output);
 
   if (cssAsset) {
-    const assetId = pathToId(cssAsset.fileName, rootDir);
+    const assetId = pathToId(
+      cssAsset.fileName.replace(".css.css", ".css"),
+      rootDir,
+    );
+
     const assetMod = moduleGraph.ensure(assetId);
 
     assetMod.stale = false;
+    // TODO: only set this for CSS imported via HTML rather than by a module
+    assetMod.acceptingUpdates = true;
     assetMod.code = cssAsset.source as string;
-    assetMod.dependents.add(id);
+    assetMod.dependents.add(entryId);
 
     entryMod.dependencies.add(assetId);
     entryMod.code = injectCss(
       entryMod.code!,
       assetId,
     );
-  }
 
-  if (isDirectCss) {
-    return moduleGraph.get(url);
+    if (isCss) {
+      return moduleGraph.get(assetId);
+    }
   }
 
   return entryMod;

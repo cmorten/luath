@@ -5,8 +5,8 @@ import {
 } from "https://esm.sh/es-module-lexer";
 import { default as MagicString } from "https://esm.sh/magic-string";
 import { isHot } from "./isHot.ts";
-import { pathToId } from "../pathToId.ts";
-import { isCssImportExtension } from "../../isCss.ts";
+import { pathToId } from "../../pathToId.ts";
+import { isCssExtension } from "../../isCss.ts";
 import { getLmrClient } from "../../getLmrClient.ts";
 import { stripUrl } from "../../stripUrl.ts";
 import { ModuleGraph } from "../../../moduleGraph.ts";
@@ -31,7 +31,7 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
       return null;
     },
     async transform(code: string, id: string) {
-      if (isCssImportExtension(id) || /\$__luath/.test(id)) {
+      if (isCssExtension(id) || /\$__luath/.test(id)) {
         return code;
       }
 
@@ -55,11 +55,17 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
           e: end,
         } = imports[index];
 
-        const rawUrl = stripUrl(code.slice(start, end));
+        const rawUrl = stripUrl(code.slice(start, end)).replace(
+          ".css",
+          ".css.js",
+        );
+
         const mod = moduleGraph.get(pathToId(rawUrl, rootDir));
 
         if (mod?.mtime) {
           str().overwrite(start, end, `${rawUrl}?mtime=${mod.mtime}`);
+        } else {
+          str().overwrite(start, end, rawUrl);
         }
       }
 

@@ -1,15 +1,12 @@
 import type { RequestHandler, WebSocket } from "../../../deps.ts";
-import {
-  acceptWebSocket,
-  isWebSocketCloseEvent,
-  normalize,
-} from "../../../deps.ts";
+import { acceptWebSocket, isWebSocketCloseEvent } from "../../../deps.ts";
 import { FileWatcher } from "../../fileWatcher.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
 import { WebSocketServer } from "../../webSocketServer.ts";
 import { getLmrClient } from "../getLmrClient.ts";
 import { isHtmlExtension } from "../isHtml.ts";
 import { stripUrl } from "../stripUrl.ts";
+import { pathToId } from "../pathToId.ts";
 
 const RE_LMR_WS = /\$__luath($|\?)/;
 const RE_LMR_JS = /\$__luath\.js($|\?)/;
@@ -17,13 +14,10 @@ const RE_LMR_JS = /\$__luath\.js($|\?)/;
 const isLmrWs = (fileName: string) => RE_LMR_WS.test(fileName);
 const isLmrJs = (fileName: string) => RE_LMR_JS.test(fileName);
 
-// TODO: replace with shared pathToId
-const pathToId = (path: string) =>
-  normalize(`/${path.replace(".css", ".css.css")}`);
-
 const invalidatedModules = new Set();
 
 export function lmr(
+  rootDir: string,
   fileWatcher: FileWatcher,
   webSocketServer: WebSocketServer,
   moduleGraph: ModuleGraph,
@@ -81,15 +75,13 @@ export function lmr(
     return !invalidatedModules.size;
   }
 
-  fileWatcher.watch();
-
   fileWatcher.on("create", (path: string) => {
-    const id = pathToId(path);
+    const id = pathToId(path, rootDir);
     moduleGraph.ensure(id);
   });
 
   fileWatcher.on("modify", (path: string) => {
-    const id = pathToId(path);
+    const id = pathToId(path, rootDir);
     const mtime = +new Date();
 
     if (isHtmlExtension(path)) {
@@ -115,7 +107,7 @@ export function lmr(
 
   // TODO: harden this
   fileWatcher.on("remove", (path: string) => {
-    const id = pathToId(path);
+    const id = pathToId(path, rootDir);
     const mtime = +new Date();
     moduleGraph.delete(id);
 
@@ -133,6 +125,8 @@ export function lmr(
 
     invalidatedModules.clear();
   });
+
+  fileWatcher.watch();
 
   return async (req, res, next) => {
     try {

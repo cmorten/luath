@@ -40,7 +40,7 @@ export function server(options?: LuathOptions) {
   });
 
   // LMR
-  app.use(lmr(fileWatcher, webSocketServer, moduleGraph));
+  app.use(lmr(rootDir, fileWatcher, webSocketServer, moduleGraph));
 
   // serve static public
   app.use(servePublic(publicDir));

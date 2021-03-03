@@ -3,7 +3,7 @@
 
 const RE_QUERYSTRING = /\?.*$/;
 const RE_HASH = /#.*$/;
-const RE_CSS = /\.css\.css($|\?)/;
+const RE_CSS = /\.css($|\?)/;
 
 const stripUrl = (url) => url.replace(RE_QUERYSTRING, "").replace(RE_HASH, "");
 
@@ -15,37 +15,25 @@ function logInfo(...args) {
 
 let errorOverlay;
 
-function showErrorOverlay(...errors) {
-  hideErrorOverlay();
+function showErrorOverlay(error) {
+  if (!errorOverlay) {
+    errorOverlay = document.createElement("div");
+    errorOverlay.style =
+      "box-sizing: border-box; width: 100%; height: 100%; position: fixed; top: 0; left: 0; padding: 15px; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 16px; background: #fffb;";
 
-  errorOverlay = document.createElement("div");
-  errorOverlay.style =
-    "box-sizing: border-box; width: 100%; height: 100%; position: absolute; top: 0; left: 0; padding: 15px; background: #ffffff88; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 16px;";
+    errorOverlay.innerHTML =
+      `<div style="background: #16242C; padding: 25px; border: 2px solid #C0C4CD; position: relative; max-height: 100%; overflow-y: scroll; box-sizing: border-box;">` +
+      `<button id="$luath_close" style="border: 0; color: #C0C4CD; width: 20px; height: 20px; background: transparent; position: absolute; top: 15px; right: 15px; font-size: 20px; padding: 0; cursor: pointer;">&#10005;</button>` +
+      `<pre id="$luath_message" style="white-space: pre-wrap; color: #EC5E66;"></pre>` +
+      `<pre id="$luath_stack" style="white-space: pre-wrap; color: #C0C4CD;"></pre>` +
+      `</div>`;
 
-  const formattedErrors = errors
-    .filter((error) => error instanceof Error)
-    .map((error) => {
-      // TODO: someone will have a well thought beautifier somewhere
-      return `<p>${error.toString()}</p>${
-        error.stack
-          ? `<p style="font-size: 12px;">${
-            error.stack
-              .replace(/ at /g, "<br />&nbsp; &nbsp; at ")
-              .replace(/\b\s+(\w*@)/g, "<br />&nbsp; &nbsp; $1")
-          }</p>`
-          : ""
-      }`;
-    })
-    .join("");
+    document.body.appendChild(errorOverlay);
+    document.getElementById("$luath_close").onclick = () => hideErrorOverlay();
+  }
 
-  errorOverlay.innerHTML =
-    `<div style="background: #ffffff; padding: 25px; color: darkred; border: 2px solid darkred; position: relative;">` +
-    `<button id="$luath_close" style="border: 0; color: #111; width: 20px; height: 20px; background: transparent; position: absolute; top: 15px; right: 15px; font-size: 20px; padding: 0; cursor: pointer;">&#10005;</button>` +
-    formattedErrors +
-    `</div>`;
-
-  document.body.appendChild(errorOverlay);
-  document.getElementById("$luath_close").onclick = () => hideErrorOverlay();
+  document.getElementById("$luath_message").textContent = error.message;
+  document.getElementById("$luath_stack").textContent = error.stack;
 }
 
 function hideErrorOverlay() {
@@ -55,9 +43,12 @@ function hideErrorOverlay() {
   }
 }
 
-function logError(...args) {
-  console.error("[lmr] ", ...args);
-  showErrorOverlay(...args);
+function logError(error) {
+  console.error("[lmr] ", error);
+
+  if (error.message !== "error loading dynamically imported module") {
+    showErrorOverlay(error);
+  }
 }
 
 function reload() {
@@ -129,7 +120,7 @@ function handleMessage(message) {
             return;
           } else if (
             url.replace(RE_INDEX_HTML, "") ===
-              resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
+            resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
           ) {
             return reload();
           } else {
@@ -202,7 +193,7 @@ function update({ url, mtime }) {
       });
     })
     .catch((err) => {
-      logError("hmr error", err);
+      logError(err);
     });
 }
 
@@ -237,7 +228,7 @@ export function luath(url) {
         JSON.stringify({
           id: url.replace(location.origin, ""),
           type: "hotAccepted",
-        }),
+        })
       );
 
       if (fn) {
