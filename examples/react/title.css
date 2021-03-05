@@ -3,6 +3,8 @@
   padding: 20px 0;
   text-align: center;
   width: 100%;
+  cursor: pointer;
+  user-select: none;
 }
 
 .text {

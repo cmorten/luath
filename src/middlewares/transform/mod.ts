@@ -3,6 +3,7 @@ import { ModuleGraph } from "../../moduleGraph.ts";
 import { isHtml } from "../isHtml.ts";
 import { isJs } from "../isJs.ts";
 import { isCss } from "../isCss.ts";
+import { isImport } from "../isImport.ts";
 import { bundle } from "./bundle.ts";
 
 export const urlIgnoreList = new Set(["/", "/favicon.ico"]);
@@ -26,7 +27,7 @@ export function transform(
     const _isCss = isCss(req);
 
     try {
-      if (_isCss || isJs(req)) {
+      if (_isCss || isJs(req) || isImport(req)) {
         const mod = await bundle(
           url,
           rootDir,

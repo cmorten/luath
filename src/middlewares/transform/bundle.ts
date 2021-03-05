@@ -11,6 +11,7 @@ import { lmr, LMR_JS_URL_IMPORT } from "./plugins/lmr.ts";
 import { esbuild } from "./plugins/esbuild.ts";
 import { reactRefresh } from "./plugins/reactRefresh.ts";
 import { isCssExtension } from "../isCss.ts";
+import { isImportUrl } from "../isImport.ts";
 
 function injectCss(
   code: string,
@@ -36,6 +37,7 @@ export async function bundle(
 ) {
   const id = stripUrl(url);
   const isCss = isCssExtension(id);
+  const isImport = isImportUrl(url);
 
   const cachedMod = moduleGraph.get(id);
   const useCache = cachedMod?.code && !cachedMod?.stale;
@@ -82,7 +84,7 @@ export async function bundle(
         modules: true,
         plugins: [atImport({
           resolve(path: string) {
-            cssImports.add(pathToId(path, rootDir));
+            cssImports.add(path);
 
             return path;
           },
@@ -129,9 +131,7 @@ export async function bundle(
       const importedId = pathToId(path, rootDir);
       const importedMod = moduleGraph.ensure(importedId);
 
-      importedMod.stale = false;
       importedMod.dependents.add(entryId);
-
       entryMod.dependencies.add(importedId);
     });
 
@@ -146,10 +146,23 @@ export async function bundle(
     const assetMod = moduleGraph.ensure(assetId);
 
     assetMod.stale = false;
-    // TODO: only set this for CSS imported via HTML rather than by a module
-    assetMod.acceptingUpdates = true;
     assetMod.code = cssAsset.source as string;
     assetMod.dependents.add(entryId);
+
+    if (!isImport) {
+      assetMod.acceptingUpdates = true;
+    }
+
+    Array.from(cssImports)
+      .filter((path) => path !== LMR_JS_URL_IMPORT && !isHttpUrl(path))
+      .forEach((path) => {
+        const importedId = pathToId(path, rootDir);
+        const importedMod = moduleGraph.ensure(importedId);
+
+        importedMod.stale = false;
+        importedMod.dependents.add(assetId);
+        assetMod.dependencies.add(importedId);
+      });
 
     entryMod.dependencies.add(assetId);
     entryMod.code = injectCss(

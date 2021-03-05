@@ -197,6 +197,10 @@ function update({ url, mtime }) {
     });
 }
 
+window.addEventListener("error", (event) =>  {
+  logError(event.error);
+});
+
 const modules = new Map();
 
 function getModule(url) {

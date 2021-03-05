@@ -5,12 +5,7 @@ export function error(webSocketServer: WebSocketServer): ErrorRequestHandler {
   return (error, _req, res, _next) => {
     webSocketServer.send({
       type: "error",
-      error: {
-        name: error.name,
-        message: error.message,
-        code: error.code,
-        stack: error.stack,
-      },
+      error: Object.assign({}, error),
     });
 
     return res.setStatus(500).end();

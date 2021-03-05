@@ -8,8 +8,8 @@ import { isHtmlExtension } from "../isHtml.ts";
 import { stripUrl } from "../stripUrl.ts";
 import { pathToId } from "../pathToId.ts";
 
-const RE_LMR_WS = /\$__luath($|\?)/;
-const RE_LMR_JS = /\$__luath\.js($|\?)/;
+const RE_LMR_WS = /\$__luath($|\?|&|#)/;
+const RE_LMR_JS = /\$__luath\.js($|\?|&|#)/;
 
 const isLmrWs = (fileName: string) => RE_LMR_WS.test(fileName);
 const isLmrJs = (fileName: string) => RE_LMR_JS.test(fileName);

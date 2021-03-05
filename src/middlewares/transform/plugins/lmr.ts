@@ -7,6 +7,8 @@ import { default as MagicString } from "https://esm.sh/magic-string";
 import { isHot } from "./isHot.ts";
 import { pathToId } from "../../pathToId.ts";
 import { isCssExtension } from "../../isCss.ts";
+import { isJsExtension } from "../../isJs.ts";
+import { isHttpUrl } from "../isHttpUrl.ts";
 import { getLmrClient } from "../../getLmrClient.ts";
 import { stripUrl } from "../../stripUrl.ts";
 import { ModuleGraph } from "../../../moduleGraph.ts";
@@ -60,12 +62,14 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
           ".css.js",
         );
 
-        const mod = moduleGraph.get(pathToId(rawUrl, rootDir));
+        if (isJsExtension(rawUrl) && !isHttpUrl(rawUrl)) {
+          const mod = moduleGraph.get(pathToId(rawUrl, rootDir));
 
-        if (mod?.mtime) {
-          str().overwrite(start, end, `${rawUrl}?mtime=${mod.mtime}`);
-        } else {
-          str().overwrite(start, end, rawUrl);
+          if (mod?.mtime) {
+            str().overwrite(start, end, `${rawUrl}?mtime=${mod.mtime}`);
+          } else {
+            str().overwrite(start, end, rawUrl);
+          }
         }
       }
 
@@ -77,7 +81,7 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
       } else {
         str().append(
           `\nimport { luath as $__luath } from "${LMR_JS_URL_IMPORT}";\n` +
-            `import.meta.hot = $__luath(import.meta.url); import.meta.hot.accept();`,
+            `import.meta.hot = $__luath(import.meta.url);`,
         );
       }
 
