@@ -1,10 +1,15 @@
-import type { RequestHandler } from "../../deps.ts";
+import type {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from "../../deps.ts";
 import { exists, join } from "../../deps.ts";
 import { isHtml } from "./isHtml.ts";
 import { preambleCode } from "./transform/plugins/reactRefresh.ts";
 
 export function indexHtml(rootDir: string): RequestHandler {
-  return async (req, res, next) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     const url = req.url === "/" ? "/index.html" : req.url;
 
     if (isHtml(req)) {

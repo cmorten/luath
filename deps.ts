@@ -7,7 +7,7 @@ export {
   copy,
   exists,
   existsSync,
-} from "https://deno.land/std@0.83.0/fs/mod.ts";
+} from "https://deno.land/std@0.89.0/fs/mod.ts";
 export {
   extname,
   isAbsolute,
@@ -15,8 +15,8 @@ export {
   normalize,
   relative,
   resolve,
-} from "https://deno.land/std@0.83.0/path/mod.ts";
-export { default as EventEmitter } from "https://deno.land/std@0.83.0/node/events.ts";
+} from "https://deno.land/std@0.89.0/path/mod.ts";
+export { default as EventEmitter } from "https://deno.land/std@0.89.0/node/events.ts";
 export type { WebSocket } from "https://deno.land/std@0.83.0/ws/mod.ts";
 export {
   acceptWebSocket,
@@ -42,10 +42,12 @@ export { loadUrl } from "https://deno.land/x/drollup@2.39.0+0.14.0/src/rollup-pl
 
 export type {
   ErrorRequestHandler,
+  NextFunction,
   Opine,
   Request,
   RequestHandler,
-} from "https://deno.land/x/opine@1.1.0/mod.ts";
+  Response,
+} from "https://deno.land/x/opine@1.1.0/src/types.ts";
 export { opine, serveStatic } from "https://deno.land/x/opine@1.1.0/mod.ts";
 
 export { default as pm } from "https://esm.sh/picomatch@2.2.2";

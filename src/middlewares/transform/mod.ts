@@ -1,4 +1,10 @@
-import type { RequestHandler, Service } from "../../../deps.ts";
+import type {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+  Service,
+} from "../../../deps.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
 import { isHtml } from "../isHtml.ts";
 import { isJs } from "../isJs.ts";
@@ -13,7 +19,7 @@ export function transform(
   moduleGraph: ModuleGraph,
   esbuildService: Promise<Service>,
 ): RequestHandler {
-  return async (req, res, next) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     const url = req.url;
 
     if (

@@ -1,7 +1,7 @@
-import type { RequestHandler } from "../../deps.ts";
+import type { RequestHandler, Response } from "../../deps.ts";
 
 export function notFound(): RequestHandler {
-  return (_req, res, _next) => {
+  return (_req: unknown, res: Response, _next: unknown) => {
     return res.setStatus(404).end();
   };
 }
