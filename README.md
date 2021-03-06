@@ -31,4 +31,5 @@ For a sneak preview:
 3. Open <http://localhost:3000> in a browser
 4. Start editing the example files and keep and an eye on the browser
 
-https://user-images.githubusercontent.com/11313985/110217624-fed86000-7eac-11eb-8794-20342732d520.mov
+![luath](https://user-images.githubusercontent.com/11313985/110217722-95a51c80-7ead-11eb-9472-0a80f0fe38b8.gif)
+
