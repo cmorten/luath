@@ -30,3 +30,5 @@ For a sneak preview:
 2. Start the example server with `deno run -A --unstable --no-check server.ts`
 3. Open <http://localhost:3000> in a browser
 4. Start editing the example files and keep and an eye on the browser
+
+https://user-images.githubusercontent.com/11313985/110217624-fed86000-7eac-11eb-8794-20342732d520.mov
