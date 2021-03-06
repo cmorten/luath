@@ -24,4 +24,8 @@
 
 Coming soon!
 
-For a sneak preview clone and run the `./server.ts` from one of the examples, open <http://localhost:3000> in a browser, and start editing some of the example files.
+For a sneak preview:
+
+1. Clone and run the `./server.ts` from one of the examples
+2. Open <http://localhost:3000> in a browser
+3. Start editing the example files and keep and an eye on the browser
