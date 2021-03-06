@@ -2,7 +2,7 @@
   <h1 align="center">Luath</h1>
 </p>
 <p align="center">
-  Deno frontend developers want it fast
+  For Deno frontend developers who like it fast
 </p>
 <p align="center">
    <img src="https://github.com/cmorten/luath/workflows/Test/badge.svg" alt="Current test status" />
