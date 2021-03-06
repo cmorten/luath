@@ -26,6 +26,7 @@ Coming soon!
 
 For a sneak preview:
 
-1. Clone and run the `./server.ts` from one of the examples
-2. Open <http://localhost:3000> in a browser
-3. Start editing the example files and keep and an eye on the browser
+1. Clone the repo and navigate to one of the examples
+2. Start the example server with `deno run -A --unstable --no-check server.ts`
+3. Open <http://localhost:3000> in a browser
+4. Start editing the example files and keep and an eye on the browser
