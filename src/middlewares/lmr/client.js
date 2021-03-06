@@ -120,7 +120,7 @@ function handleMessage(message) {
             return;
           } else if (
             url.replace(RE_INDEX_HTML, "") ===
-            resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
+              resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
           ) {
             return reload();
           } else {
@@ -197,7 +197,7 @@ function update({ url, mtime }) {
     });
 }
 
-window.addEventListener("error", (event) =>  {
+window.addEventListener("error", (event) => {
   logError(event.error);
 });
 
@@ -232,7 +232,7 @@ export function luath(url) {
         JSON.stringify({
           id: url.replace(location.origin, ""),
           type: "hotAccepted",
-        })
+        }),
       );
 
       if (fn) {

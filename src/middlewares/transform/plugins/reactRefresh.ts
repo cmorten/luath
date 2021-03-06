@@ -1,7 +1,10 @@
-import { transformSync } from "https://esm.sh/@babel/core@7.13.8";
-import pluginTransformReactJsxSelf from "https://esm.sh/@babel/plugin-transform-react-jsx-self";
-import pluginTransformReactJsxSource from "https://esm.sh/@babel/plugin-transform-react-jsx-source";
-import reactRefreshBabel from "https://cdn.esm.sh/v15/react-refresh@0.9.0/esnext/babel.js";
+// deno-lint-ignore-file no-explicit-any
+import {
+  pluginTransformReactJsxSelf,
+  pluginTransformReactJsxSource,
+  reactRefreshBabel,
+  transformSync,
+} from "../../../../deps.ts";
 
 export const runtimePublicPath = "/$__luath_react_refresh.js";
 export const runtimeUrl =
@@ -148,13 +151,16 @@ function isRefreshBoundary(ast: any) {
     if (node.type !== "ExportNamedDeclaration") {
       return true;
     }
+
     const { declaration, specifiers } = node;
+
     if (declaration && declaration.type === "VariableDeclaration") {
       return declaration.declarations.every(
         ({ id }: any) =>
           id.type === "Identifier" && isComponentishName(id.name),
       );
     }
+
     return specifiers.every(
       ({ exported }: any) =>
         exported.type === "Identifier" && isComponentishName(exported.name),

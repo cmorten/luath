@@ -142,7 +142,6 @@ export async function bundle(
       cssAsset.fileName.replace(".css.css", ".css"),
       rootDir,
     );
-
     const assetMod = moduleGraph.ensure(assetId);
 
     assetMod.stale = false;

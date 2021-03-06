@@ -3,7 +3,7 @@
 FILES_TO_FORMAT = ./src/ ./deps.ts ./mod.ts ./version.ts
 
 build:
-	@deno run -A --unstable mod.ts
+	@deno run -A --unstable --no-check mod.ts
 
 ci:
 	@make fmt-check

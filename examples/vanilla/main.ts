@@ -10,3 +10,7 @@ document.querySelector(`#app`).innerHTML = `
   <p class="${styles.meta}">Project Metadata: ${JSON.stringify(metadata, undefined, 2)}</p>
   <p class="${styles.intro}">Coming soon...!</p>
   `;
+
+if (import.meta.hot) {
+  import.meta.hot.accept();
+}

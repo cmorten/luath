@@ -9,6 +9,7 @@ import { pathToId } from "../../pathToId.ts";
 import { isCssExtension } from "../../isCss.ts";
 import { isJsExtension } from "../../isJs.ts";
 import { isHttpUrl } from "../isHttpUrl.ts";
+import { isMetaImport } from "../isMetaImport.ts";
 import { getLmrClient } from "../../getLmrClient.ts";
 import { stripUrl } from "../../stripUrl.ts";
 import { ModuleGraph } from "../../../moduleGraph.ts";
@@ -38,7 +39,7 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
       }
 
       await init;
-      let imports: ImportSpecifier[] = [];
+      let imports: readonly ImportSpecifier[] = [];
 
       try {
         imports = parseImports(code)[0];
@@ -62,13 +63,13 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
           ".css.js",
         );
 
-        if (isJsExtension(rawUrl) && !isHttpUrl(rawUrl)) {
+        if (!isMetaImport(rawUrl) && !isHttpUrl(rawUrl)) {
           const mod = moduleGraph.get(pathToId(rawUrl, rootDir));
 
           if (mod?.mtime) {
-            str().overwrite(start, end, `${rawUrl}?mtime=${mod.mtime}`);
+            str().overwrite(start, end, `${rawUrl}?im&mtime=${mod.mtime}`);
           } else {
-            str().overwrite(start, end, rawUrl);
+            str().overwrite(start, end, `${rawUrl}?im`);
           }
         }
       }

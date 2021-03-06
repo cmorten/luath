@@ -14,7 +14,7 @@ export function transform(
   esbuildService: Promise<Service>,
 ): RequestHandler {
   return async (req, res, next) => {
-    let url = req.url;
+    const url = req.url;
 
     if (
       req.method !== "GET" ||

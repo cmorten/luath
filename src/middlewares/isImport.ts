@@ -1,6 +1,6 @@
 import type { Request } from "../../deps.ts";
 
-export const RE_IMPORT = /\?esm($|\?|&|#)/;
+export const RE_IMPORT = /\?im($|\?|&|#)/;
 
 export const isImportUrl = (url: string) => RE_IMPORT.test(url);
 
