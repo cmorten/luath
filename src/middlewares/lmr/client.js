@@ -56,7 +56,7 @@ function reload() {
 }
 
 const channel = new MessageChannel();
-const url = `${location.origin.replace("http", "ws")}/$__luath`;
+const url = `${location.origin.replace("http", "ws")}/$luath/lmr`;
 
 let ws;
 

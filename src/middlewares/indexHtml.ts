@@ -6,7 +6,7 @@ import type {
 } from "../../deps.ts";
 import { exists, join } from "../../deps.ts";
 import { isHtml } from "./isHtml.ts";
-import { preambleCode } from "./transform/plugins/reactRefresh.ts";
+import { REACT_REFRESH_BOOTSTRAP } from "./transform/plugins/reactRefresh.ts";
 
 export function indexHtml(rootDir: string): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -24,8 +24,7 @@ export function indexHtml(rootDir: string): RequestHandler {
           // - need a way to say, hey - we're using x plugin which does y to the index.html
           html = html.replace(
             "<head>",
-            `<head><script type="module">${preambleCode}</script><script type="module" src="/$__luath.js"></script>`,
-            // `<head><script type="module" src="/$__luath.js"></script>`,
+            `<head><script type="module">${REACT_REFRESH_BOOTSTRAP}</script><script type="module" src="/$luath/client.js"></script>`,
           );
 
           return res.send(html);

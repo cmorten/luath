@@ -64,3 +64,10 @@ export { transformSync } from "https://esm.sh/@babel/core@7.13.8";
 export { default as pluginTransformReactJsxSelf } from "https://esm.sh/@babel/plugin-transform-react-jsx-self";
 export { default as pluginTransformReactJsxSource } from "https://esm.sh/@babel/plugin-transform-react-jsx-source";
 export { default as reactRefreshBabel } from "https://cdn.esm.sh/v15/react-refresh@0.9.0/esnext/babel.js";
+
+export type { ImportSpecifier } from "https://cdn.esm.sh/v16/es-module-lexer@0.4.1/types/lexer.d.ts";
+export {
+  init as esModuleLexerInit,
+  parse as parseImports,
+} from "https://esm.sh/es-module-lexer@0.4.1";
+export { default as MagicString } from "https://esm.sh/magic-string@0.25.7";

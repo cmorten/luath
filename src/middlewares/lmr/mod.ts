@@ -1,4 +1,10 @@
-import type { RequestHandler, WebSocket } from "../../../deps.ts";
+import type {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+  WebSocket,
+} from "../../../deps.ts";
 import { acceptWebSocket, isWebSocketCloseEvent } from "../../../deps.ts";
 import { FileWatcher } from "../../fileWatcher.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
@@ -8,8 +14,8 @@ import { isHtmlExtension } from "../isHtml.ts";
 import { stripUrl } from "../stripUrl.ts";
 import { pathToId } from "../pathToId.ts";
 
-const RE_LMR_WS = /\$__luath($|\?|&|#)/;
-const RE_LMR_JS = /\$__luath\.js($|\?|&|#)/;
+const RE_LMR_WS = /\/\$luath\/lmr($|\?|&|#)/;
+const RE_LMR_JS = /\/\$luath\/client\.js($|\?|&|#)/;
 
 const isLmrWs = (fileName: string) => RE_LMR_WS.test(fileName);
 const isLmrJs = (fileName: string) => RE_LMR_JS.test(fileName);
@@ -68,7 +74,8 @@ export function lmr(
 
     if (mod.dependents.size) {
       return !Array.from(mod.dependents).every(
-        (subModulePath) => !updateModuleSubGraph(subModulePath, mtime),
+        (subModulePath) =>
+          !updateModuleSubGraph(subModulePath as string, mtime),
       );
     }
 
@@ -128,7 +135,7 @@ export function lmr(
 
   fileWatcher.watch();
 
-  return async (req, res, next) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     try {
       if (isLmrWs(req.url)) {
         const socket = await acceptWebSocket({

@@ -6,68 +6,67 @@ import {
   transformSync,
 } from "../../../../deps.ts";
 
-export const runtimePublicPath = "/$__luath_react_refresh.js";
-export const runtimeUrl =
-  new URL(runtimePublicPath, "http://localhost:3000").href;
+const REACT_REFRESH_PATH_IMPORT = "/$luath/react-refresh.js";
 
-const runtime = (await (await fetch(
-  "https://unpkg.com/react-refresh@0.9.0/cjs/react-refresh-runtime.development.js",
-))
-  .text()).replace("process.env.NODE_ENV", "'development'");
+export const REACT_REFRESH_BOOTSTRAP =
+  `import RefreshRuntime from "${REACT_REFRESH_PATH_IMPORT}";
+RefreshRuntime.injectIntoGlobalHook(window);
+window.$RefreshReg$ = () => {};
+window.$RefreshSig$ = () => (type) => type;
+window.$luath_react_refresh_bootstrap = true;`;
 
-const runtimeCode = `
-const exports = {};
-${runtime}
-function debounce(fn, delay) {
+const REACT_REFRESH_REMOTE_URL =
+  "https://unpkg.com/react-refresh@0.9.0/cjs/react-refresh-runtime.development.js";
+
+const REACT_REFRESH_RUNTIME_CODE_PROMISE = fetch(REACT_REFRESH_REMOTE_URL)
+  .then((res) => res.text())
+  .then((code) => code.replace("process.env.NODE_ENV", "'development'"))
+  .then((code) => {
+    return `const exports = {};
+${code}
+function debounce(callback, delay) {
   let handle;
 
   return () => {
     clearTimeout(handle);
-    handle = setTimeout(fn, delay);
+    handle = setTimeout(callback, delay);
   }
 }
 const performReactRefresh = exports.performReactRefresh;
 exports.performReactRefresh = debounce(performReactRefresh, 16);
-export default exports;
-`;
+export default exports;`;
+  });
 
-export const preambleCode = `
-import RefreshRuntime from "${runtimeUrl}";
-RefreshRuntime.injectIntoGlobalHook(window);
-window.$RefreshReg$ = () => {};
-window.$RefreshSig$ = () => (type) => type;
-window.$__luath_react_refresh_preamble_installed = true;
-`;
+function shouldIgnore(code: string, id: string) {
+  if (id.endsWith(REACT_REFRESH_PATH_IMPORT)) {
+    return true;
+  } else if (!/\.(t|j)sx?$/.test(id)) {
+    return true;
+  } else if (!id.endsWith("x") && !code.includes("react")) {
+    return true;
+  }
+
+  return false;
+}
 
 /**
  * Transform plugin for transforming and injecting per-file refresh code.
  */
 export function reactRefresh() {
   return {
-    name: "react-refresh",
-
+    name: "luath-react-refresh",
     resolveId(id: string) {
-      if (id.endsWith(runtimePublicPath)) {
-        return id;
+      if (id.endsWith(REACT_REFRESH_PATH_IMPORT)) {
+        return REACT_REFRESH_PATH_IMPORT;
       }
     },
-
     load(id: string) {
-      if (id.endsWith(runtimePublicPath)) {
-        return runtimeCode;
+      if (id === REACT_REFRESH_PATH_IMPORT) {
+        return REACT_REFRESH_RUNTIME_CODE_PROMISE;
       }
     },
-
     transform(code: string, id: string) {
-      if (id.endsWith(runtimePublicPath)) {
-        return code;
-      }
-
-      if (!/\.(t|j)sx?$/.test(id)) {
-        return code;
-      }
-
-      if (!id.endsWith("x") && !code.includes("react")) {
+      if (shouldIgnore(code, id)) {
         return code;
       }
 
@@ -103,50 +102,51 @@ export function reactRefresh() {
       });
 
       if (!/\$RefreshReg\$\(/.test(result.code)) {
-        // no component detected in the file
         return code;
       }
 
-      const header = `
-  import RefreshRuntime from "${runtimeUrl}";
+      const intro = `import RefreshRuntime from "${REACT_REFRESH_PATH_IMPORT}";
 
-  let prevRefreshReg;
-  let prevRefreshSig;
+let prevRefreshReg;
+let prevRefreshSig;
 
-  if (!window.$__luath_react_refresh_preamble_installed) {
-    throw new Error("failed to install React refresh");
+if (!window.$luath_react_refresh_bootstrap) {
+  throw new Error("failed to install React refresh");
+}
+
+if (import.meta.hot) {
+  prevRefreshReg = window.$RefreshReg$;
+  prevRefreshSig = window.$RefreshSig$;
+  window.$RefreshReg$ = (type, id) => {
+    RefreshRuntime.register(type, ${JSON.stringify(id)} + " " + id)
+  };
+  window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
+}\n`;
+
+      const outro = `if (import.meta.hot) {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+
+  ${isRefreshBoundary(result.ast) ? `import.meta.hot.accept();` : ``}
+
+  if (!window.$luath_react_refresh_timeout) {
+    window.$luath_react_refresh_timeout = setTimeout(() => {
+      window.$luath_react_refresh_timeout = 0;
+      RefreshRuntime.performReactRefresh();
+    }, 30);
   }
+}`;
 
-  if (import.meta.hot) {
-    prevRefreshReg = window.$RefreshReg$;
-    prevRefreshSig = window.$RefreshSig$;
-    window.$RefreshReg$ = (type, id) => {
-      RefreshRuntime.register(type, ${JSON.stringify(id)} + " " + id)
-    };
-    window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
-  }\n`;
-
-      const footer = `
-  if (import.meta.hot) {
-    window.$RefreshReg$ = prevRefreshReg;
-    window.$RefreshSig$ = prevRefreshSig;
-
-    ${isRefreshBoundary(result.ast) ? `import.meta.hot.accept();` : ``}
-    if (!window.$__luath_react_refresh_timeout) {
-      window.$__luath_react_refresh_timeout = setTimeout(() => {
-        window.$__luath_react_refresh_timeout = 0;
-        RefreshRuntime.performReactRefresh();
-      }, 30);
-    }
-  }`;
-
-      return `${header}${result.code}${footer}`;
+      return `${intro}${result.code}${outro}`;
     },
   };
 }
 
+function isComponentishName(name: unknown) {
+  return typeof name === "string" && name[0] >= "A" && name[0] <= "Z";
+}
+
 function isRefreshBoundary(ast: any) {
-  // Every export must be a React component.
   return ast.program.body.every((node: any) => {
     if (node.type !== "ExportNamedDeclaration") {
       return true;
@@ -166,11 +166,4 @@ function isRefreshBoundary(ast: any) {
         exported.type === "Identifier" && isComponentishName(exported.name),
     );
   });
-}
-
-/**
- * @param {string} name
- */
-function isComponentishName(name: unknown) {
-  return typeof name === "string" && name[0] >= "A" && name[0] <= "Z";
 }

@@ -1,24 +1,33 @@
 import type { Service } from "../../../deps.ts";
-import { atImport, image, join, json, postcss, rollup } from "../../../deps.ts";
+import {
+  atImport,
+  image,
+  join,
+  json,
+  postcss,
+  relative,
+  rollup,
+} from "../../../deps.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
+import { pathToId } from "../pathToId.ts";
+import { isCssExtension } from "../isCss.ts";
+import { isImportUrl } from "../isImport.ts";
 import { stripUrl } from "../stripUrl.ts";
+import { lmr, LMR_JS_PATH_IMPORT } from "./plugins/lmr.ts";
+import { esbuild } from "./plugins/esbuild.ts";
+import { reactRefresh } from "./plugins/reactRefresh.ts";
+import { isLuathImport } from "./isLuathImport.ts";
 import { isPublicFile } from "./isPublicFile.ts";
 import { getEntryChunk } from "./getEntryChunk.ts";
 import { getCssAsset } from "./getCssAsset.ts";
 import { isHttpUrl } from "./isHttpUrl.ts";
-import { pathToId } from "../pathToId.ts";
-import { lmr, LMR_JS_URL_IMPORT } from "./plugins/lmr.ts";
-import { esbuild } from "./plugins/esbuild.ts";
-import { reactRefresh } from "./plugins/reactRefresh.ts";
-import { isCssExtension } from "../isCss.ts";
-import { isImportUrl } from "../isImport.ts";
 
 function injectCss(
   code: string,
   styleName: string,
 ) {
-  return `import { style as $__luath_style } from "${LMR_JS_URL_IMPORT}";\n` +
-    `$__luath_style(${JSON.stringify(styleName)});\n` + code;
+  return `import { style as $luath_style } from "${LMR_JS_PATH_IMPORT}";\n` +
+    `$luath_style(${JSON.stringify(styleName)});\n` + code;
 }
 
 function idToPath(id: string, rootDir: string) {
@@ -26,7 +35,6 @@ function idToPath(id: string, rootDir: string) {
 }
 
 // TODO: List:
-// - ensuring @import works in .css
 // - inject plugins ( reactRefresh ) rather than hardcoded in here
 
 export async function bundle(
@@ -47,9 +55,9 @@ export async function bundle(
   }
 
   const filename = idToPath(id, rootDir);
+
   let code = null;
 
-  // If we don't have it cached, let's try the local fs.
   try {
     code = Deno.readTextFileSync(filename);
   } catch (err) {
@@ -58,16 +66,13 @@ export async function bundle(
     }
   }
 
-  // TODO: This needs checking!
-  // If we couldn't find it, maybe it's:
-  // - In the public directory
-  // - Is a "special" luath thingy
+  // TODO: This needs checking
   if (code == null) {
     if (isPublicFile(id, rootDir)) {
       throw new Error(
         `Failed to load url ${id} as it was in the "public/" directory.`,
       );
-    } else if (!/\$__luath/.test(id)) {
+    } else if (!isLuathImport(id)) {
       return null;
     }
   }
@@ -103,30 +108,29 @@ export async function bundle(
     format: "es" as const,
     preserveModules: true,
     hoistTransitiveImports: false,
+    paths(id: string) {
+      if (id.startsWith(rootDir)) {
+        return `/${relative(rootDir, id)}`;
+      }
+
+      return id;
+    },
   });
 
   const entryChunk = getEntryChunk(output);
   const entryId = isCss ? pathToId(entryChunk.fileName, rootDir) : id;
   const entryMod = moduleGraph.ensure(entryId);
 
-  // If it's not an asset then it's a chunk.
-  // Either JS or a CSS proxy module
-  // Because we preserve module structure, a
-  // bundle will be at most 2 files: the entry,
-  // a CSS asset.
   entryMod.stale = false;
   entryMod.code = entryChunk.code;
 
-  // Ensure that we populate the module graph properly
-  // Ignoring the LMR injected imports, and any external
-  // URL imports.
   Array.from(
     new Set([
       ...entryChunk.imports,
       ...entryChunk.dynamicImports,
     ]),
   )
-    .filter((path) => path !== LMR_JS_URL_IMPORT && !isHttpUrl(path))
+    .filter((path) => !isLuathImport(path) && !isHttpUrl(path))
     .forEach((path) => {
       const importedId = pathToId(path, rootDir);
       const importedMod = moduleGraph.ensure(importedId);
@@ -153,7 +157,7 @@ export async function bundle(
     }
 
     Array.from(cssImports)
-      .filter((path) => path !== LMR_JS_URL_IMPORT && !isHttpUrl(path))
+      .filter((path) => !isLuathImport(path) && !isHttpUrl(path))
       .forEach((path) => {
         const importedId = pathToId(path, rootDir);
         const importedMod = moduleGraph.ensure(importedId);
