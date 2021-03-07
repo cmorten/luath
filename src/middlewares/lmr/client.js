@@ -3,7 +3,9 @@
 
 const RE_QUERYSTRING = /\?.*$/;
 const RE_HASH = /#.*$/;
-const RE_CSS = /\.css($|\?)/;
+
+const RE_CSS = /\.css($|\?|&|#)/;
+const RE_INDEX_HTML = /\/(index\.html)($|\?|&|#)/;
 
 const stripUrl = (url) => url.replace(RE_QUERYSTRING, "").replace(RE_HASH, "");
 
@@ -61,6 +63,14 @@ const url = `${location.origin.replace("http", "ws")}/$luath/lmr`;
 let ws;
 
 function connectWebSocket(cb = () => {}) {
+  if (ws) {
+    try {
+      ws.close();
+    } catch (_) {
+      // swallow
+    }
+  }
+
   ws = new WebSocket(url);
   ws.addEventListener("open", () => {
     cb();
@@ -80,8 +90,6 @@ function forwardMessages() {
 }
 
 const resolveUrl = (url) => new URL(url, location.origin).href;
-
-const RE_INDEX_HTML = /\/(index\.html)($|\?)/;
 
 let updateQueue = [];
 let updating = false;
@@ -164,10 +172,20 @@ function handleError() {}
 
 const CONNECTION_RETRY_TIMEOUT = 1000;
 
+let reconnectHandle;
+
 function handleClose(event) {
   if (!event.wasClean) {
     logInfo("connection lost - reconnecting...");
-    setTimeout(() => connectWebSocket(reload), CONNECTION_RETRY_TIMEOUT);
+
+    if (reconnectHandle) {
+      clearTimeout(reconnectHandle);
+    }
+
+    reconnectHandle = setTimeout(
+      () => connectWebSocket(reload),
+      CONNECTION_RETRY_TIMEOUT,
+    );
   }
 }
 
