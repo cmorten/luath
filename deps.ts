@@ -2,7 +2,7 @@ export type {
   HTTPOptions,
   HTTPSOptions,
   Server,
-} from "https://deno.land/std@0.83.0/http/mod.ts";
+} from "https://deno.land/std@0.89.0/http/mod.ts";
 export {
   copy,
   exists,
@@ -17,11 +17,11 @@ export {
   resolve,
 } from "https://deno.land/std@0.89.0/path/mod.ts";
 export { default as EventEmitter } from "https://deno.land/std@0.89.0/node/events.ts";
-export type { WebSocket } from "https://deno.land/std@0.83.0/ws/mod.ts";
+export type { WebSocket } from "https://deno.land/std@0.89.0/ws/mod.ts";
 export {
   acceptWebSocket,
   isWebSocketCloseEvent,
-} from "https://deno.land/std@0.83.0/ws/mod.ts";
+} from "https://deno.land/std@0.89.0/ws/mod.ts";
 
 export type {
   InputOption,
@@ -31,14 +31,14 @@ export type {
   RollupOptions,
   RollupOutput,
   WatcherOptions,
-} from "https://deno.land/x/drollup@2.39.0+0.14.0/mod.ts";
-export { rollup } from "https://deno.land/x/drollup@2.39.0+0.14.0/mod.ts";
-export { virtual } from "https://deno.land/x/drollup@2.39.0+0.14.0/plugins/virtual/mod.ts";
-export { image } from "https://deno.land/x/drollup@2.39.0+0.14.0/plugins/image/mod.ts";
-export { json } from "https://deno.land/x/drollup@2.39.0+0.14.0/plugins/json/mod.ts";
-export { postcss } from "https://deno.land/x/drollup@2.39.0+0.14.0/plugins/postcss/mod.ts";
-export { parse } from "https://deno.land/x/drollup@2.39.0+0.14.0/src/rollup-plugin-deno-resolver/parse.ts";
-export { loadUrl } from "https://deno.land/x/drollup@2.39.0+0.14.0/src/rollup-plugin-deno-resolver/loadUrl.ts";
+} from "https://deno.land/x/drollup@2.41.0+0.16.1/mod.ts";
+export { rollup } from "https://deno.land/x/drollup@2.41.0+0.16.1/mod.ts";
+export { virtual } from "https://deno.land/x/drollup@2.41.0+0.16.1/plugins/virtual/mod.ts";
+export { image } from "https://deno.land/x/drollup@2.41.0+0.16.1/plugins/image/mod.ts";
+export { json } from "https://deno.land/x/drollup@2.41.0+0.16.1/plugins/json/mod.ts";
+export { postcss } from "https://deno.land/x/drollup@2.41.0+0.16.1/plugins/postcss/mod.ts";
+export { parse } from "https://deno.land/x/drollup@2.41.0+0.16.1/src/rollup-plugin-deno-resolver/parse.ts";
+export { loadUrl } from "https://deno.land/x/drollup@2.41.0+0.16.1/src/rollup-plugin-deno-resolver/loadUrl.ts";
 
 export type {
   ErrorRequestHandler,
@@ -47,8 +47,8 @@ export type {
   Request,
   RequestHandler,
   Response,
-} from "https://deno.land/x/opine@1.1.0/src/types.ts";
-export { opine, serveStatic } from "https://deno.land/x/opine@1.1.0/mod.ts";
+} from "https://deno.land/x/opine@1.2.0/src/types.ts";
+export { opine, serveStatic } from "https://deno.land/x/opine@1.2.0/mod.ts";
 
 export { Command } from "https://deno.land/x/cliffy@v0.18.1/command/mod.ts";
 export type {
