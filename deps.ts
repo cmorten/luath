@@ -50,6 +50,12 @@ export type {
 } from "https://deno.land/x/opine@1.1.0/src/types.ts";
 export { opine, serveStatic } from "https://deno.land/x/opine@1.1.0/mod.ts";
 
+export { Command } from "https://deno.land/x/cliffy@v0.18.1/command/mod.ts";
+export type {
+  IParseResult,
+  ITypeInfo,
+} from "https://deno.land/x/cliffy@v0.18.1/command/mod.ts";
+
 export { default as pm } from "https://esm.sh/picomatch@2.2.2";
 export { default as atImport } from "https://esm.sh/postcss-import@14.0.0";
 

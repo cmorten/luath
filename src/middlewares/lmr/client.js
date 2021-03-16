@@ -35,7 +35,10 @@ function showErrorOverlay(error) {
   }
 
   document.getElementById("$luath_message").textContent = error.message;
-  document.getElementById("$luath_stack").textContent = error.stack.replace(error.message, '');
+  document.getElementById("$luath_stack").textContent = error.stack.replace(
+    error.message,
+    "",
+  );
 }
 
 function hideErrorOverlay() {

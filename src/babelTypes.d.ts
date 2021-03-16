@@ -1,3 +1,5 @@
+// deno-lint-ignore-file no-explicit-any ban-types
+
 type InputOptions = {
   cwd?: string;
   filename?: string;

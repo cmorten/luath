@@ -25,12 +25,11 @@ import { WebSocketServer } from "./webSocketServer.ts";
  */
 export function server(options?: LuathOptions) {
   const config = resolveOptions(options);
-  const rootDir = Deno.cwd();
-  const publicDir = join(rootDir, "public");
+  const publicDir = join(config.root, "public");
 
   const app = opine();
 
-  const fileWatcher = new FileWatcher(rootDir, {});
+  const fileWatcher = new FileWatcher(config.root, {});
   const webSocketServer = new WebSocketServer();
   const moduleGraph = new ModuleGraph();
 
@@ -40,19 +39,19 @@ export function server(options?: LuathOptions) {
   });
 
   // LMR
-  app.use(lmr(rootDir, fileWatcher, webSocketServer, moduleGraph));
+  app.use(lmr(config.root, fileWatcher, webSocketServer, moduleGraph));
 
   // serve static public
   app.use(servePublic(publicDir));
 
   // transform
-  app.use(transform(rootDir, moduleGraph, esbuildService));
+  app.use(transform(config.root, moduleGraph, esbuildService));
 
   // serve static
-  app.use(serveStatic(rootDir));
+  app.use(serveStatic(config.root));
 
   // transform index.html
-  app.use(indexHtml(rootDir));
+  app.use(indexHtml(config.root));
 
   // placeholder favicon
   app.use(favicon());
