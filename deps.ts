@@ -53,21 +53,28 @@ export { opine, serveStatic } from "https://deno.land/x/opine@1.1.0/mod.ts";
 export { default as pm } from "https://esm.sh/picomatch@2.2.2";
 export { default as atImport } from "https://esm.sh/postcss-import@14.0.0";
 
-// @deno-types="https://cdn.esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts"
+// @deno-types="https://esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts"
 export { startService as esbuildStartService } from "https://esm.sh/esbuild-wasm@0.8.51/esm/browser.min.js";
 export type {
   Loader,
   Service,
-} from "https://cdn.esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts";
+} from "https://esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts";
 
-export { transformSync } from "https://esm.sh/@babel/core@7.13.8";
-export { default as pluginTransformReactJsxSelf } from "https://esm.sh/@babel/plugin-transform-react-jsx-self";
-export { default as pluginTransformReactJsxSource } from "https://esm.sh/@babel/plugin-transform-react-jsx-source";
-export { default as reactRefreshBabel } from "https://cdn.esm.sh/v15/react-refresh@0.9.0/esnext/babel.js";
+// @deno-types="./src/babelTypes.d.ts"
+export { transformSync } from "https://esm.sh/@babel/core@7.13.10";
 
-export type { ImportSpecifier } from "https://cdn.esm.sh/v16/es-module-lexer@0.4.1/types/lexer.d.ts";
+// @deno-types="./src/babelTypes.d.ts"
+export { default as pluginTransformReactJsxSelf } from "https://esm.sh/@babel/plugin-transform-react-jsx-self@7.12.13";
+
+// @deno-types="./src/babelTypes.d.ts"
+export { default as pluginTransformReactJsxSource } from "https://esm.sh/@babel/plugin-transform-react-jsx-source@7.12.13";
+
+export { default as reactRefreshBabel } from "https://esm.sh/react-refresh@0.9.0/esnext/babel.js";
+
+export type { ImportSpecifier } from "https://esm.sh/es-module-lexer@0.4.1/types/lexer.d.ts";
 export {
   init as esModuleLexerInit,
   parse as parseImports,
 } from "https://esm.sh/es-module-lexer@0.4.1";
+
 export { default as MagicString } from "https://esm.sh/magic-string@0.25.7";
