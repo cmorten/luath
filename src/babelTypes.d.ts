@@ -69,7 +69,7 @@ type InputOptions = {
   generatorOpts?: {},
 };
 
-export function transformSync(code: string, opts: InputOptions): void;
+export function transformSync(code: string, opts: InputOptions): any;
 
 export function pluginTransformReactJsxSelf(...args: any): any;
 export function pluginTransformReactJsxSource(...args: any): any;
