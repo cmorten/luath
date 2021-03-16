@@ -24,7 +24,7 @@ function showErrorOverlay(error) {
       "box-sizing: border-box; width: 100%; height: 100%; position: fixed; top: 0; left: 0; padding: 15px; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 16px; background: #fffb;";
 
     errorOverlay.innerHTML =
-      `<div style="background: #16242C; padding: 25px; border: 2px solid #C0C4CD; position: relative; max-height: 100%; overflow-y: scroll; box-sizing: border-box;">` +
+      `<div style="background: #16242C; padding: 25px; border-top: 12px solid #6060bb; border-radius: 4px; position: relative; max-height: 100%; overflow-y: scroll; box-sizing: border-box;">` +
       `<button id="$luath_close" style="border: 0; color: #C0C4CD; width: 20px; height: 20px; background: transparent; position: absolute; top: 15px; right: 15px; font-size: 20px; padding: 0; cursor: pointer;">&#10005;</button>` +
       `<pre id="$luath_message" style="white-space: pre-wrap; color: #EC5E66;"></pre>` +
       `<pre id="$luath_stack" style="white-space: pre-wrap; color: #C0C4CD;"></pre>` +
@@ -35,7 +35,7 @@ function showErrorOverlay(error) {
   }
 
   document.getElementById("$luath_message").textContent = error.message;
-  document.getElementById("$luath_stack").textContent = error.stack;
+  document.getElementById("$luath_stack").textContent = error.stack.replace(error.message, '');
 }
 
 function hideErrorOverlay() {
