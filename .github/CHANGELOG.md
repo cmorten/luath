@@ -1,5 +1,10 @@
 # ChangeLog
 
+## [0.2.5] - 17-03-2021
+
+- fix: ensure only call initialize on esbuild once from plugins as well as on startup.
+- feat: prettified error logging in the Luath error middleware.
+
 ## [0.2.4] - 17-03-2021
 
 - fix: ensure only call initialize on esbuild once.

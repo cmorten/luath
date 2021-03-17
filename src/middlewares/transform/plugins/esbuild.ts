@@ -5,15 +5,20 @@ import {
 } from "../../../../deps.ts";
 import { isJsExtension } from "../../isJs.ts";
 
+let esbuildInitialized = false;
+let esbuildReady = false;
+
 export function esbuild() {
-  let esbuildReady = false;
+  if (!esbuildInitialized) {
+    esbuildInitialized = true;
+    
+    const esbuildInitializePromise = esbuildInstance.initialize({
+      worker: false,
+      wasmURL: "https://esm.sh/esbuild-wasm@0.9.3/esbuild.wasm",
+    });
 
-  const esbuildInitializePromise = esbuildInstance.initialize({
-    worker: false,
-    wasmURL: "https://esm.sh/esbuild-wasm@0.9.3/esbuild.wasm",
-  });
-
-  esbuildInitializePromise.then(() => esbuildReady = true);
+    esbuildInitializePromise.then(() => esbuildReady = true);
+  }
 
   return {
     name: "esbuild",

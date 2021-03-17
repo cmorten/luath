@@ -4,7 +4,7 @@ import { version } from "../../version.ts";
 import { server } from "../server.ts";
 import { getConfigPath } from "./getConfigPath.ts";
 import { loadConfigFile } from "./loadConfigFile.ts";
-import { handleError } from "./logging.ts";
+import { handleError } from "../logging.ts";
 
 interface ServeOptions {
   config?: string | true;

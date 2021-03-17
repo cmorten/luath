@@ -1,6 +1,6 @@
 import type { LuathOptions } from "../types.ts";
 import { toFileUrl } from "../../deps.ts";
-import { handleError } from "./logging.ts";
+import { handleError } from "../logging.ts";
 
 export async function loadConfigFile(
   fileName: string,

@@ -4,6 +4,7 @@ import type {
   Response,
 } from "../../deps.ts";
 import { WebSocketServer } from "../webSocketServer.ts";
+import { handleError } from "../logging.ts";
 
 export function error(webSocketServer: WebSocketServer): ErrorRequestHandler {
   return (
@@ -22,6 +23,8 @@ export function error(webSocketServer: WebSocketServer): ErrorRequestHandler {
       type: "error",
       error: errorJson,
     });
+
+    handleError(errorJson, true);
 
     return res.setStatus(500).end();
   };
