@@ -11,7 +11,7 @@ let esbuildReady = false;
 export function esbuild() {
   if (!esbuildInitialized) {
     esbuildInitialized = true;
-    
+
     const esbuildInitializePromise = esbuildInstance.initialize({
       worker: false,
       wasmURL: "https://esm.sh/esbuild-wasm@0.9.3/esbuild.wasm",
