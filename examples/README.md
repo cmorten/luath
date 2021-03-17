@@ -19,7 +19,7 @@ To run an example:
 1. Install the Luath CLI:
 
    ```bash
-   deno install -f -q -A --unstable --no-check https://deno.land/x/luath@0.2.3/luath.ts
+   deno install -f -q -A --unstable --no-check https://deno.land/x/luath@0.2.4/luath.ts
    ```
 
 1. Then run the desired example by navigating to the directory and running the appropriate Luath `serve` command:

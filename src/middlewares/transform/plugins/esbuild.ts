@@ -5,15 +5,16 @@ import {
 } from "../../../../deps.ts";
 import { isJsExtension } from "../../isJs.ts";
 
-const esbuildInitializePromise = esbuildInstance.initialize({
-  worker: false,
-  wasmURL: "https://esm.sh/esbuild-wasm@0.9.3/esbuild.wasm",
-});
-
-let esbuildReady = false;
-esbuildInitializePromise.then(() => esbuildReady = true);
-
 export function esbuild() {
+  let esbuildReady = false;
+  
+  const esbuildInitializePromise = esbuildInstance.initialize({
+    worker: false,
+    wasmURL: "https://esm.sh/esbuild-wasm@0.9.3/esbuild.wasm",
+  });
+
+  esbuildInitializePromise.then(() => esbuildReady = true);
+
   return {
     name: "esbuild",
 

@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.2.4] - 17-03-2021
+
+- fix: ensure only call initialize on esbuild once.
+
 ## [0.2.3] - 17-03-2021
 
 - docs: fix React example commands.
