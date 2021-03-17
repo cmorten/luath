@@ -3,7 +3,6 @@ import type {
   Request,
   RequestHandler,
   Response,
-  Service,
 } from "../../../deps.ts";
 import type { LuathPlugin } from "../../types.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
@@ -18,7 +17,6 @@ export const urlIgnoreList = new Set(["/", "/favicon.ico"]);
 export function transform(
   rootDir: string,
   moduleGraph: ModuleGraph,
-  esbuildService: Promise<Service>,
   plugins: LuathPlugin[],
 ): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -40,7 +38,6 @@ export function transform(
           url,
           rootDir,
           moduleGraph,
-          esbuildService,
           plugins,
         );
 

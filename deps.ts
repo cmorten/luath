@@ -2,12 +2,12 @@ export type {
   HTTPOptions,
   HTTPSOptions,
   Server,
-} from "https://deno.land/std@0.89.0/http/mod.ts";
+} from "https://deno.land/std@0.90.0/http/mod.ts";
 export {
   copy,
   exists,
   existsSync,
-} from "https://deno.land/std@0.89.0/fs/mod.ts";
+} from "https://deno.land/std@0.90.0/fs/mod.ts";
 export {
   extname,
   isAbsolute,
@@ -16,19 +16,19 @@ export {
   relative,
   resolve,
   toFileUrl,
-} from "https://deno.land/std@0.89.0/path/mod.ts";
-export { default as EventEmitter } from "https://deno.land/std@0.89.0/node/events.ts";
-export type { WebSocket } from "https://deno.land/std@0.89.0/ws/mod.ts";
+} from "https://deno.land/std@0.90.0/path/mod.ts";
+export { default as EventEmitter } from "https://deno.land/std@0.90.0/node/events.ts";
+export type { WebSocket } from "https://deno.land/std@0.90.0/ws/mod.ts";
 export {
   acceptWebSocket,
   isWebSocketCloseEvent,
-} from "https://deno.land/std@0.89.0/ws/mod.ts";
+} from "https://deno.land/std@0.90.0/ws/mod.ts";
 export {
   bold,
   cyan,
   dim,
   red,
-} from "https://deno.land/std@0.89.0/fmt/colors.ts";
+} from "https://deno.land/std@0.90.0/fmt/colors.ts";
 
 export type {
   InputOption,
@@ -67,12 +67,8 @@ export type {
 export { default as pm } from "https://esm.sh/picomatch@2.2.2";
 export { default as atImport } from "https://esm.sh/postcss-import@14.0.0";
 
-// @deno-types="https://esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts"
-export { startService as esbuildStartService } from "https://esm.sh/esbuild-wasm@0.8.51/esm/browser.min.js";
-export type {
-  Loader,
-  Service,
-} from "https://esm.sh/esbuild-wasm@0.8.51/lib/browser.d.ts";
+// @deno-types="https://esm.sh/esbuild-wasm@0.9.3/lib/browser.d.ts"
+export * as esbuild from "https://esm.sh/esbuild-wasm@0.9.3/esm/browser.min.js";
 
 // @deno-types="./src/babelTypes.d.ts"
 export { transformSync } from "https://esm.sh/@babel/core@7.13.10";

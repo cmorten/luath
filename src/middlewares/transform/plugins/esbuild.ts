@@ -1,16 +1,24 @@
-import type { Service } from "../../../../deps.ts";
-import { loadUrl, parse } from "../../../../deps.ts";
+import {
+  esbuild as esbuildInstance,
+  loadUrl,
+  parse,
+} from "../../../../deps.ts";
 import { isJsExtension } from "../../isJs.ts";
 
-export function esbuild(servicePromise: Promise<Service>) {
-  let esbuildTransform: Service["transform"];
+const esbuildInitializePromise = esbuildInstance.initialize({
+  worker: false,
+  wasmURL: "https://esm.sh/esbuild-wasm@0.9.3/esbuild.wasm",
+});
 
-  servicePromise.then((service) => esbuildTransform = service.transform);
+let esbuildReady = false;
+esbuildInitializePromise.then(() => esbuildReady = true);
 
+export function esbuild() {
   return {
     name: "esbuild",
+
     async load(id: string) {
-      if (!esbuildTransform || !isJsExtension(id)) {
+      if (!esbuildReady || !isJsExtension(id)) {
         return null;
       }
 
@@ -24,12 +32,13 @@ export function esbuild(servicePromise: Promise<Service>) {
 
       return code;
     },
+
     async transform(code: string, id: string) {
-      if (!esbuildTransform || !isJsExtension(id)) {
+      if (!esbuildReady || !isJsExtension(id)) {
         return;
       }
 
-      const output = await esbuildTransform(code, {
+      const output = await esbuildInstance.transform(code, {
         format: "esm",
         loader: "tsx",
       });

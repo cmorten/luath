@@ -1,5 +1,5 @@
-import type { Service } from "../../../deps.ts";
 import type { LuathPlugin } from "../../types.ts";
+import type { Plugin } from "../../../deps.ts";
 import {
   atImport,
   image,
@@ -38,7 +38,6 @@ export async function bundle(
   url: string,
   rootDir: string,
   moduleGraph: ModuleGraph,
-  esbuildService: Promise<Service>,
   plugins: LuathPlugin[],
 ) {
   const id = stripUrl(url);
@@ -95,9 +94,9 @@ export async function bundle(
           },
         })],
       }),
-      esbuild(esbuildService),
+      esbuild(),
       lmr(moduleGraph, rootDir),
-    ],
+    ] as Plugin[],
     external: () => true,
     onwarn() {},
     treeshake: false,

@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.2.1] - 17-03-2021
+
+- chore: upgrade `std` and `esbuild` deps.
+
 ## [0.2.0] - 17-03-2021
 
 - feat: luath config files for configuring development server.

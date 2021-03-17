@@ -1,6 +1,5 @@
 import type { LuathOptions } from "./types.ts";
-import type { Service } from "../deps.ts";
-import { esbuildStartService, join, opine } from "../deps.ts";
+import { join, opine } from "../deps.ts";
 import { resolveOptions } from "./resolveOptions.ts";
 import {
   error,
@@ -33,12 +32,6 @@ export function server(options?: LuathOptions) {
   const webSocketServer = new WebSocketServer();
   const moduleGraph = new ModuleGraph();
 
-  // TODO: upgrade esbuild - think this is now deprecated?
-  const esbuildService = esbuildStartService({
-    worker: false,
-    wasmURL: "https://esm.sh/esbuild-wasm@0.8.51/esbuild.wasm",
-  });
-
   // LMR
   app.use(lmr(config.root, fileWatcher, webSocketServer, moduleGraph));
 
@@ -46,7 +39,7 @@ export function server(options?: LuathOptions) {
   app.use(servePublic(publicDir));
 
   // transform
-  app.use(transform(config.root, moduleGraph, esbuildService, config.plugins));
+  app.use(transform(config.root, moduleGraph, config.plugins));
 
   // serve static
   app.use(serveStatic(config.root));
@@ -68,7 +61,6 @@ export function server(options?: LuathOptions) {
   const closeServer = _server.close;
 
   _server.close = () => {
-    esbuildService.then((service: Service) => service.stop());
     fileWatcher.close();
     webSocketServer.close();
     closeServer();
