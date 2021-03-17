@@ -9,14 +9,29 @@ export const logInfo = console.error.bind(console);
 export const logError = console.error.bind(console);
 export const logOutput = console.log.bind(console);
 
+interface LuathError {
+  id?: string;
+  code?: string;
+  frame?: string;
+  loc?: {
+    column: string;
+    file: string;
+    line: string;
+  };
+  message?: string;
+  name?: string;
+  url?: string;
+  stack?: string;
+}
+
 /**
  * handleError
  * 
- * @param {RollupErr} err
+ * @param {Error} err
  * @param {boolean} recover
  * @private
  */
-export function handleError(err: any, recover = false) {
+export function handleError(err: LuathError, recover = false) {
   let message = err.message || err;
 
   if (err.name) {

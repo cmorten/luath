@@ -34,6 +34,7 @@ export type {
   InputOption,
   OutputAsset,
   OutputChunk,
+  Plugin,
   RollupBuild,
   RollupOptions,
   RollupOutput,

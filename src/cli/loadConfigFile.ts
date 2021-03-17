@@ -1,9 +1,10 @@
+import type { LuathOptions } from "../types.ts";
 import { toFileUrl } from "../../deps.ts";
 import { handleError } from "./logging.ts";
 
 export async function loadConfigFile(
   fileName: string,
-): Promise<any> {
+): Promise<LuathOptions> {
   const filePath = toFileUrl(fileName).href;
 
   let configFileExport;
@@ -22,7 +23,7 @@ export async function loadConfigFile(
 
 async function getConfigList(
   configFileExport: unknown,
-): Promise<any> {
+): Promise<LuathOptions> {
   const config = typeof configFileExport === "function"
     ? await configFileExport()
     : configFileExport;

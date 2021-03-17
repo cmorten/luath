@@ -4,6 +4,7 @@ import type {
   RequestHandler,
   Response,
 } from "../../deps.ts";
+import type { LuathPlugin } from "../types.ts";
 import { exists, join } from "../../deps.ts";
 import { isHtml } from "./isHtml.ts";
 import { ModuleGraph } from "../moduleGraph.ts";
@@ -12,7 +13,7 @@ import { lmr } from "./transform/plugins/lmr.ts";
 export function indexHtml(
   rootDir: string,
   moduleGraph: ModuleGraph,
-  plugins: any[],
+  plugins: LuathPlugin[],
 ): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const url = req.url === "/" ? "/index.html" : req.url;
@@ -24,9 +25,11 @@ export function indexHtml(
         try {
           let html = await Deno.readTextFile(filename);
 
-          plugins.filter((plugin) => !!plugin?.transformIndexHtml).forEach(
+          plugins.filter((plugin) =>
+            typeof plugin?.transformIndexHtml === "function"
+          ).forEach(
             (plugin) => {
-              html = plugin.transformIndexHtml(html);
+              html = plugin.transformIndexHtml!(html);
             },
           );
 

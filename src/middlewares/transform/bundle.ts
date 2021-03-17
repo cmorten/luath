@@ -1,4 +1,5 @@
 import type { Service } from "../../../deps.ts";
+import type { LuathPlugin } from "../../types.ts";
 import {
   atImport,
   image,
@@ -38,7 +39,7 @@ export async function bundle(
   rootDir: string,
   moduleGraph: ModuleGraph,
   esbuildService: Promise<Service>,
-  plugins: any[],
+  plugins: LuathPlugin[],
 ) {
   const id = stripUrl(url);
   const isCss = isCssExtension(id);

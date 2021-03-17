@@ -5,6 +5,7 @@ import type {
   Response,
   Service,
 } from "../../../deps.ts";
+import type { LuathPlugin } from "../../types.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
 import { isHtml } from "../isHtml.ts";
 import { isJs } from "../isJs.ts";
@@ -18,7 +19,7 @@ export function transform(
   rootDir: string,
   moduleGraph: ModuleGraph,
   esbuildService: Promise<Service>,
-  plugins: any[],
+  plugins: LuathPlugin[],
 ): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const url = req.url;

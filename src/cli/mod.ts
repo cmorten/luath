@@ -1,3 +1,4 @@
+import type { LuathOptions } from "../types.ts";
 import { Command } from "../../deps.ts";
 import { version } from "../../version.ts";
 import { server } from "../server.ts";
@@ -18,30 +19,30 @@ function notImplemented() {
 }
 
 async function serve({ config, port, hostname }: ServeOptions, root: string) {
-  let commandOptions: any = {};
+  let loadedConfig: LuathOptions = {};
 
   if (config) {
     try {
       const configFile = await getConfigPath(config);
 
-      commandOptions = await loadConfigFile(configFile);
+      loadedConfig = await loadConfigFile(configFile);
     } catch (err) {
       handleError(err);
     }
   }
 
-  hostname = hostname ?? commandOptions?.server?.hostname;
-  port = port ?? commandOptions?.server?.port ?? DEFAULT_PORT;
-  root = root ?? commandOptions?.root;
+  hostname = hostname ?? loadedConfig?.server?.hostname;
+  port = port ?? loadedConfig?.server?.port ?? DEFAULT_PORT;
+  root = root ?? loadedConfig?.root;
 
   await server({
-    ...commandOptions,
+    ...loadedConfig,
     root,
-    server: { ...commandOptions?.server, port, hostname },
+    server: { ...loadedConfig?.server, port, hostname },
   });
 }
 
-async function build() {
+function build() {
   notImplemented();
 }
 
