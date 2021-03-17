@@ -7,7 +7,7 @@ A React example using the Luath plugin for [React Fast Refresh](https://www.npmj
 Run the example React application using the Luath `serve` command from this directory:
 
 ```bash
-cd examples/vanilla
+cd examples/react
 
 luath serve ./ -c
 ```

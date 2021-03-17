@@ -1,5 +1,10 @@
 # ChangeLog
 
+## [0.2.3] - 17-03-2021
+
+- docs: fix React example commands.
+- feat: improved error message when cannot find config file.
+
 ## [0.2.2] - 17-03-2021
 
 - docs: freshen up README and examples.

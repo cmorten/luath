@@ -11,8 +11,15 @@ export async function loadConfigFile(
   try {
     configFileExport =
       (await import(`${filePath}?cachebust=${+(new Date())}`)).default;
-  } catch (_) {
+  } catch (err) {
+    const errorJson = Object.getOwnPropertyNames(err).reduce((props, key) => {
+      props[key] = (err as Record<string, string>)[key];
+
+      return props;
+    }, {} as Record<string, string>);
+
     handleError({
+      ...errorJson,
       code: "MISSING_CONFIG",
       message: "could not find config file",
     });
