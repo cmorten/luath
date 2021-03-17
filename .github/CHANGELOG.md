@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [0.2.1] - 17-03-2021
+## [0.2.2] - 17-03-2021
 
 - docs: freshen up README and examples.
 - chore: export React Refresh plugin and missing types from `mod.ts`.
