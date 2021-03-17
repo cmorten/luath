@@ -43,7 +43,7 @@ Luath can be used either through a command line interface (CLI) or through it's 
 To install the CLI run:
 
 ```console
-deno install -f -q -A --unstable https://deno.land/x/luath@0.1.1/luath.ts
+deno install -f -q -A --unstable https://deno.land/x/luath@0.2.0/luath.ts
 ```
 
 And follow any suggestions to update your `PATH` environment variable.
@@ -59,7 +59,7 @@ luath serve --port 4000 ./examples/vanilla
 You can import Luath straight into your project for providing a development server:
 
 ```ts
-import { server } from "https://deno.land/x/luath@0.1.1/mod.ts";
+import { server } from "https://deno.land/x/luath@0.2.0/mod.ts";
 
 await server();
 ```
@@ -78,7 +78,7 @@ To run the [examples](./examples):
 1. Install the Luath CLI:
 
    ```console
-   deno install -f -q -A --unstable https://deno.land/x/luath@0.1.1/luath.ts
+   deno install -f -q -A --unstable https://deno.land/x/luath@0.2.0/luath.ts
    ```
 
 1. Then run the desired example by navigating to the directory and running the Luath `serve` command:

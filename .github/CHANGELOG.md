@@ -1,9 +1,13 @@
 # ChangeLog
 
+## [0.2.0] - 17-03-2021
+
+- feat: luath config files for configuring development server.
+
 ## [0.1.1] - 16-03-2021
 
 - chore: upgrade opine, deno-rollup and std deps.
 
 ## [0.1.0] - 16-03-2021
 
-- Initial HMR server and `serve` CLI command.
+- feat: initial HMR server and `serve` CLI command.
