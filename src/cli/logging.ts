@@ -2,7 +2,7 @@
  * Derived from <https://github.com/rollup/rollup/blob/v2.41.0/cli/logging.ts>
  */
 
- import { bold, cyan, dim, red } from "../../deps.ts";
+import { bold, cyan, dim, red } from "../../deps.ts";
 import { relativeId } from "./relativeId.ts";
 
 export const logInfo = console.error.bind(console);
