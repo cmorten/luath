@@ -7,7 +7,7 @@ import { isJsExtension } from "../../isJs.ts";
 
 export function esbuild() {
   let esbuildReady = false;
-  
+
   const esbuildInitializePromise = esbuildInstance.initialize({
     worker: false,
     wasmURL: "https://esm.sh/esbuild-wasm@0.9.3/esbuild.wasm",
