@@ -14,5 +14,6 @@ export function resolveOptions(options?: LuathOptions) {
       ...defaultLuathOptions.server,
       ...options?.server,
     },
+    plugins: options?.plugins ?? [],
   };
 }

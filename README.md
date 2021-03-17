@@ -51,7 +51,7 @@ And follow any suggestions to update your `PATH` environment variable.
 You can then use the CLI to serve your application, just provide the directory to your `index.html`.
 
 ```console
-luath serve --port 4000 ./examples/react
+luath serve --port 4000 ./examples/vanilla
 ```
 
 ### JavaScript API
@@ -81,10 +81,11 @@ To run the [examples](./examples):
    deno install -f -q -A --unstable https://deno.land/x/luath@0.1.1/luath.ts
    ```
 
-1. Then run the desired example by passing the directory to the Luath `serve` command:
+1. Then run the desired example by navigating to the directory and running the Luath `serve` command:
 
    ```bash
-   luath serve ./examples/react
+   cd examples/react
+   luath serve ./ -c
    ```
 
 1. Open <http://localhost:3000> in a browser

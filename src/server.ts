@@ -33,6 +33,7 @@ export function server(options?: LuathOptions) {
   const webSocketServer = new WebSocketServer();
   const moduleGraph = new ModuleGraph();
 
+  // TODO: upgrade esbuild - think this is now deprecated?
   const esbuildService = esbuildStartService({
     worker: false,
     wasmURL: "https://esm.sh/esbuild-wasm@0.8.51/esbuild.wasm",
@@ -45,13 +46,13 @@ export function server(options?: LuathOptions) {
   app.use(servePublic(publicDir));
 
   // transform
-  app.use(transform(config.root, moduleGraph, esbuildService));
+  app.use(transform(config.root, moduleGraph, esbuildService, config.plugins));
 
   // serve static
   app.use(serveStatic(config.root));
 
   // transform index.html
-  app.use(indexHtml(config.root));
+  app.use(indexHtml(config.root, moduleGraph, config.plugins));
 
   // placeholder favicon
   app.use(favicon());

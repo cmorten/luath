@@ -54,17 +54,20 @@ function shouldIgnore(code: string, id: string) {
  */
 export function reactRefresh() {
   return {
-    name: "luath-react-refresh",
+    name: "luath-plugin-react-refresh",
+
     resolveId(id: string) {
       if (id.endsWith(REACT_REFRESH_PATH_IMPORT)) {
         return REACT_REFRESH_PATH_IMPORT;
       }
     },
+
     load(id: string) {
       if (id === REACT_REFRESH_PATH_IMPORT) {
         return REACT_REFRESH_RUNTIME_CODE_PROMISE;
       }
     },
+
     transform(code: string, id: string) {
       if (shouldIgnore(code, id)) {
         return code;
@@ -138,6 +141,13 @@ if (import.meta.hot) {
 }`;
 
       return `${intro}${result.code}${outro}`;
+    },
+
+    transformIndexHtml(html: string) {
+      return html.replace(
+        "<head>",
+        `<head><script type="module">${REACT_REFRESH_BOOTSTRAP}</script>`,
+      );
     },
   };
 }

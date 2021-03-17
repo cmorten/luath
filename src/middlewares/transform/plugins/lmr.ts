@@ -17,7 +17,8 @@ export const LMR_JS_PATH_IMPORT = "/$luath/client.js";
 
 export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
   return {
-    name: "luath-module-reloading",
+    name: "luath-plugin-hot-module-reloading",
+
     async transform(code: string, id: string) {
       if (isCssExtension(id) || isLuathImport(id)) {
         return code;
@@ -74,6 +75,13 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
       }
 
       return str().toString();
+    },
+
+    transformIndexHtml(html: string) {
+      return html = html.replace(
+        "<head>",
+        `<head><script type="module" src="/$luath/client.js"></script>`,
+      );
     },
   };
 }

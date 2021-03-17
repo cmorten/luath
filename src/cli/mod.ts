@@ -1,8 +1,12 @@
 import { Command } from "../../deps.ts";
 import { version } from "../../version.ts";
 import { server } from "../server.ts";
+import { getConfigPath } from "./getConfigPath.ts";
+import { loadConfigFile } from "./loadConfigFile.ts";
+import { handleError } from "./logging.ts";
 
 interface ServeOptions {
+  config?: string | true;
   port?: number;
   hostname?: string;
 }
@@ -13,8 +17,28 @@ function notImplemented() {
   console.log("Not Implemented");
 }
 
-async function serve({ port, hostname }: ServeOptions, root: string) {
-  await server({ root, server: { port: port ?? DEFAULT_PORT, hostname } });
+async function serve({ config, port, hostname }: ServeOptions, root: string) {
+  let commandOptions: any = {};
+
+  if (config) {
+    try {
+      const configFile = await getConfigPath(config);
+
+      commandOptions = await loadConfigFile(configFile);
+    } catch (err) {
+      handleError(err);
+    }
+  }
+
+  hostname = hostname ?? commandOptions?.server?.hostname;
+  port = port ?? commandOptions?.server?.port ?? DEFAULT_PORT;
+  root = root ?? commandOptions?.root;
+
+  await server({
+    ...commandOptions,
+    root,
+    server: { ...commandOptions?.server, port, hostname },
+  });
 }
 
 async function build() {
@@ -28,6 +52,10 @@ const program = await new Command()
 
 program.command("serve <root:string>")
   .description("Serve an application directory with HMR [WIP]")
+  .option(
+    "-c, --config [filename:string]",
+    "Use this config file (if argument is used but value is unspecified, defaults to luath.config.js)",
+  )
   .option("-p, --port <port:number>", "Port to run the server on", {
     default: DEFAULT_PORT,
   })

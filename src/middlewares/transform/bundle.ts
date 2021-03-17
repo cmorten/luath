@@ -15,7 +15,6 @@ import { isImportUrl } from "../isImport.ts";
 import { stripUrl } from "../stripUrl.ts";
 import { lmr, LMR_JS_PATH_IMPORT } from "./plugins/lmr.ts";
 import { esbuild } from "./plugins/esbuild.ts";
-import { reactRefresh } from "./plugins/reactRefresh.ts";
 import { isLuathImport } from "./isLuathImport.ts";
 import { isPublicFile } from "./isPublicFile.ts";
 import { getEntryChunk } from "./getEntryChunk.ts";
@@ -34,14 +33,12 @@ function idToPath(id: string, rootDir: string) {
   return join(rootDir, id.slice(1).replace(".css.js", ".css"));
 }
 
-// TODO: List:
-// - inject plugins ( reactRefresh ) rather than hardcoded in here
-
 export async function bundle(
   url: string,
   rootDir: string,
   moduleGraph: ModuleGraph,
   esbuildService: Promise<Service>,
+  plugins: any[],
 ) {
   const id = stripUrl(url);
   const isCss = isCssExtension(id);
@@ -82,9 +79,11 @@ export async function bundle(
   const build = await rollup({
     input: filename,
     plugins: [
-      reactRefresh(),
+      // TODO: need concept of pre / post for custom plugins
+      ...plugins,
       json(),
       image(),
+      // TODO: this should be configurable - not everyone uses css modules.
       postcss({
         modules: true,
         plugins: [atImport({

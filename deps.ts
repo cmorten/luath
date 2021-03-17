@@ -15,6 +15,7 @@ export {
   normalize,
   relative,
   resolve,
+  toFileUrl,
 } from "https://deno.land/std@0.89.0/path/mod.ts";
 export { default as EventEmitter } from "https://deno.land/std@0.89.0/node/events.ts";
 export type { WebSocket } from "https://deno.land/std@0.89.0/ws/mod.ts";
@@ -22,6 +23,12 @@ export {
   acceptWebSocket,
   isWebSocketCloseEvent,
 } from "https://deno.land/std@0.89.0/ws/mod.ts";
+export {
+  bold,
+  cyan,
+  dim,
+  red,
+} from "https://deno.land/std@0.89.0/fmt/colors.ts";
 
 export type {
   InputOption,

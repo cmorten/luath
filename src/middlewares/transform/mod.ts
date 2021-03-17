@@ -18,6 +18,7 @@ export function transform(
   rootDir: string,
   moduleGraph: ModuleGraph,
   esbuildService: Promise<Service>,
+  plugins: any[],
 ): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const url = req.url;
@@ -39,6 +40,7 @@ export function transform(
           rootDir,
           moduleGraph,
           esbuildService,
+          plugins,
         );
 
         if (mod?.code) {
