@@ -1,7 +1,13 @@
-# vanilla
+# Vanilla
 
-Run the example React application using the Luath `serve` command:
+A no-framework "vanilla" example demonstrating CSS, JSON and image imports with HMR.
 
-```console
+## Getting Started
+
+Run the example application using the Luath `serve` command from this directory:
+
+```bash
+cd examples/vanilla
+
 luath serve ./ -c
 ```

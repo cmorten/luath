@@ -2,7 +2,7 @@
   <h1 align="center">Luath</h1>
 </p>
 <p align="center">
-  For Deno front-end developers who like it fast
+  <i>Fast front-end development tooling in Deno.</i>
 </p>
 <p align="center">
    <img src="https://github.com/cmorten/luath/workflows/Test/badge.svg" alt="Current test status" />
@@ -20,81 +20,50 @@
    <a href="https://deno-visualizer.danopia.net/dependencies-of/https/raw.githubusercontent.com/cmorten/luath/main/mod.ts"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Fcache-size%2Fhttps%2Fraw.githubusercontent.com%2Fcmorten%2Fluath%2Fmain%2Fmod.ts" alt="Luath cached size" /></a>
 </p>
 
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Installation](#installation)
-- [Examples](#examples)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Overview
 
-Luath is a WIP project for providing fast front-end development tooling in Deno.
+Luath (`/l̪ˠuə/` - Scottish Gaelic for _fast_) is a front-end development and build tool for Deno with:
+
+1. A [_WIP_] development server for serving your application via ESM with hot module replacement and support for a wide range of modern features.
+1. A [_WIP_] build command for bundling your application code with [deno-rollup](https://github.com/cmorten/deno-rollup/).
+
+## Features
+
+- 👩‍💻 Quick Start CLI
+- 🔥 Fast Hot Module Replacement (HMR)
+- 🍣 Rollup Plugin Compatible
+- 🗿 Static File Serving
+- 👨‍🎤 JSX and TypeScript Support
+- 🎨 PostCSS and CSS Module Support
+- 📒 JSON and Image Import Support
 
 ## Installation
 
-Luath can be used either through a command line interface (CLI) or through it's JavaScript API.
+Luath can be used either through a command line interface (CLI):
 
-### CLI
+```bash
+# Install Luath
+deno install -f -q -A --unstable --no-check https://deno.land/x/luath@0.2.2/luath.ts
 
-To install the CLI run:
-
-```console
-deno install -f -q -A --unstable https://deno.land/x/luath@0.2.1/luath.ts
+# Serve the example
+luath serve ./examples/vanilla
 ```
 
-And follow any suggestions to update your `PATH` environment variable.
-
-You can then use the CLI to serve your application, just provide the directory to your `index.html`.
-
-```console
-luath serve --port 4000 ./examples/vanilla
-```
-
-### JavaScript API
-
-You can import Luath straight into your project for providing a development server:
+Or through it's JavaScript API:
 
 ```ts
-import { server } from "https://deno.land/x/luath@0.2.1/mod.ts";
+import { server } from "https://deno.land/x/luath@0.2.2/mod.ts";
 
-await server();
+await server({ root: "./examples/vanilla" });
 ```
 
 ## Examples
 
-To run the [examples](./examples):
-
-1. Clone the Luath repo locally:
-
-   ```bash
-   git clone git://github.com/cmorten/luath.git --depth 1
-   cd luath
-   ```
-
-1. Install the Luath CLI:
-
-   ```console
-   deno install -f -q -A --unstable https://deno.land/x/luath@0.2.1/luath.ts
-   ```
-
-1. Then run the desired example by navigating to the directory and running the Luath `serve` command:
-
-   ```bash
-   cd examples/react
-   luath serve ./ -c
-   ```
-
-1. Open <http://localhost:3000> in a browser
-
-1. Start editing the example files and keep and an eye on the browser
+Please refer to the [examples documentation](./examples).
 
 ## Contributing
 
-[Contributing guide](./.github/CONTRIBUTING.md)
+Please refer to the [contributing guide](./.github/CONTRIBUTING.md)
 
 ---
 

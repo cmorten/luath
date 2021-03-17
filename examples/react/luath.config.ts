@@ -1,5 +1,5 @@
-import { reactRefresh } from "../../src/middlewares/transform/plugins/reactRefresh.ts";
+import { luathPluginReactRefresh } from "../../mod.ts";
 
 export default {
-  plugins: [reactRefresh()],
+  plugins: [luathPluginReactRefresh()],
 };
