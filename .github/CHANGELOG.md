@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.2.6] - 17-03-2021
+
+- fix: revert upgrade of server and ws versions to match those used in Opine otherwise ws server hangs due to type mismatch.
+
 ## [0.2.5] - 17-03-2021
 
 - fix: ensure only call initialize on esbuild once from plugins as well as on startup.

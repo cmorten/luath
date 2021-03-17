@@ -2,7 +2,7 @@ export type {
   HTTPOptions,
   HTTPSOptions,
   Server,
-} from "https://deno.land/std@0.90.0/http/mod.ts";
+} from "https://deno.land/std@0.89.0/http/mod.ts";
 export {
   copy,
   exists,
@@ -18,11 +18,11 @@ export {
   toFileUrl,
 } from "https://deno.land/std@0.90.0/path/mod.ts";
 export { default as EventEmitter } from "https://deno.land/std@0.90.0/node/events.ts";
-export type { WebSocket } from "https://deno.land/std@0.90.0/ws/mod.ts";
+export type { WebSocket } from "https://deno.land/std@0.89.0/ws/mod.ts";
 export {
   acceptWebSocket,
   isWebSocketCloseEvent,
-} from "https://deno.land/std@0.90.0/ws/mod.ts";
+} from "https://deno.land/std@0.89.0/ws/mod.ts";
 export {
   bold,
   cyan,
