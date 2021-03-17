@@ -28,7 +28,7 @@ Luath (`/l̪ˠuə/` - Scottish Gaelic for _fast_) is a front-end development and
 1. A [_WIP_] build command for bundling your application code with [deno-rollup](https://github.com/cmorten/deno-rollup/).
 
 <p align="center">
-  <img height="370" style="height: 370px;" src="https://github.com/cmorten/luath/raw/main/.github/luath.gif" alt="Luath CLI example showing HMR">
+  <img src="https://github.com/cmorten/luath/raw/main/.github/luath.gif" alt="Luath CLI example showing HMR">
 </p>
 
 ## Features
