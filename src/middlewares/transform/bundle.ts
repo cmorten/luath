@@ -63,7 +63,6 @@ export async function bundle(
     }
   }
 
-  // TODO: This needs checking
   if (code == null) {
     if (isPublicFile(id, rootDir)) {
       throw new Error(
