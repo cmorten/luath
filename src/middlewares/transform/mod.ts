@@ -10,6 +10,7 @@ import { isJs } from "../../isJs.ts";
 import { isCss } from "../../isCss.ts";
 import { isHtml } from "../isHtml.ts";
 import { isImport } from "../isImport.ts";
+import { sendCompressed } from "../sendCompressed.ts";
 import { bundle } from "./bundle.ts";
 
 export const urlIgnoreList = new Set(["/", "/favicon.ico"]);
@@ -44,7 +45,13 @@ export function transform(
         if (mod?.code) {
           const type = _isCss ? ".css" : ".js";
 
-          return res.type(type).send(mod?.code);
+          res.type(type).set('Cache-Control', "no-cache");
+
+          if (req.fresh) {
+            return res.setStatus(304).end();
+          }
+
+          return sendCompressed(req, res, mod?.code);
         }
       }
     } catch (err) {

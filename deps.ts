@@ -39,14 +39,15 @@ export type {
   RollupOptions,
   RollupOutput,
   WatcherOptions,
-} from "https://deno.land/x/drollup@2.41.0+0.16.1/mod.ts";
-export { rollup } from "https://deno.land/x/drollup@2.41.0+0.16.1/mod.ts";
-export { virtual } from "https://deno.land/x/drollup@2.41.0+0.16.1/plugins/virtual/mod.ts";
-export { image } from "https://deno.land/x/drollup@2.41.0+0.16.1/plugins/image/mod.ts";
-export { json } from "https://deno.land/x/drollup@2.41.0+0.16.1/plugins/json/mod.ts";
-export { postcss } from "https://deno.land/x/drollup@2.41.0+0.16.1/plugins/postcss/mod.ts";
-export { parse } from "https://deno.land/x/drollup@2.41.0+0.16.1/src/rollup-plugin-deno-resolver/parse.ts";
-export { loadUrl } from "https://deno.land/x/drollup@2.41.0+0.16.1/src/rollup-plugin-deno-resolver/loadUrl.ts";
+} from "https://deno.land/x/drollup@2.42.3+0.17.0/mod.ts";
+export { rollup } from "https://deno.land/x/drollup@2.42.3+0.17.0/mod.ts";
+export { virtual } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/virtual/mod.ts";
+export { image } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/image/mod.ts";
+export { json } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/json/mod.ts";
+export { postcss } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/postcss/mod.ts";
+export { terser } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/terser/mod.ts";
+export { parse } from "https://deno.land/x/drollup@2.42.3+0.17.0/src/rollup-plugin-deno-resolver/parse.ts";
+export { loadUrl } from "https://deno.land/x/drollup@2.42.3+0.17.0/src/rollup-plugin-deno-resolver/loadUrl.ts";
 
 export type {
   ErrorRequestHandler,

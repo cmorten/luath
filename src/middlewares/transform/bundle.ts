@@ -8,6 +8,7 @@ import {
   postcss,
   relative,
   rollup,
+  terser,
 } from "../../../deps.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
 import { pathToId } from "../../pathToId.ts";
@@ -33,6 +34,11 @@ function injectCss(
 function idToPath(id: string, rootDir: string) {
   return join(rootDir, id.slice(1).replace(".css.js", ".css"));
 }
+
+const jsonPlugin = json();
+const imagePlugin = image();
+const terserPlugin = terser();
+const esbuildPlugin = esbuild();
 
 export async function bundle(
   url: string,
@@ -80,8 +86,8 @@ export async function bundle(
     plugins: [
       // TODO: need concept of pre / post for custom plugins
       ...plugins,
-      json(),
-      image(),
+      jsonPlugin,
+      imagePlugin,
       // TODO: this should be configurable - not everyone uses css modules.
       postcss({
         modules: true,
@@ -93,8 +99,9 @@ export async function bundle(
           },
         })],
       }),
-      esbuild(),
+      esbuildPlugin,
       lmr(moduleGraph, rootDir),
+      terserPlugin,
     ] as Plugin[],
     external: () => true,
     onwarn() {},

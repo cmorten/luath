@@ -75,8 +75,8 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
 
     transformIndexHtml(html: string) {
       return html = html.replace(
-        "<head>",
-        `<head><script type="module" src="/$luath/client.js"></script>`,
+        "</body>",
+        `<script type="module" src="/$luath/client.js"></script></body>`,
       );
     },
   };
