@@ -37,7 +37,7 @@ function showErrorOverlay(error) {
   document.getElementById("$luath_message").textContent = error.message;
   document.getElementById("$luath_stack").textContent = error.stack.replace(
     error.message,
-    "",
+    ""
   );
 }
 
@@ -131,7 +131,7 @@ function handleMessage(message) {
             return;
           } else if (
             url.replace(RE_INDEX_HTML, "") ===
-              resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
+            resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
           ) {
             return reload();
           } else {
@@ -154,6 +154,47 @@ function handleMessage(message) {
 
         if (!updating) {
           dequeue();
+        }
+      });
+
+      break;
+    }
+    case "remove": {
+      data.changes.forEach((path) => {
+        const url = stripUrl(resolveUrl(path));
+
+        if (!modules.get(url)) {
+          if (isCssExtension(url)) {
+            removeStyle(url);
+
+            return;
+          } else if (
+            url.replace(RE_INDEX_HTML, "") ===
+            resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
+          ) {
+            return reload();
+          } else {
+            for (const node of document.querySelectorAll("[src],[href]")) {
+              const attribute = node.src ? "src" : "href";
+              const value = node[attribute];
+
+              if (value && stripUrl(resolveUrl(value)) === url) {
+                node[attribute] = `${stripUrl(value)}?mtime=${mtime}`;
+              }
+            }
+
+            return;
+          }
+        }
+
+        modules.delete(url);
+
+        const updateIndex = updateQueue.findIndex(
+          ({ url: existingUrl }) => existingUrl === url
+        );
+
+        if (updateIndex) {
+          updateQueue.splice(updateIndex, 1);
         }
       });
 
@@ -187,7 +228,7 @@ function handleClose(event) {
 
     reconnectHandle = setTimeout(
       () => connectWebSocket(reload),
-      CONNECTION_RETRY_TIMEOUT,
+      CONNECTION_RETRY_TIMEOUT
     );
   }
 }
@@ -253,7 +294,7 @@ export function luath(url) {
         JSON.stringify({
           id: url.replace(location.origin, ""),
           type: "hotAccepted",
-        }),
+        })
       );
 
       if (fn) {
@@ -294,4 +335,10 @@ export function style(filename, mtime = Date.now()) {
       }, 1000);
     };
   }
+}
+
+function removeStyle(filename) {
+  const id = resolveUrl(filename);
+  const oldNode = styles.get(id);
+  document.head.removeChild(oldNode);
 }

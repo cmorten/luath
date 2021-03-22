@@ -1,6 +1,6 @@
 import type { WatcherOptions } from "../deps.ts";
 import type { CreateFilter } from "./createFilter.ts";
-import { EventEmitter, relative } from "../deps.ts";
+import { EventEmitter, relative, exists } from "../deps.ts";
 import { ensureArray } from "./ensureArray.ts";
 import { createFilter } from "./createFilter.ts";
 
@@ -36,7 +36,7 @@ export class FileWatcher extends EventEmitter {
   public async watch() {
     const watcher = Deno.watchFs(this.rootDir);
 
-    for await (const { kind, paths } of watcher) {
+    for await (let { kind, paths } of watcher) {
       if (this.closed) {
         break;
       } else if (["any", "access"].includes(kind)) {
@@ -45,6 +45,10 @@ export class FileWatcher extends EventEmitter {
 
       for (const path of paths) {
         if (this.filter(path)) {
+          if (kind === "modify" && !(await exists(path))) {
+            kind = "remove"
+          }
+
           this.queueMap.set(relative(this.rootDir, path), kind);
           setTimeout(() => this.flush(), FILE_WATCH_DEBOUNCE_MS);
         }

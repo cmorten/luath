@@ -84,7 +84,23 @@ export function lmr(
 
   fileWatcher.on("create", (path: string) => {
     const id = pathToId(path, rootDir);
+    const mtime = +new Date();
+
     moduleGraph.ensure(id);
+
+    const shouldReload = updateModuleSubGraph(id, mtime);
+
+    if (shouldReload) {
+      webSocketServer.send({ type: "reload" });
+    } else {
+      webSocketServer.send({
+        type: "update",
+        mtime,
+        changes: Array.from(invalidatedModules),
+      });
+    }
+
+    invalidatedModules.clear();
   });
 
   fileWatcher.on("modify", (path: string) => {
@@ -112,17 +128,21 @@ export function lmr(
     invalidatedModules.clear();
   });
 
-  // TODO: harden this
   fileWatcher.on("remove", (path: string) => {
     const id = pathToId(path, rootDir);
     const mtime = +new Date();
-    moduleGraph.delete(id);
 
     const shouldReload = updateModuleSubGraph(id, mtime);
+    moduleGraph.delete(id);
+    invalidatedModules.delete(id);
 
     if (shouldReload) {
       webSocketServer.send({ type: "reload" });
     } else {
+      webSocketServer.send({
+        type: "remove",
+        changes: [id],
+      });
       webSocketServer.send({
         type: "update",
         mtime,
