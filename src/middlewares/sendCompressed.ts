@@ -1,3 +1,6 @@
+/**
+ * Derived from <https://github.com/expressjs/compression/blob/1.7.4/index.js>
+ */
 import type { Request, Response } from "../../deps.ts";
 import { deflate, gzip } from "https://deno.land/x/compress@v0.3.6/mod.ts";
 
@@ -27,11 +30,13 @@ export function sendCompressed(req: Request, res: Response, body: string) {
     return res.send(body);
   }
 
-  let method = req.acceptsEncodings(["gzip", "deflate", "identity"]);
+  let methods = req.acceptsEncodings(["gzip", "deflate", "identity"]);
+  let method = Array.isArray(methods) ? methods[0] : methods;
 
   // we really don't prefer deflate
   if (method === "deflate" && req.acceptsEncodings(["gzip"])) {
-    method = req.acceptsEncodings(["gzip", "identity"]);
+    methods = req.acceptsEncodings(["gzip", "identity"]);
+    method = Array.isArray(methods) ? methods[0] : methods;
   }
 
   // negotiation failed

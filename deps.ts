@@ -7,7 +7,7 @@ export {
   copy,
   exists,
   existsSync,
-} from "https://deno.land/std@0.90.0/fs/mod.ts";
+} from "https://deno.land/std@0.91.0/fs/mod.ts";
 export {
   extname,
   isAbsolute,
@@ -16,8 +16,8 @@ export {
   relative,
   resolve,
   toFileUrl,
-} from "https://deno.land/std@0.90.0/path/mod.ts";
-export { default as EventEmitter } from "https://deno.land/std@0.90.0/node/events.ts";
+} from "https://deno.land/std@0.91.0/path/mod.ts";
+export { default as EventEmitter } from "https://deno.land/std@0.91.0/node/events.ts";
 export type { WebSocket } from "https://deno.land/std@0.89.0/ws/mod.ts";
 export {
   acceptWebSocket,
@@ -28,7 +28,7 @@ export {
   cyan,
   dim,
   red,
-} from "https://deno.land/std@0.90.0/fmt/colors.ts";
+} from "https://deno.land/std@0.91.0/fmt/colors.ts";
 
 export type {
   InputOption,

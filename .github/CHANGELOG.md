@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.3.0] - 22-03-2021
+
+- feat: compress responses + other minor optimisations
+
 ## [0.2.6] - 17-03-2021
 
 - fix: revert upgrade of server and ws versions to match those used in Opine otherwise ws server hangs due to type mismatch.

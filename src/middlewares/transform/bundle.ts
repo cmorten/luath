@@ -37,7 +37,6 @@ function idToPath(id: string, rootDir: string) {
 
 const jsonPlugin = json();
 const imagePlugin = image();
-const terserPlugin = terser();
 const esbuildPlugin = esbuild();
 
 export async function bundle(
@@ -46,6 +45,7 @@ export async function bundle(
   moduleGraph: ModuleGraph,
   plugins: LuathPlugin[],
 ) {
+  const esbuildPlugin = esbuild();
   const id = stripUrl(url);
   const isCss = isCssExtension(id);
   const isImport = isImportUrl(url);
@@ -101,7 +101,7 @@ export async function bundle(
       }),
       esbuildPlugin,
       lmr(moduleGraph, rootDir),
-      terserPlugin,
+      terser(),
     ] as Plugin[],
     external: () => true,
     onwarn() {},

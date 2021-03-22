@@ -1,4 +1,4 @@
-import type { Request } from "../../deps.ts";
+import type { Request } from "../deps.ts";
 
 export const RE_JAVASCRIPT = /\.((j|t)sx?)($|\?|&|#)/;
 

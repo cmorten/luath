@@ -45,7 +45,7 @@ export function transform(
         if (mod?.code) {
           const type = _isCss ? ".css" : ".js";
 
-          res.type(type).set('Cache-Control', "no-cache");
+          res.type(type).set("Cache-Control", "no-cache");
 
           if (req.fresh) {
             return res.setStatus(304).end();

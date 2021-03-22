@@ -170,7 +170,7 @@ export function lmr(
 
         return;
       } else if (isLmrJs(req.url)) {
-        res.type(".js").set('Cache-Control', "max-age=31536000,immutable");
+        res.type(".js").set("Cache-Control", "max-age=31536000,immutable");
 
         if (req.fresh) {
           return await res.setStatus(304).end();
