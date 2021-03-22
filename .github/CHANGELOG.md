@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.3.1] - 22-03-2021
+
+- chore: no-op release
+
 ## [0.3.0] - 22-03-2021
 
 - feat: compress responses + other minor optimisations
