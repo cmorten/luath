@@ -1,9 +1,5 @@
-import {
-  esbuild as esbuildInstance,
-  loadUrl,
-  parse,
-} from "../../../../deps.ts";
-import { isJsExtension } from "../../isJs.ts";
+import { esbuild as esbuildInstance, loadUrl, parse } from "../../deps.ts";
+import { isJsExtension } from "../isJs.ts";
 
 let esbuildInitialized = false;
 let esbuildReady = false;

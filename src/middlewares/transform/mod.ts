@@ -6,9 +6,9 @@ import type {
 } from "../../../deps.ts";
 import type { LuathPlugin } from "../../types.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
+import { isJs } from "../../isJs.ts";
+import { isCss } from "../../isCss.ts";
 import { isHtml } from "../isHtml.ts";
-import { isJs } from "../isJs.ts";
-import { isCss } from "../isCss.ts";
 import { isImport } from "../isImport.ts";
 import { bundle } from "./bundle.ts";
 

@@ -37,7 +37,7 @@ function showErrorOverlay(error) {
   document.getElementById("$luath_message").textContent = error.message;
   document.getElementById("$luath_stack").textContent = error.stack.replace(
     error.message,
-    ""
+    "",
   );
 }
 
@@ -131,7 +131,7 @@ function handleMessage(message) {
             return;
           } else if (
             url.replace(RE_INDEX_HTML, "") ===
-            resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
+              resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
           ) {
             return reload();
           } else {
@@ -170,7 +170,7 @@ function handleMessage(message) {
             return;
           } else if (
             url.replace(RE_INDEX_HTML, "") ===
-            resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
+              resolveUrl(location.pathname).replace(RE_INDEX_HTML, "")
           ) {
             return reload();
           } else {
@@ -190,7 +190,7 @@ function handleMessage(message) {
         modules.delete(url);
 
         const updateIndex = updateQueue.findIndex(
-          ({ url: existingUrl }) => existingUrl === url
+          ({ url: existingUrl }) => existingUrl === url,
         );
 
         if (updateIndex) {
@@ -228,7 +228,7 @@ function handleClose(event) {
 
     reconnectHandle = setTimeout(
       () => connectWebSocket(reload),
-      CONNECTION_RETRY_TIMEOUT
+      CONNECTION_RETRY_TIMEOUT,
     );
   }
 }
@@ -294,7 +294,7 @@ export function luath(url) {
         JSON.stringify({
           id: url.replace(location.origin, ""),
           type: "hotAccepted",
-        })
+        }),
       );
 
       if (fn) {

@@ -4,7 +4,7 @@ import {
   pluginTransformReactJsxSource,
   reactRefreshBabel,
   transformSync,
-} from "../../../../deps.ts";
+} from "../../deps.ts";
 
 const REACT_REFRESH_PATH_IMPORT = "/$luath/react-refresh.js";
 

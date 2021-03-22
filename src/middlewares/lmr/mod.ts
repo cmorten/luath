@@ -9,10 +9,10 @@ import { acceptWebSocket, isWebSocketCloseEvent } from "../../../deps.ts";
 import { FileWatcher } from "../../fileWatcher.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
 import { WebSocketServer } from "../../webSocketServer.ts";
+import { stripUrl } from "../../stripUrl.ts";
+import { pathToId } from "../../pathToId.ts";
 import { getLmrClient } from "../getLmrClient.ts";
 import { isHtmlExtension } from "../isHtml.ts";
-import { stripUrl } from "../stripUrl.ts";
-import { pathToId } from "../pathToId.ts";
 
 const RE_LMR_WS = /\/\$luath\/lmr($|\?|&|#)/;
 const RE_LMR_JS = /\/\$luath\/client\.js($|\?|&|#)/;

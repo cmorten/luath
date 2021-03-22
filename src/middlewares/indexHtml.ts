@@ -6,9 +6,9 @@ import type {
 } from "../../deps.ts";
 import type { LuathPlugin } from "../types.ts";
 import { exists, join } from "../../deps.ts";
-import { isHtml } from "./isHtml.ts";
 import { ModuleGraph } from "../moduleGraph.ts";
-import { lmr } from "./transform/plugins/lmr.ts";
+import { lmr } from "../plugins/lmr.ts";
+import { isHtml } from "./isHtml.ts";
 
 export function indexHtml(
   rootDir: string,

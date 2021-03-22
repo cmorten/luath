@@ -10,17 +10,17 @@ import {
   rollup,
 } from "../../../deps.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
-import { pathToId } from "../pathToId.ts";
-import { isCssExtension } from "../isCss.ts";
+import { pathToId } from "../../pathToId.ts";
+import { isCssExtension } from "../../isCss.ts";
+import { stripUrl } from "../../stripUrl.ts";
+import { isLuathImport } from "../../isLuathImport.ts";
+import { isHttpUrl } from "../../isHttpUrl.ts";
+import { lmr, LMR_JS_PATH_IMPORT } from "../../plugins/lmr.ts";
+import { esbuild } from "../../plugins/esbuild.ts";
 import { isImportUrl } from "../isImport.ts";
-import { stripUrl } from "../stripUrl.ts";
-import { lmr, LMR_JS_PATH_IMPORT } from "./plugins/lmr.ts";
-import { esbuild } from "./plugins/esbuild.ts";
-import { isLuathImport } from "./isLuathImport.ts";
 import { isPublicFile } from "./isPublicFile.ts";
 import { getEntryChunk } from "./getEntryChunk.ts";
 import { getCssAsset } from "./getCssAsset.ts";
-import { isHttpUrl } from "./isHttpUrl.ts";
 
 function injectCss(
   code: string,

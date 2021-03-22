@@ -1,13 +1,9 @@
-import type { ImportSpecifier } from "../../../../deps.ts";
-import {
-  esModuleLexerInit,
-  MagicString,
-  parseImports,
-} from "../../../../deps.ts";
-import { pathToId } from "../../pathToId.ts";
-import { isCssExtension } from "../../isCss.ts";
-import { stripUrl } from "../../stripUrl.ts";
-import { ModuleGraph } from "../../../moduleGraph.ts";
+import type { ImportSpecifier } from "../../deps.ts";
+import { esModuleLexerInit, MagicString, parseImports } from "../../deps.ts";
+import { ModuleGraph } from "../moduleGraph.ts";
+import { pathToId } from "../pathToId.ts";
+import { isCssExtension } from "../isCss.ts";
+import { stripUrl } from "../stripUrl.ts";
 import { isHttpUrl } from "../isHttpUrl.ts";
 import { isMetaImport } from "../isMetaImport.ts";
 import { isLuathImport } from "../isLuathImport.ts";

@@ -1,4 +1,4 @@
-import { relative, resolve } from "../../deps.ts";
+import { relative, resolve } from "../deps.ts";
 import { stripUrl } from "./stripUrl.ts";
 
 export function pathToId(path: string, rootDir: string) {
