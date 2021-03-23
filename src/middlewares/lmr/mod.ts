@@ -13,7 +13,6 @@ import { stripUrl } from "../../stripUrl.ts";
 import { pathToId } from "../../pathToId.ts";
 import { getLmrClient } from "../getLmrClient.ts";
 import { isHtmlExtension } from "../isHtml.ts";
-import { sendCompressed } from "../sendCompressed.ts";
 
 const RE_LMR_WS = /\/\$luath\/lmr($|\?|&|#)/;
 const RE_LMR_JS = /\/\$luath\/client\.js($|\?|&|#)/;
@@ -166,17 +165,11 @@ export function lmr(
           headers: req.headers,
         });
 
-        handleWebSocketMessage(socket);
-
-        return;
+        return await handleWebSocketMessage(socket);
       } else if (isLmrJs(req.url)) {
-        res.type(".js").set("Cache-Control", "max-age=31536000,immutable");
-
-        if (req.fresh) {
-          return await res.setStatus(304).end();
-        }
-
-        return await sendCompressed(req, res, await getLmrClient());
+        return await res.type(".js")
+          .set("Cache-Control", "max-age=31536000,immutable")
+          .end(await getLmrClient());
       }
 
       next();

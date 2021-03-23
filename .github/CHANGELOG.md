@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.4.0] - 23-03-2021
+
+- revert: in-memory compression slow
+
 ## [0.3.2] - 23-03-2021
 
 - chore: remove gif and preventing deno.land/x webhook publish due to size restrictions

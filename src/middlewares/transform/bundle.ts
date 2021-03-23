@@ -45,7 +45,6 @@ export async function bundle(
   moduleGraph: ModuleGraph,
   plugins: LuathPlugin[],
 ) {
-  const esbuildPlugin = esbuild();
   const id = stripUrl(url);
   const isCss = isCssExtension(id);
   const isImport = isImportUrl(url);

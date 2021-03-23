@@ -44,7 +44,7 @@ Luath can be used either through a command line interface (CLI):
 
 ```bash
 # Install Luath
-deno install -f -q -A --unstable --no-check https://deno.land/x/luath@0.3.2/luath.ts
+deno install -f -q -A --unstable --no-check https://deno.land/x/luath@0.4.0/luath.ts
 
 # Serve the example
 luath serve ./examples/vanilla
@@ -53,7 +53,7 @@ luath serve ./examples/vanilla
 Or through it's JavaScript API:
 
 ```ts
-import { server } from "https://deno.land/x/luath@0.3.2/mod.ts";
+import { server } from "https://deno.land/x/luath@0.4.0/mod.ts";
 
 await server({ root: "./examples/vanilla" });
 ```
