@@ -1,4 +1,5 @@
 <p align="center">
+  <a href="https://www.linkedin.com/in/hannah-morten-b1218017a/"><img height="200" style="height:200px;" src="https://github.com/cmorten/luath/raw/main/.github/icon.svg" alt="Deno zooming through the lighting storm that is front-end development"></a>
   <h1 align="center">Luath</h1>
 </p>
 <p align="center">
@@ -26,10 +27,6 @@ Luath (`/l̪ˠuə/` - Scottish Gaelic for _fast_) is a front-end development and
 
 1. A [_WIP_] development server for serving your application via ESM with hot module replacement and support for a wide range of modern features.
 1. A [_WIP_] build command for bundling your application code with [deno-rollup](https://github.com/cmorten/deno-rollup/).
-
-<p align="center">
-  <img src="https://github.com/cmorten/luath/raw/main/.github/luath.gif" alt="Luath CLI example showing HMR">
-</p>
 
 ## Features
 
@@ -76,3 +73,5 @@ Please refer to the [contributing guide](./.github/CONTRIBUTING.md)
 Luath is licensed under the [MIT License](./LICENSE.md).
 
 Derived works include [vite](https://github.com/vitejs/vite) and [wmr](https://github.com/preactjs/wmr). The plan is to attribute specific segments in the appropriate files, but for now their licenses can be found in the root of this repository.
+
+Icon designed and created by [Hannah Morten](https://www.linkedin.com/in/hannah-morten-b1218017a/).
