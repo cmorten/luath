@@ -1,5 +1,11 @@
 # ChangeLog
 
+## [0.3.2] - 23-03-2021
+
+- chore: remove gif and preventing deno.land/x webhook publish due to size restrictions
+- docs: add icon to readme
+- chore: upgrade deno version in ci
+
 ## [0.3.1] - 22-03-2021
 
 - chore: no-op release
