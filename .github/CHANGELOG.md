@@ -1,5 +1,14 @@
 # ChangeLog
 
+## [0.5.0] - 27-03-2021
+
+- feat: write css to inline style tags to remove FOUC on load
+- feat: introduce precache step on server startup to minimise first request round-trip time
+- revert: remove terser as adding second to some builds
+- fix: babel core issue with require not defined when served from esm.sh
+- feat: make use of esm.sh `?dev` for prettier react imports in example
+- fix: handle non-root files properly
+
 ## [0.4.0] - 23-03-2021
 
 - revert: in-memory compression slow
