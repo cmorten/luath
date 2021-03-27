@@ -52,7 +52,7 @@ const program = await new Command()
   .description("CLI for fast front-end development in Deno");
 
 program.command("serve <root:string>")
-  .description("Serve an application directory with HMR [WIP]")
+  .description("Serve an application directory with HMR")
   .option(
     "-c, --config [filename:string]",
     "Use this config file (if argument is used but value is unspecified, defaults to luath.config.js)",
