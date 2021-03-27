@@ -18,18 +18,18 @@ export const precache = async (
       const html = await Deno.readTextFile(filename);
       const dom = parse(html);
 
-      [...dom.querySelectorAll("script"), ...dom.querySelectorAll("link")]
-        .forEach(
-          ({ attributes }) => {
+      await Promise.all(
+        [...dom.querySelectorAll("script"), ...dom.querySelectorAll("link")]
+          .map(async ({ attributes }) => {
             const attribute = attributes.src ?? attributes.href;
 
             if (attribute && !isLuathImport(attribute)) {
               const url = pathToId(attribute, rootDir);
 
-              populateCache(url, rootDir, moduleGraph, plugins).catch(() => {});
+              return populateCache(url, rootDir, moduleGraph, plugins);
             }
-          },
-        );
+          }),
+      );
     }
   } catch (_) {
     //swallow
@@ -41,14 +41,14 @@ async function populateCache(
   rootDir: string,
   moduleGraph: ModuleGraph,
   plugins: LuathPlugin[],
-) {
+): Promise<any> {
   const out = await bundle(url, rootDir, moduleGraph, plugins);
 
   if (out?.dependencies) {
-    (Array.from(out.dependencies) as string[]).forEach(async (
-      dependency: string,
-    ) =>
-      populateCache(dependency, rootDir, moduleGraph, plugins).catch(() => {})
+    return Promise.all(
+      (Array.from(out.dependencies) as string[]).map((dependency) =>
+        populateCache(dependency, rootDir, moduleGraph, plugins)
+      ),
     );
   }
 }

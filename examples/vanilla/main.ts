@@ -9,7 +9,7 @@ document.querySelector(`#app`)!.innerHTML = `
   <h1 class="${shared.title}">Hello Deno!</h1>
   <img class="${styles.icon}" src="${icon}" />
   <p class="${styles.meta}">Project Metadata: ${JSON.stringify(metadata, undefined, 2)}</p>
-  <p class="${styles.intro}">Coming soon...!</p>
+  <p class="${styles.intro}">Try changing one of the files!</p>
   `;
 
 if (import.meta.hot) {

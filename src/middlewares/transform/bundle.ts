@@ -8,7 +8,6 @@ import {
   postcss,
   relative,
   rollup,
-  terser,
 } from "../../../deps.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
 import { pathToId } from "../../pathToId.ts";
@@ -26,9 +25,12 @@ import { getCssAsset } from "./getCssAsset.ts";
 function injectCss(
   code: string,
   styleName: string,
+  styleCode: string,
 ) {
   return `import { style as $luath_style } from "${LMR_JS_PATH_IMPORT}";\n` +
-    `$luath_style(${JSON.stringify(styleName)});\n` + code;
+    `$luath_style(${JSON.stringify(styleName)}, \`${
+      styleCode.replace("\n", "")
+    }\`);\n` + code;
 }
 
 function idToPath(id: string, rootDir: string) {
@@ -98,7 +100,6 @@ export async function bundle(
       }),
       esbuildPlugin,
       lmr(moduleGraph, rootDir),
-      terser(),
     ] as Plugin[],
     external: () => true,
     onwarn() {},
@@ -119,8 +120,6 @@ export async function bundle(
       return id;
     },
   });
-
-  build.close();
 
   const entryChunk = getEntryChunk(output);
   const isCss = isCssExtension(id);
@@ -177,6 +176,7 @@ export async function bundle(
     entryMod.code = injectCss(
       entryMod.code!,
       assetId,
+      assetMod.code!,
     );
 
     if (isCss) {

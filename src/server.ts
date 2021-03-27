@@ -23,12 +23,12 @@ import { precache } from "./precache.ts";
  * @param {Number} port
  * @public
  */
-export function server(options?: LuathOptions) {
+export async function server(options?: LuathOptions) {
   const config = resolveOptions(options);
   const moduleGraph = new ModuleGraph();
 
   // Precache
-  precache(config.root, moduleGraph, config.plugins);
+  await precache(config.root, moduleGraph, config.plugins);
 
   const publicDir = join(config.root, "public");
   const fileWatcher = new FileWatcher(config.root, {});

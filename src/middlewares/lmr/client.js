@@ -126,8 +126,6 @@ function handleMessage(message) {
 
         if (!modules.get(url)) {
           if (isCssExtension(url)) {
-            style(url, mtime);
-
             return;
           } else if (
             url.replace(RE_INDEX_HTML, "") ===
@@ -314,26 +312,16 @@ export function luath(url) {
 
 const styles = new Map();
 
-export function style(filename, mtime = Date.now()) {
+export function style(filename, code) {
   const id = resolveUrl(filename);
-  const oldNode = styles.get(id);
-  const newNode = document.createElement("link");
-  newNode.rel = "stylesheet";
-  newNode.href = oldNode ? `${filename}?mtime=${mtime}` : filename;
-  document.head.appendChild(newNode);
+  const existingNode = styles.get(id);
+  const node = existingNode ?? document.createElement("style");
+  node.setAttribute("type", "text/css");
+  node.innerHTML = code;
+  styles.set(id, node);
 
-  styles.set(id, newNode);
-
-  if (oldNode) {
-    newNode.onload = () => {
-      setTimeout(() => {
-        try {
-          document.head.removeChild(oldNode);
-        } catch (_) {
-          // swallow
-        }
-      }, 1000);
-    };
+  if (!existingNode) {
+    document.head.appendChild(node);
   }
 }
 

@@ -45,7 +45,6 @@ export { virtual } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/virtu
 export { image } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/image/mod.ts";
 export { json } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/json/mod.ts";
 export { postcss } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/postcss/mod.ts";
-export { terser } from "https://deno.land/x/drollup@2.42.3+0.17.0/plugins/terser/mod.ts";
 export { parse } from "https://deno.land/x/drollup@2.42.3+0.17.0/src/rollup-plugin-deno-resolver/parse.ts";
 export { loadUrl } from "https://deno.land/x/drollup@2.42.3+0.17.0/src/rollup-plugin-deno-resolver/loadUrl.ts";
 

@@ -35,7 +35,7 @@ export function indexHtml(
 
           html = lmr(moduleGraph, rootDir).transformIndexHtml(html);
 
-          return res.send(html);
+          return res.type(".html").end(html);
         } catch (err) {
           return next(err);
         }
