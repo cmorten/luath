@@ -14,6 +14,7 @@ import {
 import { FileWatcher } from "./fileWatcher.ts";
 import { ModuleGraph } from "./moduleGraph.ts";
 import { WebSocketServer } from "./webSocketServer.ts";
+import { precache } from "./precache.ts";
 
 /**
  * server
@@ -24,13 +25,16 @@ import { WebSocketServer } from "./webSocketServer.ts";
  */
 export function server(options?: LuathOptions) {
   const config = resolveOptions(options);
+  const moduleGraph = new ModuleGraph();
+
+  // Precache
+  precache(config.root, moduleGraph, config.plugins);
+
   const publicDir = join(config.root, "public");
-
-  const app = opine();
-
   const fileWatcher = new FileWatcher(config.root, {});
   const webSocketServer = new WebSocketServer();
-  const moduleGraph = new ModuleGraph();
+
+  const app = opine();
 
   // LMR
   app.use(lmr(config.root, fileWatcher, webSocketServer, moduleGraph));

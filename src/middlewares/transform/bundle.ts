@@ -46,11 +46,8 @@ export async function bundle(
   plugins: LuathPlugin[],
 ) {
   const id = stripUrl(url);
-  const isCss = isCssExtension(id);
-  const isImport = isImportUrl(url);
-
   const cachedMod = moduleGraph.get(id);
-  const useCache = cachedMod?.code && !cachedMod?.stale;
+  const useCache = !cachedMod?.stale && cachedMod?.code;
 
   if (useCache) {
     return cachedMod;
@@ -82,6 +79,7 @@ export async function bundle(
 
   const build = await rollup({
     input: filename,
+    cache: false,
     plugins: [
       // TODO: need concept of pre / post for custom plugins
       ...plugins,
@@ -111,6 +109,7 @@ export async function bundle(
     sourcemap: false,
     format: "es" as const,
     preserveModules: true,
+    indent: false,
     hoistTransitiveImports: false,
     paths(id: string) {
       if (id.startsWith(rootDir)) {
@@ -121,7 +120,10 @@ export async function bundle(
     },
   });
 
+  build.close();
+
   const entryChunk = getEntryChunk(output);
+  const isCss = isCssExtension(id);
   const entryId = isCss ? pathToId(entryChunk.fileName, rootDir) : id;
   const entryMod = moduleGraph.ensure(entryId);
 
@@ -156,7 +158,7 @@ export async function bundle(
     assetMod.code = cssAsset.source as string;
     assetMod.dependents.add(entryId);
 
-    if (!isImport) {
+    if (!isImportUrl(url)) {
       assetMod.acceptingUpdates = true;
     }
 

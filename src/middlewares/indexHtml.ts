@@ -33,7 +33,6 @@ export function indexHtml(
             },
           );
 
-          // TODO: Ideally we don't special case this... though it is a special case!
           html = lmr(moduleGraph, rootDir).transformIndexHtml(html);
 
           return res.send(html);
