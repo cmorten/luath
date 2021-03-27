@@ -1,9 +1,8 @@
-// deno-lint-ignore-file no-explicit-any
 import { loadUrl } from "./loadUrl.ts";
 
 let lmrClient: Promise<string>;
 
-export async function getLmrClient() {
+export function getLmrClient() {
   if (lmrClient) {
     return lmrClient;
   }

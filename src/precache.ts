@@ -1,4 +1,4 @@
-import type { LuathPlugin } from "../types.ts";
+import type { LuathPlugin } from "./types.ts";
 import { exists, join } from "../deps.ts";
 import { isLuathImport } from "./isLuathImport.ts";
 import { pathToId } from "./pathToId.ts";
@@ -20,7 +20,7 @@ export const precache = async (
 
       await Promise.all(
         [...dom.querySelectorAll("script"), ...dom.querySelectorAll("link")]
-          .map(async ({ attributes }) => {
+          .map(({ attributes }) => {
             const attribute = attributes.src ?? attributes.href;
 
             if (attribute && !isLuathImport(attribute)) {
@@ -41,7 +41,7 @@ async function populateCache(
   rootDir: string,
   moduleGraph: ModuleGraph,
   plugins: LuathPlugin[],
-): Promise<any> {
+): Promise<unknown> {
   const out = await bundle(url, rootDir, moduleGraph, plugins);
 
   if (out?.dependencies) {

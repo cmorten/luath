@@ -71,7 +71,7 @@ export { default as atImport } from "https://esm.sh/postcss-import@14.0.0";
 export * as esbuild from "https://esm.sh/esbuild-wasm@0.9.3/esm/browser.min.js";
 
 // @deno-types="./src/babelTypes.d.ts"
-export { transformSync } from "https://esm.sh/@babel/core@7.13.10";
+export { transformSync } from "./babelDeps.js";
 
 // @deno-types="./src/babelTypes.d.ts"
 export { default as pluginTransformReactJsxSelf } from "https://esm.sh/@babel/plugin-transform-react-jsx-self@7.12.13";
