@@ -6,10 +6,10 @@ import shared from "./shared.css";
 import styles from "./main.css";
 
 document.querySelector(`#app`)!.innerHTML = `
-  <h1 class="${shared.title}">Hello Deno!</h1>
-  <img class="${styles.icon}" src="${icon}" />
+  <h1 class="${shared.title}">Hello Luath!</h1>
+  <img class="${styles.icon}" alt="Deno zooming through the lighting storm that is front-end development" src="${icon}" />
   <p class="${styles.meta}">Project Metadata: ${JSON.stringify(metadata, undefined, 2)}</p>
-  <p class="${styles.intro}">Try changing one of the files!</p>
+  <p class="${styles.intro}">Edit <code>main.ts</code> and save to try out the HMR!</p>
   `;
 
 if (import.meta.hot) {

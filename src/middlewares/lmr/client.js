@@ -48,10 +48,15 @@ function hideErrorOverlay() {
   }
 }
 
+const ignoredErrors = [
+  "error loading dynamically imported module",
+  "Failed to fetch dynamically imported module:",
+];
+
 function logError(error) {
   console.error("[lmr] ", error);
 
-  if (error.message !== "error loading dynamically imported module") {
+  if (!ignoredErrors.some((ignore) => error.message.includes(ignore))) {
     showErrorOverlay(error);
   }
 }
@@ -126,6 +131,8 @@ function handleMessage(message) {
 
         if (!modules.get(url)) {
           if (isCssExtension(url)) {
+            link(path, mtime);
+
             return;
           } else if (
             url.replace(RE_INDEX_HTML, "") ===
@@ -312,21 +319,71 @@ export function luath(url) {
 
 const styles = new Map();
 
-export function style(filename, code) {
-  const id = resolveUrl(filename);
-  const existingNode = styles.get(id);
-  const node = existingNode ?? document.createElement("style");
-  node.setAttribute("type", "text/css");
-  node.innerHTML = code;
-  styles.set(id, node);
+const FOUC_TIMEOUT = 250;
 
-  if (!existingNode) {
-    document.head.appendChild(node);
+export function link(filename, mtime) {
+  const id = stripUrl(resolveUrl(filename));
+  let oldNode = styles.get(id);
+
+  if (!oldNode) {
+    for (const node of document.querySelectorAll("link")) {
+      if (stripUrl(resolveUrl(node.href)) === id) {
+        oldNode = node;
+
+        break;
+      }
+    }
+  }
+
+  if (!oldNode || oldNode?.tagName.toLowerCase() !== "link") {
+    return;
+  }
+
+  const newNode = document.createElement("link");
+  newNode.setAttribute("rel", "stylesheet");
+  newNode.setAttribute("href", `${filename}?mtime=${mtime}`);
+  document.head.appendChild(newNode);
+  styles.set(id, newNode);
+
+  if (oldNode) {
+    newNode.onload = () => {
+      setTimeout(() => {
+        try {
+          document.head.removeChild(oldNode);
+        } catch (_) {
+          // swallow
+        }
+      }, FOUC_TIMEOUT);
+    };
+  }
+}
+
+export function style(filename, code) {
+  const id = stripUrl(resolveUrl(filename));
+  const oldNode = styles.get(id);
+  const newNode = document.createElement("style");
+  newNode.setAttribute("type", "text/css");
+  newNode.innerHTML = code;
+  styles.set(id, newNode);
+  document.head.appendChild(newNode);
+
+  if (oldNode) {
+    setTimeout(() => {
+      try {
+        document.head.removeChild(oldNode);
+      } catch (_) {
+        // swallow
+      }
+    }, FOUC_TIMEOUT);
   }
 }
 
 function removeStyle(filename) {
-  const id = resolveUrl(filename);
+  const id = stripUrl(resolveUrl(filename));
   const oldNode = styles.get(id);
-  document.head.removeChild(oldNode);
+  try {
+    document.head.removeChild(oldNode);
+  } catch (_) {
+    // swallow
+  }
 }

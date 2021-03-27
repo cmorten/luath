@@ -2,11 +2,13 @@ import type { LuathPlugin } from "../../types.ts";
 import type { Plugin } from "../../../deps.ts";
 import {
   atImport,
+  dirname,
   image,
   join,
   json,
   postcss,
   relative,
+  resolve,
   rollup,
 } from "../../../deps.ts";
 import { ModuleGraph } from "../../moduleGraph.ts";
@@ -30,7 +32,8 @@ function injectCss(
   return `import { style as $luath_style } from "${LMR_JS_PATH_IMPORT}";\n` +
     `$luath_style(${JSON.stringify(styleName)}, \`${
       styleCode.replace("\n", "")
-    }\`);\n` + code;
+    }\`);\n` + code +
+    `if (import.meta.hot) { import.meta.hot.accept(); }`;
 }
 
 function idToPath(id: string, rootDir: string) {
@@ -123,7 +126,9 @@ export async function bundle(
 
   const entryChunk = getEntryChunk(output);
   const isCss = isCssExtension(id);
-  const entryId = isCss ? pathToId(entryChunk.fileName, rootDir) : id;
+  const entryId = isCss
+    ? resolve(pathToId(dirname(id), rootDir), entryChunk.fileName)
+    : id;
   const entryMod = moduleGraph.ensure(entryId);
 
   entryMod.stale = false;
@@ -147,10 +152,11 @@ export async function bundle(
   const cssAsset = getCssAsset(output);
 
   if (cssAsset) {
-    const assetId = pathToId(
+    const assetId = resolve(
+      pathToId(dirname(id), rootDir),
       cssAsset.fileName.replace(".css.css", ".css"),
-      rootDir,
     );
+
     const assetMod = moduleGraph.ensure(assetId);
 
     assetMod.stale = false;
@@ -164,7 +170,7 @@ export async function bundle(
     Array.from(cssImports)
       .filter((path) => !isLuathImport(path) && !isHttpUrl(path))
       .forEach((path) => {
-        const importedId = pathToId(path, rootDir);
+        const importedId = resolve(pathToId(dirname(id), rootDir), path);
         const importedMod = moduleGraph.ensure(importedId);
 
         importedMod.stale = false;

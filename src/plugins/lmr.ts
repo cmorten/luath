@@ -1,5 +1,11 @@
 import type { ImportSpecifier } from "../../deps.ts";
-import { esModuleLexerInit, MagicString, parseImports } from "../../deps.ts";
+import {
+  dirname,
+  esModuleLexerInit,
+  MagicString,
+  parseImports,
+  resolve,
+} from "../../deps.ts";
 import { ModuleGraph } from "../moduleGraph.ts";
 import { pathToId } from "../pathToId.ts";
 import { isCssExtension } from "../isCss.ts";
@@ -16,7 +22,7 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
     name: "luath-plugin-hot-module-reloading",
 
     async transform(code: string, id: string) {
-      if (isCssExtension(id) || isLuathImport(id)) {
+      if (isLuathImport(id)) {
         return code;
       }
 
@@ -48,7 +54,9 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
         if (
           !isMetaImport(rawUrl) && !isHttpUrl(rawUrl) && !isLuathImport(rawUrl)
         ) {
-          const mod = moduleGraph.get(pathToId(rawUrl, rootDir));
+          const mod = moduleGraph.get(
+            pathToId(resolve(dirname(id), rawUrl), rootDir),
+          );
 
           if (mod?.mtime) {
             str().overwrite(start, end, `${rawUrl}?im&mtime=${mod.mtime}`);
