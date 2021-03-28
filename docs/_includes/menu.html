@@ -1,0 +1,134 @@
+<button class="open-menu" id="open-menu"></button>
+<aside class="side">
+  <ul class="side-menu">
+    <li class="side-menu-section">
+      <h2 class="side-menu-title">Guide</h2>
+      <ul class="side-menu-links">
+        <li class="side-menu-item">
+          <a href="/guide#getting-started" class="side-menu-item-link"
+            >Getting Started</a
+          >
+          <ul class="side-menu-links">
+            <li class="side-menu-sub-item">
+              <a href="/guide#overview" class="side-menu-sub-item-link"
+                >Overview</a
+              >
+            </li>
+            <li class="side-menu-sub-item">
+              <a
+                href="/guide#running-your-first-luath-project"
+                class="side-menu-sub-item-link"
+                >Running Your First Luath Project</a
+              >
+            </li>
+            <li class="side-menu-sub-item">
+              <a href="/guide#cli" class="side-menu-sub-item-link">CLI</a>
+            </li>
+            <li class="side-menu-sub-item">
+              <a href="/guide#getting-involved" class="side-menu-sub-item-link"
+                >Getting Involved</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="side-menu-item">
+          <a href="/guide#features" class="side-menu-item-link">Features</a>
+          <ul class="side-menu-links">
+            <li class="side-menu-sub-item">
+              <a
+                href="/guide#hot-module-replacement"
+                class="side-menu-sub-item-link"
+                >Hot Module Replacement</a
+              >
+            </li>
+            <li class="side-menu-sub-item">
+              <a
+                href="/guide#jsx-and-typescript"
+                class="side-menu-sub-item-link"
+                >JSX And TypeScript</a
+              >
+            </li>
+            <li class="side-menu-sub-item">
+              <a
+                href="/guide#postcss-and-css-modules"
+                class="side-menu-sub-item-link"
+                >PostCSS And CSS Modules</a
+              >
+            </li>
+            <li class="side-menu-sub-item">
+              <a href="/guide#json" class="side-menu-sub-item-link">JSON</a>
+            </li>
+            <li class="side-menu-sub-item">
+              <a href="/guide#images" class="side-menu-sub-item-link">Images</a>
+            </li>
+            <li class="side-menu-sub-item">
+              <a
+                href="/guide#static-file-serving"
+                class="side-menu-sub-item-link"
+                >Static File Serving</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li class="side-menu-section">
+      <h2 class="side-menu-title">APIs</h2>
+      <ul class="side-menu-links">
+        <li class="side-menu-item">
+          <a href="/apis#javascript-api" class="side-menu-item-link"
+            >JavaScript API</a
+          >
+        </li>
+        <li class="side-menu-item">
+          <a href="/apis#plugin-api" class="side-menu-item-link">Plugin API</a>
+        </li>
+        <li class="side-menu-item">
+          <a href="/apis#configuration" class="side-menu-item-link"
+            >Configuration</a
+          >
+        </li>
+      </ul>
+    </li>
+  </ul>
+</aside>
+<script>
+  function resetActiveElement() {
+    anchors.forEach((_anchor) => {
+      _anchor.classList.remove("active");
+    });
+  }
+
+  function setActiveElementFromUrl() {
+    resetActiveElement();
+
+    const pathname = window.location.pathname;
+    const hash = window.location.hash;
+    const selector = `.side [href="${pathname}${hash}"]`;
+    const activeElement = document.querySelector(selector);
+
+    if (activeElement) {
+      activeElement.classList.add("active");
+    }
+  }
+
+  const anchors = document.querySelectorAll(
+    ".side-menu-item-link,.side-menu-sub-item-link"
+  );
+
+  anchors.forEach((anchor) => {
+    anchor.onclick = function () {
+      resetActiveElement();
+      this.classList.add("active");
+    };
+  });
+
+  window.addEventListener("load", () => {
+    setActiveElementFromUrl();
+
+    document.querySelector("#open-menu").onclick = function () {
+      document.querySelector(".side").classList.toggle("open");
+    };
+  });
+  window.addEventListener("hashchange", setActiveElementFromUrl);
+</script>

@@ -64,7 +64,7 @@ Please refer to the [examples documentation](./examples).
 
 ## Contributing
 
-Please refer to the [contributing guide](./.github/CONTRIBUTING.md)
+Please refer to the [contributing guide](./.github/CONTRIBUTING.md).
 
 ---
 
