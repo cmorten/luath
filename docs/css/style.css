@@ -317,7 +317,7 @@ pre code {
 @media (max-width: 899px) {
   .side {
     background: #fff;
-    transform: translateX(-320px);
+    transform: translateX(-320px) translateZ(0);
     width: 100%;
     max-width: 320px;
     transition: transform 0.3s ease-out;
@@ -325,7 +325,7 @@ pre code {
   }
 
   .side.open {
-    transform: translateX(0px);
+    transform: translateX(0px) translateZ(0);
   }
 
   .open-menu {
