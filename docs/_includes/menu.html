@@ -1,4 +1,4 @@
-<button class="open-menu" id="open-menu"></button>
+<button class="open-menu" id="open-menu" aria-label="Toggle side menu"></button>
 <aside class="side">
   <ul class="side-menu">
     <li class="side-menu-section">
@@ -133,18 +133,45 @@
     };
   });
 
+  function onResize() {
+    if (window.innerWidth < 900) {
+      if (document.querySelector(".side").classList.contains("open")) {
+        document.querySelector(".side").removeAttribute("aria-hidden");
+      } else {
+        document.querySelector(".side").setAttribute("aria-hidden", true);
+      }
+    } else {
+      document.querySelector(".side").removeAttribute("aria-hidden");
+    }
+  }
+
+  window.addEventListener("resize", onResize);
+
   window.addEventListener("load", () => {
     setActiveElementFromUrl();
+    onResize();
 
     document.querySelector("#open-menu").onclick = function () {
       document.querySelector(".side").classList.toggle("open");
+
+      if (document.querySelector(".side").classList.contains("open")) {
+        document.querySelector(".side-menu-title").focus();
+        document.querySelector(".side").removeAttribute("aria-hidden");
+        document.querySelector(".main").setAttribute("aria-hidden", true);
+      } else {
+        document.querySelector("#open-menu").focus();
+        document.querySelector(".side").setAttribute("aria-hidden", true);
+        document.querySelector(".main").removeAttribute("aria-hidden");
+      }
     };
 
     document.querySelector(".main").onclick = function () {
       if (document.querySelector(".side").classList.contains("open")) {
         document.querySelector(".side").classList.toggle("open");
+        document.querySelector(".side").setAttribute("aria-hidden", true);
       }
     };
   });
+
   window.addEventListener("hashchange", setActiveElementFromUrl);
 </script>
