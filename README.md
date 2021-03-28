@@ -58,6 +58,10 @@ import { server } from "https://deno.land/x/luath@0.5.0/mod.ts";
 await server({ root: "./examples/vanilla" });
 ```
 
+## Documentation
+
+Please refer to the [documentation site](https://cmorten.github.io/luath/).
+
 ## Examples
 
 Please refer to the [examples documentation](./examples).
