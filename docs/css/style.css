@@ -343,11 +343,14 @@ pre code {
   .doc-main {
     width: 100%;
     margin-left: 0;
+    margin-top: 60px;
     position: unset;
   }
 
   .nav {
     position: fixed;
+    top: 0;
+    left: 0;
     z-index: 20;
   }
 }
