@@ -26,7 +26,8 @@ pre {
   line-height: 16px;
   vertical-align: middle;
   display: inline-block;
-  word-wrap: anywhere;
+  word-break: break-word;
+  word-wrap: break-word;
   white-space: pre-wrap;
   text-align: left;
 }
