@@ -25,14 +25,18 @@
               <a href="/luath/guide#cli" class="side-menu-sub-item-link">CLI</a>
             </li>
             <li class="side-menu-sub-item">
-              <a href="/luath/guide#getting-involved" class="side-menu-sub-item-link"
+              <a
+                href="/luath/guide#getting-involved"
+                class="side-menu-sub-item-link"
                 >Getting Involved</a
               >
             </li>
           </ul>
         </li>
         <li class="side-menu-item">
-          <a href="/luath/guide#features" class="side-menu-item-link">Features</a>
+          <a href="/luath/guide#features" class="side-menu-item-link"
+            >Features</a
+          >
           <ul class="side-menu-links">
             <li class="side-menu-sub-item">
               <a
@@ -56,10 +60,14 @@
               >
             </li>
             <li class="side-menu-sub-item">
-              <a href="/luath/guide#json" class="side-menu-sub-item-link">JSON</a>
+              <a href="/luath/guide#json" class="side-menu-sub-item-link"
+                >JSON</a
+              >
             </li>
             <li class="side-menu-sub-item">
-              <a href="/luath/guide#images" class="side-menu-sub-item-link">Images</a>
+              <a href="/luath/guide#images" class="side-menu-sub-item-link"
+                >Images</a
+              >
             </li>
             <li class="side-menu-sub-item">
               <a
@@ -81,7 +89,9 @@
           >
         </li>
         <li class="side-menu-item">
-          <a href="/luath/apis#plugin-api" class="side-menu-item-link">Plugin API</a>
+          <a href="/luath/apis#plugin-api" class="side-menu-item-link"
+            >Plugin API</a
+          >
         </li>
         <li class="side-menu-item">
           <a href="/luath/apis#configuration" class="side-menu-item-link"
@@ -131,7 +141,9 @@
     };
 
     document.querySelector(".main").onclick = function () {
-      document.querySelector(".side").classList.toggle("open");
+      if (document.querySelector(".side").classList.contains("open")) {
+        document.querySelector(".side").classList.toggle("open");
+      }
     };
   });
   window.addEventListener("hashchange", setActiveElementFromUrl);
