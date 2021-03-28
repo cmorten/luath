@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.5.1] - 28-03-2021
+
+- docs: add a documentation site on GitHub pages
+
 ## [0.5.0] - 27-03-2021
 
 - feat: write css to inline style tags to remove FOUC on load

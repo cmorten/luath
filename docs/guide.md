@@ -18,7 +18,7 @@ lang: en
     <section class="subsection">
       <h2 id="running-your-first-luath-project">Running Your First Luath Project</h2>
       <p>Install the Luath CLI using <a href="https://deno.land/">Deno</a>:</p>
-      <pre><code>$ deno install -f -q -A --unstable https://deno.land/x/luath@0.5.0/luath.ts</code></pre>
+      <pre><code>$ deno install -f -q -A --unstable https://deno.land/x/luath@0.5.1/luath.ts</code></pre>
       <p>Then follow any prompts from the Deno command. For example, you may need to add the Deno bin directory to your path:</p>
       <pre><code>$ export PATH="$HOME/.deno/bin:$PATH"</code></pre>
       <p>You are now set to use Luath. Let's try it out with one of the Luath repo examples:</p>
@@ -39,7 +39,7 @@ lang: en
       <pre><code>$ luath --help
       
   Usage:   luath 
-  Version: v0.5.0
+  Version: v0.5.1
 
   Description:
 
