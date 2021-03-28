@@ -10,6 +10,6 @@ lang: en
     <div class="title"><a href="/" class="luath">Luath</a><span><a href="https://github.com/cmorten/luath/blob/main/.github/CHANGELOG.md" class="version">{{ site.data.luath.current_version }}</a></span></div>
     <p class="description">Fast front-end development tooling in <a href="https://deno.land/">Deno</a>.</p>
     <pre><code>$ deno install -f -q -A --unstable https://deno.land/x/luath@0.5.0/luath.ts</code></pre>
-    <div><a href="/guide" class="primary get-started">Get Started</a></div>
+    <div><a href="/luath/guide" class="primary get-started">Get Started</a></div>
   </section>
 </main>

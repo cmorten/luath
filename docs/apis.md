@@ -39,7 +39,7 @@ lang: en
     <section class="subsection">
       <h2 id="configuration">Configuration</h2>
       <p>When running a Luath application using the CLI, you can provide a configuration file via the <code>--config</code> flag in the <code>luath serve</code> command.</p>
-      <p>Similarly, configuration can also be passed to the Luath <a href="/apis#javascript-apis">JavaScript APIs</a>.</p>
+      <p>Similarly, configuration can also be passed to the Luath <a href="/luath/apis#javascript-apis">JavaScript APIs</a>.</p>
       <p>The simplest configuration file just exports an empty object:</p>
       <pre><code>// luath.config.ts
       <br />export default {};</code></pre>
@@ -52,7 +52,7 @@ lang: en
       <p>Luath server options. Accepts any valid <code>HTTPOptions</code> or <code>HTTPSOptions</code> from the Deno <code>http</code> standard library.</p>
       <h3><code>plugins?: LuathPlugin[]</code></h3>
       <p>Default: <code>undefined</code></p>
-      <p>An array of Luath plugins to use. Please refer to the <a href="/apis#plugin-api">Plugin API</a> documentation for further details.</p>
+      <p>An array of Luath plugins to use. Please refer to the <a href="/luath/apis#plugin-api">Plugin API</a> documentation for further details.</p>
     </section>
   </section>
 </main>
