@@ -129,6 +129,10 @@
     document.querySelector("#open-menu").onclick = function () {
       document.querySelector(".side").classList.toggle("open");
     };
+
+    document.querySelector(".main").onclick = function () {
+      document.querySelector(".side").classList.toggle("open");
+    };
   });
   window.addEventListener("hashchange", setActiveElementFromUrl);
 </script>
