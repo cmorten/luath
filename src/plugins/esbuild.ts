@@ -3,8 +3,6 @@ import { esbuild as esbuildInstance, loadUrl, parse } from "../../deps.ts";
 import { isJsExtension } from "../isJs.ts";
 
 export function esbuild() {
-
-
   return {
     name: "esbuild",
 
