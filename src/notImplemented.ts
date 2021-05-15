@@ -1,6 +1,6 @@
 /**
  * notImplemented
- * 
+ *
  * @param {string} [msg]
  * @throws {Error}
  * @private

@@ -8,7 +8,7 @@ const FILE_WATCH_DEBOUNCE_MS = 50;
 
 /**
  * FileWatcher
- * 
+ *
  * @private
  */
 export class FileWatcher extends EventEmitter {

@@ -26,7 +26,7 @@ interface LuathError {
 
 /**
  * handleError
- * 
+ *
  * @param {Error} err
  * @param {boolean} recover
  * @private

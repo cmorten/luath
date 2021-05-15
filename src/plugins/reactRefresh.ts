@@ -16,7 +16,7 @@ window.$RefreshSig$ = () => (type) => type;
 window.$luath_react_refresh_bootstrap = true;`;
 
 const REACT_REFRESH_REMOTE_URL =
-  "https://unpkg.com/react-refresh@0.9.0/cjs/react-refresh-runtime.development.js";
+  "https://unpkg.com/react-refresh@0.10.0/cjs/react-refresh-runtime.development.js";
 
 const REACT_REFRESH_RUNTIME_CODE_PROMISE = fetch(REACT_REFRESH_REMOTE_URL)
   .then((res) => res.text())

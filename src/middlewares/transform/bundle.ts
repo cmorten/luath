@@ -40,10 +40,6 @@ function idToPath(id: string, rootDir: string) {
   return join(rootDir, id.slice(1).replace(".css.js", ".css"));
 }
 
-const jsonPlugin = json();
-const imagePlugin = image();
-const esbuildPlugin = esbuild();
-
 export async function bundle(
   url: string,
   rootDir: string,
@@ -88,8 +84,8 @@ export async function bundle(
     plugins: [
       // TODO: need concept of pre / post for custom plugins
       ...plugins,
-      jsonPlugin,
-      imagePlugin,
+      json(),
+      image(),
       // TODO: this should be configurable - not everyone uses css modules.
       postcss({
         modules: true,
@@ -101,7 +97,7 @@ export async function bundle(
           },
         })],
       }),
-      esbuildPlugin,
+      esbuild(),
       lmr(moduleGraph, rootDir),
     ] as Plugin[],
     external: () => true,

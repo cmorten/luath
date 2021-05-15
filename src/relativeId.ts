@@ -2,7 +2,7 @@ import { isAbsolute, relative } from "../deps.ts";
 
 /**
  * relativeId
- * 
+ *
  * @param {string} id
  * @returns {string}
  * @private

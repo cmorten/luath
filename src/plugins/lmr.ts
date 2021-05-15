@@ -8,7 +8,6 @@ import {
 } from "../../deps.ts";
 import { ModuleGraph } from "../moduleGraph.ts";
 import { pathToId } from "../pathToId.ts";
-import { isCssExtension } from "../isCss.ts";
 import { stripUrl } from "../stripUrl.ts";
 import { isHttpUrl } from "../isHttpUrl.ts";
 import { isMetaImport } from "../isMetaImport.ts";

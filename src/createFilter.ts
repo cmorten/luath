@@ -3,9 +3,9 @@ import { ensureArray } from "./ensureArray.ts";
 
 /**
  * getMatcherString
- * 
- * @param {string} id 
- * @param {string|false|null|undefined} resolutionBase 
+ *
+ * @param {string} id
+ * @param {string|false|null|undefined} resolutionBase
  * @returns {string}
  * @private
  */
@@ -36,9 +36,9 @@ export type CreateFilter = (id: string | unknown) => boolean;
 
 /**
  * createFilter
- * 
- * @param {FilterPattern} include 
- * @param {FilterPattern} exclude 
+ *
+ * @param {FilterPattern} include
+ * @param {FilterPattern} exclude
  * @param {any} options
  * @returns {CreateFilter}
  * @private

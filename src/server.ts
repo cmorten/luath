@@ -18,9 +18,8 @@ import { precache } from "./precache.ts";
 
 /**
  * server
- * 
+ *
  * @param {LuathOptions} options
- * @param {Number} port
  * @public
  */
 export async function server(options?: LuathOptions) {

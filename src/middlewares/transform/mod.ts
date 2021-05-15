@@ -14,6 +14,9 @@ import { bundle } from "./bundle.ts";
 
 export const urlIgnoreList = new Set(["/", "/favicon.ico"]);
 
+const RE_LUATH_JS = /\/\$luath\/.*\.js($|\?|&|#)/;
+const isLuathJs = (fileName: string) => RE_LUATH_JS.test(fileName);
+
 export function transform(
   rootDir: string,
   moduleGraph: ModuleGraph,
@@ -44,11 +47,16 @@ export function transform(
         if (mod?.code) {
           const type = _isCss ? ".css" : ".js";
 
-          res.type(type).set("Cache-Control", "no-cache").etag(mod.code);
+          res.type(type).etag(mod.code);
 
           if (req.fresh) {
             return await res.setStatus(304).end();
           }
+
+          res.set(
+            "Cache-Control",
+            isLuathJs(url) ? "max-age=31536000,immutable" : "no-cache",
+          );
 
           return await res.end(mod.code);
         }

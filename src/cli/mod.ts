@@ -2,11 +2,12 @@ import type { LuathOptions } from "../types.ts";
 import { Command } from "../../deps.ts";
 import { version } from "../../version.ts";
 import { server } from "../server.ts";
+import { build as _build } from "../build.ts";
 import { getConfigPath } from "./getConfigPath.ts";
 import { loadConfigFile } from "./loadConfigFile.ts";
 import { handleError } from "../logging.ts";
 
-interface ServeOptions {
+interface CLIOptions {
   config?: string | true;
   port?: number;
   hostname?: string;
@@ -14,11 +15,7 @@ interface ServeOptions {
 
 const DEFAULT_PORT = 3000;
 
-function notImplemented() {
-  console.log("Not Implemented");
-}
-
-async function serve({ config, port, hostname }: ServeOptions, root: string) {
+async function serve({ config, port, hostname }: CLIOptions, root: string) {
   let loadedConfig: LuathOptions = {};
 
   if (config) {
@@ -42,8 +39,25 @@ async function serve({ config, port, hostname }: ServeOptions, root: string) {
   });
 }
 
-function build() {
-  notImplemented();
+async function build({ config }: CLIOptions, root: string) {
+  let loadedConfig: LuathOptions = {};
+
+  if (config) {
+    try {
+      const configFile = await getConfigPath(config);
+
+      loadedConfig = await loadConfigFile(configFile);
+    } catch (err) {
+      handleError(err);
+    }
+  }
+
+  root = root ?? loadedConfig?.root;
+
+  await _build({
+    ...loadedConfig,
+    root,
+  });
 }
 
 const program = await new Command()
@@ -65,6 +79,10 @@ program.command("serve <root:string>")
 
 program.command("build <root:string>")
   .description("Build an application directory [Not Implemented]")
+  .option(
+    "-c, --config [filename:string]",
+    "Use this config file (if argument is used but value is unspecified, defaults to luath.config.js)",
+  )
   .action(build);
 
 program.parse(Deno.args);
