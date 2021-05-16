@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.7.0] - 16-05-2021
+
+- feat: add `run` CLI command
+
 ## [0.6.0] - 16-05-2021
 
 - feat: add `build` CLI command
