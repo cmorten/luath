@@ -21,6 +21,7 @@ import { lmr, LMR_JS_PATH_IMPORT } from "../../plugins/lmr.ts";
 import { esbuildTsx } from "../../plugins/esbuild/mod.ts";
 import { isImportUrl } from "../isImport.ts";
 import { isPublicFile } from "./isPublicFile.ts";
+import { isBareImportSpecifier } from "../../isBareImportSpecifier.ts";
 import { getEntryChunk } from "./getEntryChunk.ts";
 import { getCssAsset } from "./getCssAsset.ts";
 
@@ -100,7 +101,7 @@ export async function bundle(
       esbuildTsx(),
       lmr(moduleGraph, rootDir),
     ] as Plugin[],
-    external: () => true,
+    external: (source) => !isBareImportSpecifier(source),
     onwarn() {},
     treeshake: false,
   });

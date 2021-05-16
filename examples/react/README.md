@@ -1,3 +1,4 @@
+<!-- deno-fmt-ignore-file -->
 # react
 
 A React example using the Luath plugin for [React Fast Refresh](https://www.npmjs.com/package/react-refresh).

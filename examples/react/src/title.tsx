@@ -1,4 +1,4 @@
-import React from "https://esm.sh/react@17.0.2?dev";
+import React from "react";
 import styles from "./title.css";
 
 export const Title = () => {

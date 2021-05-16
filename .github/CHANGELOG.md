@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.8.0] - 16-05-2021
+
+- feat: add minimal support for importmap rollup plugin
+
 ## [0.7.0] - 16-05-2021
 
 - feat: add `run` CLI command

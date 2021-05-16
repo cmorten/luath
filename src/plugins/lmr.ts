@@ -12,6 +12,7 @@ import { stripUrl } from "../stripUrl.ts";
 import { isHttpUrl } from "../isHttpUrl.ts";
 import { isMetaImport } from "../isMetaImport.ts";
 import { isLuathImport } from "../isLuathImport.ts";
+import { isBareImportSpecifier } from "../isBareImportSpecifier.ts";
 import { isHot } from "./isHot.ts";
 
 export const LMR_JS_PATH_IMPORT = "/$luath/client.js";
@@ -51,7 +52,8 @@ export function lmr(moduleGraph: ModuleGraph, rootDir: string) {
         );
 
         if (
-          !isMetaImport(rawUrl) && !isHttpUrl(rawUrl) && !isLuathImport(rawUrl)
+          !isMetaImport(rawUrl) && !isHttpUrl(rawUrl) &&
+          !isLuathImport(rawUrl) && !isBareImportSpecifier(rawUrl)
         ) {
           const mod = moduleGraph.get(
             pathToId(resolve(dirname(id), rawUrl), rootDir),

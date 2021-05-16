@@ -1,4 +1,5 @@
 /// <reference lib="dom" />
+// deno-lint-ignore-file ban-ts-comment
 // @ts-nocheck
 import metadata from "./metadata.json";
 import icon from "../public/icon.png";
