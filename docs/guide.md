@@ -43,17 +43,21 @@ lang: en
 
   Description:
 
-      CLI for fast front-end development in Deno
+      CLI for fast front-end development in Deno.
 
   Options:
 
       -h, --help     - Show this help.
       -V, --version  - Show the version number for this program.
+      -c, --config    [filename]  - Use this config file (if argument is used but value is unspecified, defaults                 
+                                  to luath.config.ts).                                                                           
+      -p, --port      <port>      - Port to run the server on.                                                    (Default: 3000)
+      -h, --hostname  <hostname>  - Hostname to run the server on.    
 
   Commands:
 
-      serve  &lt;root&gt;  - Serve an application directory with HMR
-      build  &lt;root&gt;  - Build an application directory
+      serve  [root]  - Serve the application with HMR.
+      build  [root]  - Build the production assets.
   </code></pre>
     <p>For help with subcommands similarly provide the help flag, for example <code>luath serve --help</code>.</p>
     </section>
