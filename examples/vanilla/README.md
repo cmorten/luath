@@ -1,6 +1,7 @@
 # Vanilla
 
-A no-framework "vanilla" example demonstrating CSS, JSON and image imports with HMR.
+A no-framework "vanilla" example demonstrating CSS, JSON and image imports with
+HMR.
 
 ## Getting Started
 

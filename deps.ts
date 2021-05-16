@@ -9,6 +9,7 @@ export {
   existsSync,
 } from "https://deno.land/std@0.96.0/fs/mod.ts";
 export {
+  basename,
   dirname,
   extname,
   isAbsolute,
@@ -49,6 +50,7 @@ export { html } from "https://deno.land/x/drollup@2.42.3+0.17.1/plugins/html/mod
 export { postcss } from "https://deno.land/x/drollup@2.42.3+0.17.1/plugins/postcss/mod.ts";
 export { parse } from "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup-plugin-deno-resolver/parse.ts";
 export { loadUrl } from "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup-plugin-deno-resolver/loadUrl.ts";
+export { makeHtmlAttributes } from "https://esm.sh/@rollup/plugin-html@0.2.2/dist/index.js";
 
 export type {
   ErrorRequestHandler,
@@ -89,3 +91,8 @@ export {
 } from "https://esm.sh/es-module-lexer@0.4.1";
 
 export { default as MagicString } from "https://esm.sh/magic-string@0.25.7";
+
+export {
+  DOMParser,
+  Element,
+} from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";

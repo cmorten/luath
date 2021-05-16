@@ -22,7 +22,7 @@ async function serve({ config, port, hostname }: CLIOptions, root: string) {
     try {
       const configFile = await getConfigPath(config);
 
-      loadedConfig = await loadConfigFile(configFile);
+      loadedConfig = await loadConfigFile(configFile, "serve");
     } catch (err) {
       handleError(err);
     }
@@ -32,11 +32,15 @@ async function serve({ config, port, hostname }: CLIOptions, root: string) {
   port = port ?? loadedConfig?.server?.port ?? DEFAULT_PORT;
   root = root ?? loadedConfig?.root;
 
-  await server({
-    ...loadedConfig,
-    root,
-    server: { ...loadedConfig?.server, port, hostname },
-  });
+  try {
+    await server({
+      ...loadedConfig,
+      root,
+      server: { ...loadedConfig?.server, port, hostname },
+    });
+  } catch (err) {
+    handleError(err);
+  }
 }
 
 async function build({ config }: CLIOptions, root: string) {
@@ -46,7 +50,7 @@ async function build({ config }: CLIOptions, root: string) {
     try {
       const configFile = await getConfigPath(config);
 
-      loadedConfig = await loadConfigFile(configFile);
+      loadedConfig = await loadConfigFile(configFile, "build");
     } catch (err) {
       handleError(err);
     }
@@ -54,10 +58,14 @@ async function build({ config }: CLIOptions, root: string) {
 
   root = root ?? loadedConfig?.root;
 
-  await _build({
-    ...loadedConfig,
-    root,
-  });
+  try {
+    await _build({
+      ...loadedConfig,
+      root,
+    });
+  } catch (err) {
+    handleError(err);
+  }
 }
 
 const program = await new Command()

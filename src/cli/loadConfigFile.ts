@@ -4,6 +4,7 @@ import { handleError } from "../logging.ts";
 
 export async function loadConfigFile(
   fileName: string,
+  command: string,
 ): Promise<LuathOptions> {
   const filePath = toFileUrl(fileName).href;
 
@@ -25,14 +26,15 @@ export async function loadConfigFile(
     });
   }
 
-  return getConfigList(configFileExport);
+  return getConfigList(configFileExport, command);
 }
 
 async function getConfigList(
   configFileExport: unknown,
+  command: string,
 ): Promise<LuathOptions> {
   const config = typeof configFileExport === "function"
-    ? await configFileExport()
+    ? await configFileExport({ command })
     : configFileExport;
 
   if (typeof config !== "object") {

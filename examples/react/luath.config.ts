@@ -1,5 +1,8 @@
 import { luathPluginReactRefresh } from "../../mod.ts";
 
-export default {
-  plugins: [luathPluginReactRefresh()],
-};
+export default ({ command }: { command: string }) =>
+  command === "serve"
+    ? {
+      plugins: [luathPluginReactRefresh()],
+    }
+    : {};
