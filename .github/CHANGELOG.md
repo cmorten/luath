@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.6.0] - 16-05-2021
+
+- feat: add `build` CLI command
+
 ## [0.5.1] - 28-03-2021
 
 - docs: add a documentation site on GitHub pages

@@ -12,13 +12,13 @@ lang: en
       <p>Luath ( <code>/l̪ˠuə/</code> - Scottish Gaelic for <i>fast</i> ) is a front-end development and build tool for Deno with:</p>
       <ol>
         <li>A development server for serving your application via ESM with hot module replacement and support for a wide range of modern features.</li>
-        <li>A [ <i>WIP</i> ] build command for bundling your application code with <a href="https://github.com/cmorten/deno-rollup/"><code>deno-rollup</code></a>.</li>
+        <li>A build command for bundling your application code with <a href="https://github.com/cmorten/deno-rollup/"><code>deno-rollup</code></a>.</li>
       </ol>
     </section>
     <section class="subsection">
       <h2 id="running-your-first-luath-project">Running Your First Luath Project</h2>
       <p>Install the Luath CLI using <a href="https://deno.land/">Deno</a>:</p>
-      <pre><code>$ deno install -f -q -A --unstable https://deno.land/x/luath@0.5.1/luath.ts</code></pre>
+      <pre><code>$ deno install -f -q -A --unstable https://deno.land/x/luath@0.6.0/luath.ts</code></pre>
       <p>Then follow any prompts from the Deno command. For example, you may need to add the Deno bin directory to your path:</p>
       <pre><code>$ export PATH="$HOME/.deno/bin:$PATH"</code></pre>
       <p>You are now set to use Luath. Let's try it out with one of the Luath repo examples:</p>
@@ -39,7 +39,7 @@ lang: en
       <pre><code>$ luath --help
       
   Usage:   luath 
-  Version: v0.5.1
+  Version: v0.6.0
 
   Description:
 
@@ -53,7 +53,7 @@ lang: en
   Commands:
 
       serve  &lt;root&gt;  - Serve an application directory with HMR
-      build  &lt;root&gt;  - Build an application directory [Not Implemented]
+      build  &lt;root&gt;  - Build an application directory
   </code></pre>
     <p>For help with subcommands similarly provide the help flag, for example <code>luath serve --help</code>.</p>
     </section>

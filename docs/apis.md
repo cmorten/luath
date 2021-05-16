@@ -12,9 +12,15 @@ lang: en
       <h3><code>server: (options?: LuathOptions) => Promise</code></h3>
       <p>Create a Luath server with custom options. Resolves to an <a href="https://github.com/asos-craigmorten/opine"><code>opine</code></a> server.</p>
       <p>For example:</p>
-      <pre><code>import { server } from "https://deno.land/x/luath@0.5.1/mod.ts";
+      <pre><code>import { server } from "https://deno.land/x/luath@0.6.0/mod.ts";
       <br />import { plugins } from "./plugins.ts";
       <br />await server({ root: Deno.cwd(), server: { port: 4000 }, plugins });</code></pre>
+      <h3><code>build: (options?: LuathOptions) => Promise</code></h3>
+      <p>Builds the production assets.</p>
+      <p>For example:</p>
+      <pre><code>import { build } from "https://deno.land/x/luath@0.6.0/mod.ts";
+      <br />import { plugins } from "./plugins.ts";
+      <br />await build({ root: Deno.cwd(), plugins });</code></pre>
     </section>
     <section class="subsection">
       <h2 id="plugin-api">Plugin API</h2>
@@ -43,6 +49,13 @@ lang: en
       <p>The simplest configuration file just exports an empty object:</p>
       <pre><code>// luath.config.ts
       <br />export default {};</code></pre>
+      <p>Conditional configuration can be implemented based on the <code>command</code> (<code>build</code> or <code>serve</code>) by exporting a function:</p>
+      <pre><code>// luath.config.ts
+      <br />export default ({ command }: { command: string }) => {
+      <br />  return command === "build"
+      <br />    ? { /* ...build specific config... */ }
+      <br />    : { /* ...serve specific config... */ };
+      <br />};</code></pre>
       <p>Available configuration options are:</p>
       <h3><code>root?: string</code></h3>
       <p>Default: <code>Deno.cwd()</code></p>

@@ -86,7 +86,7 @@ program.command("serve <root:string>")
   .action(serve);
 
 program.command("build <root:string>")
-  .description("Build an application directory [Not Implemented]")
+  .description("Build an application directory")
   .option(
     "-c, --config [filename:string]",
     "Use this config file (if argument is used but value is unspecified, defaults to luath.config.js)",

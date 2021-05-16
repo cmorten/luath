@@ -15,6 +15,7 @@ import {
   loadUrl,
   makeHtmlAttributes,
   parse as parseId,
+  pluginTerserTransform,
   postcss,
   resolve,
   rollup,
@@ -91,7 +92,7 @@ function esbuildCss(cssInputs: string[]): Plugin {
       }
     },
 
-    async generateBundle(_opts, bundle) {
+    generateBundle(_opts, bundle) {
       Object.entries(bundle).forEach(([key, chunkOrAsset]) => {
         if (
           chunkOrAsset.type === "chunk" &&
@@ -152,6 +153,7 @@ export async function build(options?: LuathOptions) {
         plugins: [atImport()],
         exclude: cssInputs,
       }),
+      pluginTerserTransform() as any,
       html({
         meta: metaAttributes,
         template: ({ attributes, files, meta, publicPath }) => {

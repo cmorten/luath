@@ -51,6 +51,7 @@ export { postcss } from "https://deno.land/x/drollup@2.42.3+0.17.1/plugins/postc
 export { parse } from "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup-plugin-deno-resolver/parse.ts";
 export { loadUrl } from "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup-plugin-deno-resolver/loadUrl.ts";
 export { makeHtmlAttributes } from "https://esm.sh/@rollup/plugin-html@0.2.2/dist/index.js";
+export { pluginTerserTransform } from "https://deno.land/x/denopack@0.10.0/plugin/terserTransform/mod.ts";
 
 export type {
   ErrorRequestHandler,
