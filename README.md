@@ -48,6 +48,9 @@ deno install -f -q -A --unstable --no-check https://deno.land/x/luath@0.6.0/luat
 
 # Serve the example
 luath serve ./examples/vanilla
+
+# Build the example
+luath build ./examples/vanilla
 ```
 
 Or through it's JavaScript API:
