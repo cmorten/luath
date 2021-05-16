@@ -1,4 +1,4 @@
-import type { Plugin } from "../../deps.ts";
+import type { Plugin } from "../../../deps.ts";
 import { loadUrl, parse } from "../../../deps.ts";
 import { isJsExtension } from "../../isJs.ts";
 import { transform } from "./transform.ts";
