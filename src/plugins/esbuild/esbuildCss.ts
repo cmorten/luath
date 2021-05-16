@@ -1,5 +1,11 @@
 import type { Plugin } from "../../../deps.ts";
-import { basename, esbuild, loadUrl, parse } from "../../../deps.ts";
+import {
+  basename,
+  esbuild,
+  fromFileUrl,
+  loadUrl,
+  parse,
+} from "../../../deps.ts";
 import { isCssExtension } from "../../isCss.ts";
 import { transform } from "./transform.ts";
 
@@ -20,7 +26,7 @@ export function esbuildCss(cssInputs: string[]): Plugin {
 
       if (cssInputs.includes(id)) {
         const output = await esbuild.build({
-          entryPoints: [url],
+          entryPoints: [fromFileUrl(url)],
           write: false,
           bundle: true,
           minify: true,

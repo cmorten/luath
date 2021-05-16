@@ -12,13 +12,13 @@ lang: en
       <h3><code>server: (options?: LuathOptions) => Promise</code></h3>
       <p>Create a Luath server with custom options. Resolves to an <a href="https://github.com/asos-craigmorten/opine"><code>opine</code></a> server.</p>
       <p>For example:</p>
-      <pre><code>import { server } from "https://deno.land/x/luath@0.6.0/mod.ts";
+      <pre><code>import { server } from "https://deno.land/x/luath@0.7.0/mod.ts";
       <br />import { plugins } from "./plugins.ts";
       <br />await server({ root: Deno.cwd(), server: { port: 4000 }, plugins });</code></pre>
       <h3><code>build: (options?: LuathOptions) => Promise</code></h3>
       <p>Builds the production assets.</p>
       <p>For example:</p>
-      <pre><code>import { build } from "https://deno.land/x/luath@0.6.0/mod.ts";
+      <pre><code>import { build } from "https://deno.land/x/luath@0.7.0/mod.ts";
       <br />import { plugins } from "./plugins.ts";
       <br />await build({ root: Deno.cwd(), plugins });</code></pre>
     </section>
@@ -61,7 +61,7 @@ lang: en
       <p>Default: <code>Deno.cwd()</code></p>
       <p>Project root directory for the Luath server.</p>
       <h3><code>server?: LuathServerOptions</code></h3>
-      <p>Default: <code>{ port: 3000 }</code></p>
+      <p>Default: <code>{ port: 4505, hostname: "0.0.0.0" }</code></p>
       <p>Luath server options. Accepts any valid <code>HTTPOptions</code> or <code>HTTPSOptions</code> from the Deno <code>http</code> standard library.</p>
       <h3><code>plugins?: LuathPlugin[]</code></h3>
       <p>Default: <code>undefined</code></p>

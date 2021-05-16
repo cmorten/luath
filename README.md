@@ -26,7 +26,7 @@
 Luath (`/l̪ˠuə/` - Scottish Gaelic for _fast_) is a front-end development and build tool for Deno with:
 
 1. A development server for serving your application via ESM with hot module replacement and support for a wide range of modern features.
-1. A build command for bundling your application code with [deno-rollup](https://github.com/cmorten/deno-rollup/).
+2. A build command for bundling your application code with [deno-rollup](https://github.com/cmorten/deno-rollup/).
 
 ## Features
 
@@ -44,25 +44,28 @@ Luath can be used either through a command line interface (CLI):
 
 ```bash
 # Install Luath
-deno install -f -q -A --unstable --no-check https://deno.land/x/luath@0.6.0/luath.ts
+deno install -fqA --unstable --no-check https://deno.land/x/luath@0.7.0/luath.ts
 
 # Serve the example
 luath serve ./examples/vanilla
 
-# Build the example
+# Build production assets for the example
 luath build ./examples/vanilla
+
+# Serve the example production assets
+luath run ./examples/vanilla
 ```
 
 Or through it's JavaScript API:
 
 ```ts
-import { server } from "https://deno.land/x/luath@0.6.0/mod.ts";
+import { server } from "https://deno.land/x/luath@0.7.0/mod.ts";
 
 await server({ root: "./examples/vanilla" });
 ```
 
 ```ts
-import { build } from "https://deno.land/x/luath@0.6.0/mod.ts";
+import { build } from "https://deno.land/x/luath@0.7.0/mod.ts";
 
 await build({ root: "./examples/vanilla" });
 ```

@@ -12,6 +12,7 @@ export {
   basename,
   dirname,
   extname,
+  fromFileUrl,
   isAbsolute,
   join,
   normalize,

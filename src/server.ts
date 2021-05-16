@@ -69,8 +69,5 @@ export async function server(options?: LuathOptions) {
     closeServer();
   };
 
-  const { hostname, port } = _server.listener.addr as Deno.NetAddr;
-  console.info(`listening on http://${hostname}:${port}`);
-
   return _server;
 }

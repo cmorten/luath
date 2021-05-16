@@ -1,4 +1,4 @@
-import React from "https://esm.sh/react@17.0.2?dev"
+import React from "https://esm.sh/react@17.0.2?dev";
 import styles from "./list.css";
 
 const doggos = [...new Array(12)].map((_, index) => ({

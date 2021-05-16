@@ -18,7 +18,7 @@ lang: en
     <section class="subsection">
       <h2 id="running-your-first-luath-project">Running Your First Luath Project</h2>
       <p>Install the Luath CLI using <a href="https://deno.land/">Deno</a>:</p>
-      <pre><code>$ deno install -f -q -A --unstable https://deno.land/x/luath@0.6.0/luath.ts</code></pre>
+      <pre><code>$ deno install -fqA --unstable https://deno.land/x/luath@0.7.0/luath.ts</code></pre>
       <p>Then follow any prompts from the Deno command. For example, you may need to add the Deno bin directory to your path:</p>
       <pre><code>$ export PATH="$HOME/.deno/bin:$PATH"</code></pre>
       <p>You are now set to use Luath. Let's try it out with one of the Luath repo examples:</p>
@@ -29,7 +29,7 @@ lang: en
         <pre><code>$ cd luath/examples/vanilla</code></pre>
         <li>Run the example with the <code>luath serve</code> command:</li>
         <pre><code>$ luath serve ./ -c</code></pre>
-        <li>Open <a href="http://localhost:3000"><code>http://localhost:3000</code></a> in a browser.</li>
+        <li>Open <a href="http://localhost:4505"><code>http://localhost:4505</code></a> in a browser.</li>
         <li>Start editing some of the example files and keep an eye on the browser!</li>
       </ol>
     </section>
@@ -37,9 +37,9 @@ lang: en
       <h2 id="cli">CLI</h2>
       <p>To view the available commands and flags for the Luath CLI you can use the <code>luath --help</code> command:</p>
       <pre><code>$ luath --help
-      
-  Usage:   luath 
-  Version: v0.6.0
+
+  Usage:   luath [root:string]
+  Version: v0.7.0
 
   Description:
 
@@ -47,17 +47,17 @@ lang: en
 
   Options:
 
-      -h, --help     - Show this help.
-      -V, --version  - Show the version number for this program.
-      -c, --config    [filename]  - Use this config file (if argument is used but value is unspecified, defaults                 
-                                  to luath.config.ts).                                                                           
-      -p, --port      <port>      - Port to run the server on.                                                    (Default: 3000)
-      -h, --hostname  <hostname>  - Hostname to run the server on.    
+      -h, --help                  - Show this help.
+      -V, --version               - Show the version number for this program.
+      -c, --config    [filename]  - Use this config file (if argument is used but value is unspecified, defaults to luath.config.ts).
+      -p, --port      &lt;port&gt;      - Port to run the server on. (Default: 4505)
+      -h, --hostname  &lt;hostname&gt;  - Hostname to run the server on.  (Default: "0.0.0.0")
 
   Commands:
 
       serve  [root]  - Serve the application with HMR.
       build  [root]  - Build the production assets.
+      run    [root]  - Serve the production assets.
   </code></pre>
     <p>For help with subcommands similarly provide the help flag, for example <code>luath serve --help</code>.</p>
     </section>

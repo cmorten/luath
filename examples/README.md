@@ -16,21 +16,21 @@ To run an example:
    cd luath
    ```
 
-1. Install the Luath CLI:
+2. Install the Luath CLI:
 
    ```bash
-   deno install -f -q -A --unstable --no-check https://deno.land/x/luath@0.6.0/luath.ts
+   deno install -fqA --unstable --no-check https://deno.land/x/luath@0.7.0/luath.ts
    ```
 
-1. Then run the desired example by navigating to the directory and running the appropriate Luath `serve` command:
+3. Then run the desired example by navigating to the directory and running the    appropriate Luath `serve` command. E.g.
 
    ```bash
    cd examples/react
-   luath serve ./ -c
+   luath serve -c
    ```
 
    The command required for each example is in the examples' README.
 
-1. Open <http://localhost:3000> in a browser.
+4. Open <http://0.0.0.0:4505> in a browser.
 
-1. Start editing the example files and keep and an eye on the browser.
+5. Start editing the example files and keep and an eye on the browser.
