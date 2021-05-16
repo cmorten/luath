@@ -18,7 +18,7 @@ import { stripUrl } from "../../stripUrl.ts";
 import { isLuathImport } from "../../isLuathImport.ts";
 import { isHttpUrl } from "../../isHttpUrl.ts";
 import { lmr, LMR_JS_PATH_IMPORT } from "../../plugins/lmr.ts";
-import { esbuild } from "../../plugins/esbuild.ts";
+import { esbuildTsx } from "../../plugins/esbuild/mod.ts";
 import { isImportUrl } from "../isImport.ts";
 import { isPublicFile } from "./isPublicFile.ts";
 import { getEntryChunk } from "./getEntryChunk.ts";
@@ -97,7 +97,7 @@ export async function bundle(
           },
         })],
       }),
-      esbuild(),
+      esbuildTsx(),
       lmr(moduleGraph, rootDir),
     ] as Plugin[],
     external: () => true,

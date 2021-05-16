@@ -1,111 +1,24 @@
-// deno-lint-ignore-file no-explicit-any
-import type { LuathOptions } from "./types.ts";
 import type { Plugin } from "../deps.ts";
+import type { LuathOptions } from "./types.ts";
 import {
   atImport,
-  basename,
   copy,
   DOMParser,
   Element,
-  esbuild as esbuildInstance,
+  esbuild,
   html,
   image,
   join,
   json,
-  loadUrl,
   makeHtmlAttributes,
-  parse as parseId,
   pluginTerserTransform,
   postcss,
   resolve,
   rollup,
 } from "../deps.ts";
 import { resolveOptions } from "./resolveOptions.ts";
-import { isJsExtension } from "./isJs.ts";
 import { isCssExtension } from "./isCss.ts";
-
-async function load(id: string) {
-  const url = parseId(id);
-
-  if (!url) {
-    return null;
-  }
-
-  return await loadUrl(url, {});
-}
-
-async function transform(loader: string, code: string, options: any = {}) {
-  const output = await esbuildInstance.transform(code, {
-    minify: true,
-    loader,
-    ...options,
-  });
-
-  return output.code;
-}
-
-function esbuildTsx(): Plugin {
-  return {
-    name: "esbuild-tsx",
-    load,
-    async transform(code: string, id: string) {
-      if (!isJsExtension(id)) {
-        return null;
-      }
-
-      return await transform("tsx", code);
-    },
-  };
-}
-
-function esbuildCss(cssInputs: string[]): Plugin {
-  return {
-    name: "esbuild-css",
-    async load(id: string) {
-      if (!isCssExtension(id)) {
-        return null;
-      }
-
-      if (cssInputs.includes(id)) {
-        const output = await esbuildInstance.build({
-          entryPoints: [id],
-          write: false,
-          bundle: true,
-          minify: true,
-        });
-
-        this.emitFile({
-          type: "asset",
-          name: basename(id),
-          source: output.outputFiles[0].text,
-        });
-
-        return "";
-      } else {
-        const code = await load(id);
-
-        if (!code) {
-          return null;
-        }
-
-        return await transform("css", code);
-      }
-    },
-
-    generateBundle(_opts, bundle) {
-      Object.entries(bundle).forEach(([key, chunkOrAsset]) => {
-        if (
-          chunkOrAsset.type === "chunk" &&
-          cssInputs.includes(chunkOrAsset.facadeModuleId!)
-        ) {
-          delete bundle[key];
-        }
-      });
-
-      return;
-    },
-  };
-}
+import { esbuildCss, esbuildTsx } from "./plugins/esbuild/mod.ts";
 
 /**
  * build
@@ -123,10 +36,10 @@ export async function build(options?: LuathOptions) {
 
   const contents = await Deno.readTextFile(index);
   const dom = new DOMParser().parseFromString(contents, "text/html")!;
-  const inputs = [
+  const inputs = ([
     ...dom.querySelectorAll("script"),
     ...dom.querySelectorAll("link"),
-  ].map(({ attributes }: any) => {
+  ] as Element[]).map(({ attributes }) => {
     return resolve(config.root, attributes.src ?? attributes.href);
   });
 
@@ -143,17 +56,19 @@ export async function build(options?: LuathOptions) {
   const bundle = await rollup({
     input: inputs,
     plugins: [
+      // TODO: need concept of pre / post for custom plugins
       ...config.plugins,
       json(),
       image(),
       esbuildCss(cssInputs),
       esbuildTsx(),
+      // TODO: this should be configurable - not everyone uses css modules.
       postcss({
         modules: true,
         plugins: [atImport()],
         exclude: cssInputs,
       }),
-      pluginTerserTransform() as any,
+      pluginTerserTransform() as Plugin,
       html({
         meta: metaAttributes,
         template: ({ attributes, files, meta, publicPath }) => {
@@ -186,7 +101,7 @@ export async function build(options?: LuathOptions) {
           const nonCssLinks =
             (Array.from(dom.querySelectorAll("link")) as Element[])
               .filter((link) => !isCssExtension(link.attributes?.href))
-              .map((link: any) => {
+              .map((link) => {
                 const { href, ...nonHrefAttr } = link.attributes;
                 let attrs = makeHtmlAttributes({
                   ...attributes.link,
@@ -241,7 +156,7 @@ export async function build(options?: LuathOptions) {
   });
 
   await bundle.close();
-  esbuildInstance.stop();
+  esbuild.stop();
 
   await copy(publicDir, publicDistDir, { overwrite: true });
 }

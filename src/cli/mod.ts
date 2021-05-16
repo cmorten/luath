@@ -1,96 +1,41 @@
-import type { LuathOptions } from "../types.ts";
 import { Command } from "../../deps.ts";
 import { version } from "../../version.ts";
-import { server } from "../server.ts";
-import { build as _build } from "../build.ts";
-import { getConfigPath } from "./getConfigPath.ts";
-import { loadConfigFile } from "./loadConfigFile.ts";
-import { handleError } from "../logging.ts";
+import { DEFAULT_PORT } from "./constants.ts";
+import { serve } from "./serve.ts";
+import { build } from "./build.ts";
 
-interface CLIOptions {
-  config?: string | true;
-  port?: number;
-  hostname?: string;
-}
+const configOption: [string, string] = [
+  "-c, --config [filename:string]",
+  "Use this config file (if argument is used but value is unspecified, defaults to luath.config.ts).",
+];
 
-const DEFAULT_PORT = 3000;
-
-async function serve({ config, port, hostname }: CLIOptions, root: string) {
-  let loadedConfig: LuathOptions = {};
-
-  if (config) {
-    try {
-      const configFile = await getConfigPath(config);
-
-      loadedConfig = await loadConfigFile(configFile, "serve");
-    } catch (err) {
-      handleError(err);
-    }
-  }
-
-  hostname = hostname ?? loadedConfig?.server?.hostname;
-  port = port ?? loadedConfig?.server?.port ?? DEFAULT_PORT;
-  root = root ?? loadedConfig?.root;
-
-  try {
-    await server({
-      ...loadedConfig,
-      root,
-      server: { ...loadedConfig?.server, port, hostname },
-    });
-  } catch (err) {
-    handleError(err);
-  }
-}
-
-async function build({ config }: CLIOptions, root: string) {
-  let loadedConfig: LuathOptions = {};
-
-  if (config) {
-    try {
-      const configFile = await getConfigPath(config);
-
-      loadedConfig = await loadConfigFile(configFile, "build");
-    } catch (err) {
-      handleError(err);
-    }
-  }
-
-  root = root ?? loadedConfig?.root;
-
-  try {
-    await _build({
-      ...loadedConfig,
-      root,
-    });
-  } catch (err) {
-    handleError(err);
-  }
+function addServeCommand(program: Command) {
+  program.option(...configOption)
+    .option("-p, --port <port:number>", "Port to run the server on.", {
+      default: DEFAULT_PORT,
+    })
+    .option(
+      "-h, --hostname <hostname:string>",
+      "Hostname to run the server on.",
+    )
+    .action(serve);
 }
 
 const program = await new Command()
   .name("luath")
   .version(version)
-  .description("CLI for fast front-end development in Deno");
+  .description("CLI for fast front-end development in Deno.");
 
-program.command("serve <root:string>")
-  .description("Serve an application directory with HMR")
-  .option(
-    "-c, --config [filename:string]",
-    "Use this config file (if argument is used but value is unspecified, defaults to luath.config.js)",
-  )
-  .option("-p, --port <port:number>", "Port to run the server on", {
-    default: DEFAULT_PORT,
-  })
-  .option("-h, --hostname <hostname:string>", "Hostname to run the server on")
-  .action(serve);
+addServeCommand(program);
+addServeCommand(
+  program.command("serve [root:string]").description(
+    "Serve the application with HMR.",
+  ),
+);
 
-program.command("build <root:string>")
-  .description("Build an application directory")
-  .option(
-    "-c, --config [filename:string]",
-    "Use this config file (if argument is used but value is unspecified, defaults to luath.config.js)",
-  )
+program.command("build [root:string]")
+  .description("Build the production assets.")
+  .option(...configOption)
   .action(build);
 
 program.parse(Deno.args);
