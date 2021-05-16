@@ -61,6 +61,12 @@ import { server } from "https://deno.land/x/luath@0.6.0/mod.ts";
 await server({ root: "./examples/vanilla" });
 ```
 
+```ts
+import { build } from "https://deno.land/x/luath@0.6.0/mod.ts";
+
+await build({ root: "./examples/vanilla" });
+```
+
 ## Documentation
 
 Please refer to the [documentation site](https://cmorten.github.io/luath/).
