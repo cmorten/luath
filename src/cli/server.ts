@@ -16,12 +16,12 @@ export async function server(
 ) {
   let loadedConfig: LuathOptions = {};
 
-  if (config) {
-    try {
-      const configFile = await getConfigPath(config);
+  try {
+    const configFile = await getConfigPath(config);
 
-      loadedConfig = await loadConfigFile(configFile, commandName);
-    } catch (err) {
+    loadedConfig = await loadConfigFile(configFile, commandName);
+  } catch (err) {
+    if (config) {
       handleError(err);
     }
   }

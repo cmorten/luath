@@ -7,9 +7,9 @@ import { resolve } from "../../deps.ts";
 const DEFAULT_CONFIG_BASE = "luath.config";
 
 export async function getConfigPath(
-  commandConfig: string | true,
+  commandConfig?: string | true,
 ): Promise<string> {
-  if (commandConfig === true) {
+  if (commandConfig === true || typeof commandConfig === "undefined") {
     return resolve(await findConfigFileNameInCwd());
   }
 

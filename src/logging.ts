@@ -32,10 +32,14 @@ interface LuathError {
  * @private
  */
 export function handleError(err: LuathError, recover = false) {
-  let message = err.message || err;
+  let message = (err.message ?? err.toString()).trim();
 
   if (err.name) {
-    message = `${err.name}: ${message}`;
+    message = `${err.name}:${message ? ` ${message}` : ""}`;
+  }
+
+  if (err.code) {
+    message += ` CODE: ${err.code}`;
   }
 
   logError(bold(red(`[!] ${bold(message.toString())}`)));

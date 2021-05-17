@@ -1,6 +1,17 @@
 body {
   padding: 0px;
   margin: 0px;
-  font-size: 14px;
+}
+
+body,
+button {
+  font-size: 24px;
   font-family: "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
+}
+
+code {
+  background: #ccc;
+  color: #2c3e50;
+  padding: 4px;
+  border-radius: 4px;
 }

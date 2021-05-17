@@ -1,0 +1,38 @@
+.app {
+  text-align: center;
+}
+
+.logo {
+  height: 300px;
+  pointer-events: none;
+}
+
+.header {
+  background-color: #111;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.link {
+  color: #0770cf;
+  text-decoration: none;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}

@@ -1,5 +1,12 @@
 # ChangeLog
 
+## [0.8.1] - 17-05-2021
+
+- feat: automatically detect Luath config without having to provid flag if using the default naming convention in the root directory
+- feat: add error code to error logging output
+- feat: support Deno `1.10.2`
+- docs: add new simple `react` example and move existing example to `react-importmap`
+
 ## [0.8.0] - 16-05-2021
 
 - feat: add minimal support for importmap rollup plugin

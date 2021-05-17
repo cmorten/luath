@@ -9,12 +9,12 @@ import { getRoot } from "./getRoot.ts";
 export async function build({ config }: CLIOptions, root: string) {
   let loadedConfig: LuathOptions = {};
 
-  if (config) {
-    try {
-      const configFile = await getConfigPath(config);
+  try {
+    const configFile = await getConfigPath(config);
 
-      loadedConfig = await loadConfigFile(configFile, "build");
-    } catch (err) {
+    loadedConfig = await loadConfigFile(configFile, "build");
+  } catch (err) {
+    if (config) {
       handleError(err);
     }
   }

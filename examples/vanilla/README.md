@@ -15,17 +15,17 @@ cd examples/vanilla
 Run the example application using the Luath `serve` command from this directory:
 
 ```bash
-luath serve -c
+luath serve
 ```
 
 Build the production assets for the example application using the Luath `build` command from this directory:
 
 ```bash
-luath build -c
+luath build
 ```
 
 Serve the production assets for the example application using the Luath `run` command from this directory:
 
 ```bash
-luath run -c
+luath run
 ```

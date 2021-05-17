@@ -18,7 +18,7 @@ lang: en
     <section class="subsection">
       <h2 id="running-your-first-luath-project">Running Your First Luath Project</h2>
       <p>Install the Luath CLI using <a href="https://deno.land/">Deno</a>:</p>
-      <pre><code>$ deno install -fqA --unstable https://deno.land/x/luath@0.8.0/luath.ts</code></pre>
+      <pre><code>$ deno install -fqA --unstable https://deno.land/x/luath@0.8.1/luath.ts</code></pre>
       <p>Then follow any prompts from the Deno command. For example, you may need to add the Deno bin directory to your path:</p>
       <pre><code>$ export PATH="$HOME/.deno/bin:$PATH"</code></pre>
       <p>You are now set to use Luath. Let's try it out with one of the Luath repo examples:</p>
@@ -26,9 +26,9 @@ lang: en
         <li>Clone the Luath repo locally:</li>
         <pre><code>$ git clone git://github.com/cmorten/luath.git --depth 1</code></pre>
         <li>Navigate to the desired example:</li>
-        <pre><code>$ cd luath/examples/vanilla</code></pre>
+        <pre><code>$ cd luath/examples/react</code></pre>
         <li>Run the example with the <code>luath serve</code> command:</li>
-        <pre><code>$ luath serve ./ -c</code></pre>
+        <pre><code>$ luath serve</code></pre>
         <li>Open <a href="http://localhost:4505"><code>http://localhost:4505</code></a> in a browser.</li>
         <li>Start editing some of the example files and keep an eye on the browser!</li>
       </ol>
@@ -39,7 +39,7 @@ lang: en
       <pre><code>$ luath --help
 
   Usage:   luath [root:string]
-  Version: v0.8.0
+  Version: v0.8.1
 
   Description:
 

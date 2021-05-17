@@ -1,14 +1,14 @@
 <!-- deno-fmt-ignore-file -->
-# react
+# react-importmap
 
-A React example using the Luath plugin for [React Fast Refresh](https://www.npmjs.com/package/react-refresh).
+A React example using the Luath plugin for [React Fast Refresh](https://www.npmjs.com/package/react-refresh), and the Rollup [importmap](https://deno.land/x/drollup@2.42.3+0.17.1/plugins/importmap) plugin.
 
 ## Getting Started
 
 Change to this directory:
 
 ```bash
-cd examples/react
+cd examples/react-importmap
 ```
 
 Run the example React application using the Luath `serve` command from this directory:
