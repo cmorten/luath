@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.8.2] - 17-05-2021
+
+- chore: no-op version release due to [failed publish](https://deno.land/status/60a2e10f00627501007bebb8) of `0.8.1` to `deno.land/x`
+
 ## [0.8.1] - 17-05-2021
 
 - feat: automatically detect Luath config without having to provid flag if using the default naming convention in the root directory
