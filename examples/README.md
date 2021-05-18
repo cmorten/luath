@@ -21,7 +21,7 @@ To run an example:
 2. Install the Luath CLI:
 
    ```bash
-   deno install -fqA --unstable --no-check https://deno.land/x/luath@0.8.2/luath.ts
+   deno install -fqA --unstable --no-check https://deno.land/x/luath@0.8.3/luath.ts
    ```
 
 3. Then run the desired example by navigating to the directory and running the appropriate Luath `serve` command. E.g.
