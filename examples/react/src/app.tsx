@@ -9,7 +9,7 @@ function App() {
     <div className={styles.app}>
       <header className={styles.header}>
         <img src={logo} className={styles.logo} alt="React logo" />
-        <p>Hello Luath!</p>
+        <p className={styles.hello}>Hello Luath!</p>
         <p>
           <button onClick={() => setCount((count) => count + 1)}>
             Click count is: {count}

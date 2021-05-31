@@ -5,8 +5,10 @@ body {
 
 body,
 button {
-  font-size: 24px;
+  font-size: 16px;
   font-family: "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code {

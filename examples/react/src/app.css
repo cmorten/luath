@@ -7,6 +7,10 @@
   pointer-events: none;
 }
 
+.hello {
+  font-size: 24px;
+}
+
 .header {
   background-color: #111;
   min-height: 100vh;

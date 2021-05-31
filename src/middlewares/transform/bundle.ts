@@ -81,7 +81,6 @@ export async function bundle(
 
   const build = await rollup({
     input: filename,
-    cache: false,
     plugins: [
       // TODO: need concept of pre / post for custom plugins
       ...plugins,
@@ -104,6 +103,7 @@ export async function bundle(
     external: (source) => !isBareImportSpecifier(source),
     onwarn() {},
     treeshake: false,
+    makeAbsoluteExternalsRelative: false,
   });
 
   const { output } = await build.generate({
@@ -139,7 +139,7 @@ export async function bundle(
   )
     .filter((path) => !isLuathImport(path) && !isHttpUrl(path))
     .forEach((path) => {
-      const importedId = pathToId(path, rootDir);
+      const importedId = pathToId(resolve(`.${dirname(id)}`, path), rootDir);
       const importedMod = moduleGraph.ensure(importedId);
 
       importedMod.dependents.add(entryId);

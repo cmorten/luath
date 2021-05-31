@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.8.5] - 31-05-2021
+
+- fix: upgrade of deno-rollup brought in a breaking change which normalized absolute ids to relative - see [rollup release notes](https://github.com/rollup/rollup/releases/tag/v2.44.0). Required to add `makeAbsoluteExternalsRelative: false` and fix some import parsing to maintain desired behaviour and id format within the luath module graph.
+
 ## [0.8.4] - 31-05-2021
 
 - chore: upgrade deps
