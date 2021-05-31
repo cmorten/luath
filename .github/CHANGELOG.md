@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [0.9.0] - 31-05-2021
+## [0.8.4] - 31-05-2021
 
 - chore: upgrade deps
 
