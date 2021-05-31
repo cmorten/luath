@@ -46,14 +46,17 @@ Luath can be used either through a command line interface (CLI):
 # Install Luath
 deno install -fqA --unstable --no-check https://deno.land/x/luath@0.8.4/luath.ts
 
+# Change directory to example
+cd ./examples/react
+
 # Serve the example
-luath serve ./examples/react
+luath serve
 
 # Build production assets for the example
-luath build ./examples/react
+luath build
 
 # Serve the example production assets
-luath run ./examples/react
+luath run
 ```
 
 Or through it's JavaScript API:
