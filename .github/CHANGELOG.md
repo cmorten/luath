@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.9.0] - 31-05-2021
+
+- chore: upgrade deps
+
 ## [0.8.3] - 18-05-2021
 
 - chore: no-op version release due to [failed publish](https://deno.land/status/60a2e23500009d3a007bebb9) of `0.8.2` to `deno.land/x` - [root cause provided by Deno Team](https://discord.com/channels/684898665143206084/689420767620104201/843974771150422026)

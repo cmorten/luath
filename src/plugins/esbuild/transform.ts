@@ -1,7 +1,7 @@
 import { esbuild } from "../../../deps.ts";
 
 export async function transform(
-  loader: string,
+  loader: esbuild.Loader,
   code: string,
   options: Record<string, unknown> = {},
 ) {

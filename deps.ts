@@ -2,12 +2,12 @@ export type {
   HTTPOptions,
   HTTPSOptions,
   Server,
-} from "https://deno.land/std@0.95.0/http/mod.ts";
+} from "https://deno.land/std@0.97.0/http/mod.ts";
 export {
   copy,
   exists,
   existsSync,
-} from "https://deno.land/std@0.96.0/fs/mod.ts";
+} from "https://deno.land/std@0.97.0/fs/mod.ts";
 export {
   basename,
   dirname,
@@ -19,19 +19,19 @@ export {
   relative,
   resolve,
   toFileUrl,
-} from "https://deno.land/std@0.96.0/path/mod.ts";
-export { default as EventEmitter } from "https://deno.land/std@0.96.0/node/events.ts";
-export type { WebSocket } from "https://deno.land/std@0.95.0/ws/mod.ts";
+} from "https://deno.land/std@0.97.0/path/mod.ts";
+export { default as EventEmitter } from "https://deno.land/std@0.97.0/node/events.ts";
+export type { WebSocket } from "https://deno.land/std@0.97.0/ws/mod.ts";
 export {
   acceptWebSocket,
   isWebSocketCloseEvent,
-} from "https://deno.land/std@0.95.0/ws/mod.ts";
+} from "https://deno.land/std@0.97.0/ws/mod.ts";
 export {
   bold,
   cyan,
   dim,
   red,
-} from "https://deno.land/std@0.96.0/fmt/colors.ts";
+} from "https://deno.land/std@0.97.0/fmt/colors.ts";
 
 export type {
   InputOption,
@@ -42,15 +42,15 @@ export type {
   RollupOptions,
   RollupOutput,
   WatcherOptions,
-} from "https://deno.land/x/drollup@2.42.3+0.17.1/mod.ts";
-export { rollup } from "https://deno.land/x/drollup@2.42.3+0.17.1/mod.ts";
-export { virtual } from "https://deno.land/x/drollup@2.42.3+0.17.1/plugins/virtual/mod.ts";
-export { image } from "https://deno.land/x/drollup@2.42.3+0.17.1/plugins/image/mod.ts";
-export { json } from "https://deno.land/x/drollup@2.42.3+0.17.1/plugins/json/mod.ts";
-export { html } from "https://deno.land/x/drollup@2.42.3+0.17.1/plugins/html/mod.ts";
-export { postcss } from "https://deno.land/x/drollup@2.42.3+0.17.1/plugins/postcss/mod.ts";
-export { parse } from "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup-plugin-deno-resolver/parse.ts";
-export { loadUrl } from "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup-plugin-deno-resolver/loadUrl.ts";
+} from "https://deno.land/x/drollup@2.50.5+0.18.1/mod.ts";
+export { rollup } from "https://deno.land/x/drollup@2.50.5+0.18.1/mod.ts";
+export { virtual } from "https://deno.land/x/drollup@2.50.5+0.18.1/plugins/virtual/mod.ts";
+export { image } from "https://deno.land/x/drollup@2.50.5+0.18.1/plugins/image/mod.ts";
+export { json } from "https://deno.land/x/drollup@2.50.5+0.18.1/plugins/json/mod.ts";
+export { html } from "https://deno.land/x/drollup@2.50.5+0.18.1/plugins/html/mod.ts";
+export { postcss } from "https://deno.land/x/drollup@2.50.5+0.18.1/plugins/postcss/mod.ts";
+export { parse } from "https://deno.land/x/drollup@2.50.5+0.18.1/src/rollup-plugin-deno-resolver/parse.ts";
+export { loadUrl } from "https://deno.land/x/drollup@2.50.5+0.18.1/src/rollup-plugin-deno-resolver/loadUrl.ts";
 export { makeHtmlAttributes } from "https://esm.sh/@rollup/plugin-html@0.2.2/dist/index.js";
 export { pluginTerserTransform } from "https://deno.land/x/denopack@0.10.0/plugin/terserTransform/mod.ts";
 
@@ -61,19 +61,19 @@ export type {
   Request,
   RequestHandler,
   Response,
-} from "https://deno.land/x/opine@1.3.4/src/types.ts";
-export { opine, serveStatic } from "https://deno.land/x/opine@1.3.4/mod.ts";
+} from "https://deno.land/x/opine@1.4.0/src/types.ts";
+export { opine, serveStatic } from "https://deno.land/x/opine@1.4.0/mod.ts";
 
-export { Command } from "https://deno.land/x/cliffy@v0.18.2/command/mod.ts";
+export { Command } from "https://deno.land/x/cliffy@v0.19.1/command/mod.ts";
 export type {
   IParseResult,
   ITypeInfo,
-} from "https://deno.land/x/cliffy@v0.18.2/command/mod.ts";
+} from "https://deno.land/x/cliffy@v0.19.1/command/mod.ts";
 
 export { default as pm } from "https://esm.sh/picomatch@2.2.2";
 export { default as atImport } from "https://esm.sh/postcss-import@14.0.0";
 
-export * as esbuild from "https://deno.land/x/esbuild@v0.11.22/mod.js";
+export * as esbuild from "https://deno.land/x/esbuild@v0.12.5/mod.js";
 
 // @deno-types="./src/babelTypes.d.ts"
 export { transformSync } from "https://jspm.dev/@babel/core@7.14.2";
@@ -97,4 +97,4 @@ export { default as MagicString } from "https://esm.sh/magic-string@0.25.7";
 export {
   DOMParser,
   Element,
-} from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
+} from "https://deno.land/x/deno_dom@v0.1.12-alpha/deno-dom-wasm.ts";
