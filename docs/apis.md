@@ -12,13 +12,13 @@ lang: en
       <h3><code>server: (options?: LuathOptions) => Promise</code></h3>
       <p>Create a Luath server with custom options. Resolves to an <a href="https://github.com/asos-craigmorten/opine"><code>opine</code></a> server.</p>
       <p>For example:</p>
-      <pre><code>import { server } from "https://deno.land/x/luath@0.8.5/mod.ts";
+      <pre><code>import { server } from "https://deno.land/x/luath@0.9.0/mod.ts";
       <br />import { plugins } from "./plugins.ts";
       <br />await server({ root: Deno.cwd(), server: { port: 4000 }, plugins });</code></pre>
       <h3><code>build: (options?: LuathOptions) => Promise</code></h3>
       <p>Builds the production assets.</p>
       <p>For example:</p>
-      <pre><code>import { build } from "https://deno.land/x/luath@0.8.5/mod.ts";
+      <pre><code>import { build } from "https://deno.land/x/luath@0.9.0/mod.ts";
       <br />import { plugins } from "./plugins.ts";
       <br />await build({ root: Deno.cwd(), plugins });</code></pre>
     </section>

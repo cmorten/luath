@@ -1,4 +1,3 @@
-import type { Plugin } from "../deps.ts";
 import type { LuathOptions } from "./types.ts";
 import {
   atImport,
@@ -11,10 +10,10 @@ import {
   join,
   json,
   makeHtmlAttributes,
-  pluginTerserTransform,
   postcss,
   resolve,
   rollup,
+  terser,
 } from "../deps.ts";
 import { resolveOptions } from "./resolveOptions.ts";
 import { isCssExtension } from "./isCss.ts";
@@ -68,7 +67,7 @@ export async function build(options?: LuathOptions) {
         plugins: [atImport()],
         exclude: cssInputs,
       }),
-      pluginTerserTransform() as Plugin,
+      terser(),
       html({
         meta: metaAttributes,
         template: ({ attributes, files, meta, publicPath }) => {

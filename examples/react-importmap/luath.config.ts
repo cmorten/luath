@@ -1,6 +1,6 @@
 import { luathPluginReactRefresh } from "../../mod.ts";
 import { dirname, fromFileUrl, resolve } from "../../deps.ts";
-import { rollupImportMapPlugin } from "https://deno.land/x/drollup@2.50.5+0.18.1/plugins/importmap/mod.ts";
+import { rollupImportMapPlugin } from "https://deno.land/x/drollup@2.52.7+0.19.1/plugins/importmap/mod.ts";
 
 const __dirname = dirname(fromFileUrl(import.meta.url));
 

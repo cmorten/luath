@@ -1,5 +1,4 @@
 // deno-lint-ignore-file no-undef
-/// <reference lib="dom" />
 
 const RE_QUERYSTRING = /\?.*$/;
 const RE_HASH = /#.*$/;
