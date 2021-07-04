@@ -50,6 +50,7 @@ export { json } from "https://deno.land/x/drollup@2.52.7+0.19.1/plugins/json/mod
 export { html } from "https://deno.land/x/drollup@2.52.7+0.19.1/plugins/html/mod.ts";
 export { postcss } from "https://deno.land/x/drollup@2.52.7+0.19.1/plugins/postcss/mod.ts";
 export { terser } from "https://deno.land/x/drollup@2.52.7+0.19.1/plugins/terser/mod.ts";
+export { esbuild as esbuildPlugin } from "https://deno.land/x/drollup@2.52.7+0.19.1/plugins/esbuild/mod.ts";
 export { parse } from "https://deno.land/x/drollup@2.52.7+0.19.1/src/rollup-plugin-deno-resolver/parse.ts";
 export { loadUrl } from "https://deno.land/x/drollup@2.52.7+0.19.1/src/rollup-plugin-deno-resolver/loadUrl.ts";
 export { makeHtmlAttributes } from "https://esm.sh/@rollup/plugin-html@0.2.2/dist/index.js";

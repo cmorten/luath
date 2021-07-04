@@ -1,6 +1,13 @@
 import { relative, resolve } from "../deps.ts";
-import { stripUrl } from "./stripUrl.ts";
+
+const idCache = new Map();
 
 export function pathToId(path: string, rootDir: string) {
-  return `/${relative(rootDir, resolve(rootDir, stripUrl(path)))}`;
+  const key = `${path}-${rootDir}`;
+
+  if (!idCache.has(key)) {
+    idCache.set(key, `/${relative(rootDir, resolve(rootDir, path))}`);
+  }
+
+  return idCache.get(key);
 }

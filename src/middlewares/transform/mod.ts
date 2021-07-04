@@ -35,36 +35,30 @@ export function transform(
 
     const _isCss = isCss(req);
 
-    try {
-      if (_isCss || isJs(req) || isImport(req)) {
-        const mod = await bundle(
-          url,
-          rootDir,
-          moduleGraph,
-          plugins,
+    if (_isCss || isJs(req) || isImport(req)) {
+      const mod = await bundle(
+        url,
+        rootDir,
+        moduleGraph,
+        plugins,
+      );
+
+      if (mod?.code) {
+        const type = _isCss ? ".css" : ".js";
+
+        res.type(type).setStatus(200).etag(mod.code);
+
+        if (req.fresh) {
+          return res.setStatus(304).end();
+        }
+
+        res.set(
+          "Cache-Control",
+          isLuathJs(url) ? "max-age=31536000,immutable" : "no-cache",
         );
 
-        if (mod?.code) {
-          const type = _isCss ? ".css" : ".js";
-
-          res.type(type).etag(mod.code);
-
-          if (req.fresh) {
-            return await res.setStatus(304).end();
-          }
-
-          res.set(
-            "Cache-Control",
-            isLuathJs(url) ? "max-age=31536000,immutable" : "no-cache",
-          );
-
-          return await res.end(mod.code);
-        }
+        return res.end(mod.code);
       }
-    } catch (err) {
-      return next(err);
     }
-
-    next();
   };
 }

@@ -4,7 +4,7 @@ import { EventEmitter, exists, relative } from "../deps.ts";
 import { ensureArray } from "./ensureArray.ts";
 import { createFilter } from "./createFilter.ts";
 
-const FILE_WATCH_DEBOUNCE_MS = 50;
+const FILE_WATCH_DEBOUNCE_MS = 30;
 
 /**
  * FileWatcher

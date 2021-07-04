@@ -1,5 +1,5 @@
 import type { LuathPlugin } from "../../types.ts";
-import type { Plugin } from "../../../deps.ts";
+import type { OutputChunk, Plugin } from "../../../deps.ts";
 import {
   atImport,
   dirname,
@@ -37,9 +37,41 @@ function injectCss(
     `if (import.meta.hot) { import.meta.hot.accept(); }`;
 }
 
+const pathCache = new Map();
+
 function idToPath(id: string, rootDir: string) {
-  return join(rootDir, id.slice(1).replace(".css.js", ".css"));
+  const key = `${id}-${rootDir}`;
+
+  if (!pathCache.has(key)) {
+    pathCache.set(key, join(rootDir, id.slice(1).replace(".css.js", ".css")));
+  }
+
+  return pathCache.get(key);
 }
+
+function getImports(entryChunk: OutputChunk) {
+  const seen: Record<string, string> = {};
+  const imports: string[] = [];
+
+  entryChunk.imports.forEach((path) => {
+    if (!isLuathImport(path) && !isHttpUrl(path) && !seen[path]) {
+      imports.push(path);
+    }
+  });
+  entryChunk.dynamicImports.forEach((path) => {
+    if (!isLuathImport(path) && !isHttpUrl(path) && !seen[path]) {
+      imports.push(path);
+    }
+  });
+
+  return imports;
+}
+
+const jsonPlugin = json();
+const imagePlugin = image();
+const esbuildPlugin = esbuildTsx();
+
+let buildCache: any;
 
 export async function bundle(
   url: string,
@@ -49,9 +81,8 @@ export async function bundle(
 ) {
   const id = stripUrl(url);
   const cachedMod = moduleGraph.get(id);
-  const useCache = !cachedMod?.stale && cachedMod?.code;
 
-  if (useCache) {
+  if (!cachedMod?.stale && !!cachedMod?.code) {
     return cachedMod;
   }
 
@@ -60,7 +91,7 @@ export async function bundle(
   let code = null;
 
   try {
-    code = Deno.readTextFileSync(filename);
+    code = await Deno.readTextFile(filename);
   } catch (err) {
     if (!(err instanceof Deno.errors.NotFound)) {
       throw err;
@@ -81,11 +112,12 @@ export async function bundle(
 
   const build = await rollup({
     input: filename,
+    cache: buildCache,
     plugins: [
       // TODO: need concept of pre / post for custom plugins
       ...plugins,
-      json(),
-      image(),
+      jsonPlugin,
+      imagePlugin,
       // TODO: this should be configurable - not everyone uses css modules.
       postcss({
         modules: true,
@@ -97,7 +129,7 @@ export async function bundle(
           },
         })],
       }),
-      esbuildTsx(),
+      esbuildPlugin,
       lmr(moduleGraph, rootDir),
     ] as Plugin[],
     external: (source) => !isBareImportSpecifier(source),
@@ -105,6 +137,8 @@ export async function bundle(
     treeshake: false,
     makeAbsoluteExternalsRelative: false,
   });
+
+  buildCache = build.cache;
 
   const { output } = await build.generate({
     sourcemap: false,
@@ -123,23 +157,18 @@ export async function bundle(
 
   const entryChunk = getEntryChunk(output);
   const isCss = isCssExtension(id);
-  const entryId = isCss
-    ? resolve(pathToId(dirname(id), rootDir), entryChunk.fileName)
-    : id;
+  const entryId = isCss ? `${id}.js` : id;
   const entryMod = moduleGraph.ensure(entryId);
 
   entryMod.stale = false;
   entryMod.code = entryChunk.code;
 
-  Array.from(
-    new Set([
-      ...entryChunk.imports,
-      ...entryChunk.dynamicImports,
-    ]),
-  )
-    .filter((path) => !isLuathImport(path) && !isHttpUrl(path))
+  const idDirname = dirname(id);
+  const dotIdDirname = `.${idDirname}`;
+
+  getImports(entryChunk)
     .forEach((path) => {
-      const importedId = pathToId(resolve(`.${dirname(id)}`, path), rootDir);
+      const importedId = pathToId(resolve(dotIdDirname, path), rootDir);
       const importedMod = moduleGraph.ensure(importedId);
 
       importedMod.dependents.add(entryId);
@@ -149,8 +178,9 @@ export async function bundle(
   const cssAsset = getCssAsset(output);
 
   if (cssAsset) {
+    const baseId = pathToId(idDirname, rootDir);
     const assetId = resolve(
-      pathToId(dirname(id), rootDir),
+      baseId,
       cssAsset.fileName.replace(".css.css", ".css"),
     );
 
@@ -167,7 +197,7 @@ export async function bundle(
     Array.from(cssImports)
       .filter((path) => !isLuathImport(path) && !isHttpUrl(path))
       .forEach((path) => {
-        const importedId = resolve(pathToId(dirname(id), rootDir), path);
+        const importedId = resolve(baseId, path);
         const importedMod = moduleGraph.ensure(importedId);
 
         importedMod.stale = false;

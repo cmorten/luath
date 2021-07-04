@@ -28,7 +28,9 @@ export function lmr(
   webSocketServer: WebSocketServer,
   moduleGraph: ModuleGraph,
 ): RequestHandler {
-  async function handleWebSocketMessage(socket: WebSocket) {
+  async function handleWebSocketMessage(socketPromise: Promise<WebSocket>) {
+    const socket = await socketPromise;
+
     webSocketServer.register(socket);
 
     for await (const message of socket) {
@@ -40,14 +42,9 @@ export function lmr(
         } else if (typeof message === "string") {
           const data = JSON.parse(message);
 
-          switch (data.type) {
-            case "hotAccepted": {
-              const id = stripUrl(data.id);
-              const mod = moduleGraph.ensure(id);
-              mod.acceptingUpdates = true;
-
-              break;
-            }
+          if (data.type === "hotAccepted") {
+            const mod = moduleGraph.ensure(stripUrl(data.id));
+            mod.acceptingUpdates = true;
           }
         }
       } catch (_) {
@@ -55,7 +52,7 @@ export function lmr(
       }
     }
 
-    await webSocketServer.unregister(socket);
+    webSocketServer.unregister(socket);
   }
 
   function updateModuleSubGraph(id: string, mtime: number): boolean {
@@ -156,25 +153,21 @@ export function lmr(
   fileWatcher.watch();
 
   return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      if (isLmrWs(req.url)) {
-        const socket = await acceptWebSocket({
-          conn: req.conn,
-          bufReader: req.r,
-          bufWriter: req.w,
-          headers: req.headers,
-        });
+    if (isLmrWs(req.url)) {
+      handleWebSocketMessage(acceptWebSocket({
+        conn: req.conn,
+        bufReader: req.r,
+        bufWriter: req.w,
+        headers: req.headers,
+      }));
 
-        return await handleWebSocketMessage(socket);
-      } else if (isLmrJs(req.url)) {
-        return await res.type(".js")
-          .set("Cache-Control", "max-age=31536000,immutable")
-          .end(await getLmrClient());
-      }
-
-      next();
-    } catch (e) {
-      next(e);
+      return;
+    } else if (isLmrJs(req.url)) {
+      return res.type(".js")
+        .set("Cache-Control", "max-age=31536000,immutable")
+        .end(await getLmrClient());
     }
+
+    next();
   };
 }

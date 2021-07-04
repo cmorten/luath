@@ -7,8 +7,5 @@ export function getLmrClient() {
     return lmrClient;
   }
 
-  const importMetaUrl = import.meta.url;
-  const clientUrl = new URL("./lmr/client.js", importMetaUrl);
-
-  return lmrClient = loadUrl(clientUrl);
+  return lmrClient = loadUrl(new URL("./lmr/client.js", import.meta.url));
 }
