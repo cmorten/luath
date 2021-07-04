@@ -44,7 +44,7 @@ Luath can be used either through a command line interface (CLI):
 
 ```bash
 # Install Luath
-deno install -fqA --unstable --no-check https://deno.land/x/luath@0.9.0/luath.ts
+deno install -fqA --unstable --no-check https://deno.land/x/luath@0.9.1/luath.ts
 
 # Change directory to example
 cd ./examples/react
@@ -62,13 +62,13 @@ luath run
 Or through it's JavaScript API:
 
 ```ts
-import { server } from "https://deno.land/x/luath@0.9.0/mod.ts";
+import { server } from "https://deno.land/x/luath@0.9.1/mod.ts";
 
 await server({ root: "./examples/vanilla" });
 ```
 
 ```ts
-import { build } from "https://deno.land/x/luath@0.9.0/mod.ts";
+import { build } from "https://deno.land/x/luath@0.9.1/mod.ts";
 
 await build({ root: "./examples/vanilla" });
 ```

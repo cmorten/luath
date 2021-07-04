@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.9.1] - 04-07-2021
+
+- feat: small optimizations - memoization, rollup cache, etc.
+
 ## [0.9.0] - 03-07-2021
 
 - chore: upgrade deps
