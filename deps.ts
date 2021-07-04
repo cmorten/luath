@@ -39,6 +39,7 @@ export type {
   OutputChunk,
   Plugin,
   RollupBuild,
+  RollupCache,
   RollupOptions,
   RollupOutput,
   WatcherOptions,

@@ -1,5 +1,5 @@
 import type { LuathPlugin } from "../../types.ts";
-import type { OutputChunk, Plugin } from "../../../deps.ts";
+import type { OutputChunk, Plugin, RollupCache } from "../../../deps.ts";
 import {
   atImport,
   dirname,
@@ -71,7 +71,7 @@ const jsonPlugin = json();
 const imagePlugin = image();
 const esbuildPlugin = esbuildTsx();
 
-let buildCache: any;
+let buildCache: RollupCache | undefined;
 
 export async function bundle(
   url: string,
